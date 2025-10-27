@@ -1,8 +1,27 @@
 import { defineConfig } from 'vite'
-import react from '@vitejs/plugin-react'
+import viteCompression from 'vite-plugin-compression';
 
-// https://vitejs.dev/config/
 export default defineConfig({
-  plugins: [react()],
-  base: "/pramithas/"
-})
+  base: '/pramithas/',
+  publicDir: 'public', // needed so vite copies your /draco/ folder
+  build: {
+    outDir: 'dist',
+    target: 'esnext',
+    assetsInlineLimit: 4096,
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          three: ['three'],
+          vendor: ['gsap'],
+        },
+      },
+    },
+  },
+  plugins: [
+    viteCompression({
+      algorithm: 'brotliCompress',
+      ext: '.br',
+      threshold: 10240,
+    }),
+  ],
+});
