@@ -3,7 +3,7 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
-  "homepage": "https://pralfredo.github.io/pramithas",
+  "homepage": "https://pramithas.com",
   "scripts": {
     "predeploy": "npm run build",
     "deploy": "rm -rf docs/* && npm run build && cp -r dist/* docs/",

@@ -2,8 +2,8 @@ import { defineConfig } from 'vite'
 import viteCompression from 'vite-plugin-compression';
 
 export default defineConfig({
-  base: '/pramithas/',
-  publicDir: 'public', // needed so vite copies your /draco/ folder
+  base: '/',
+  publicDir: 'public',
   build: {
     outDir: 'dist',
     target: 'esnext',
