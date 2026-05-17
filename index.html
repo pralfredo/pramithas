@@ -1301,14 +1301,16 @@ void main(){
     const satProjects=makeMoon(0x7cf7ff,3.7,0.60,'Projects','#projects');
     const satAbout=makeMoon(0xff9ff3,4.7,0.42,'About','#about');
     const satResume=makeMoon(0x9cffb5,5.5,0.28,'Résumé','/Resume.pdf');
+    const satPublication=makeMoon(0xffd580,6.4,0.18,'Publication','https://arxiv.org/abs/2409.15094');
 
     // DOM labels
     const labelsRoot=document.getElementById('labels');
     const labelFor=new Map();
-    [satProjects,satAbout,satResume].forEach(g=>{
+    [satProjects,satAbout,satResume,satPublication].forEach(g=>{
       const d=document.createElement('div'); d.className='label';
       const {label,href}=g.userData;
-      d.innerHTML=href.endsWith('.pdf')
+      const isExternal=href.startsWith('http')||href.endsWith('.pdf');
+      d.innerHTML=isExternal
         ?`<a href="${href}" target="_blank" rel="noopener">${label} ↗</a>`
         :`<a href="${href}">${label}</a>`;
       labelsRoot.appendChild(d); labelFor.set(g,d);
