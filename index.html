@@ -1,71 +1,1421 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Pramithas Upreti • Portfolio</title>
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap"
-    rel="stylesheet">
-  <link rel="stylesheet" href="styles.css" />
-</head>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #04050f;
+      --glass: rgba(255,255,255,.055);
+      --stroke: rgba(255,255,255,.1);
+      --neonA: #7cf7ff;
+      --neonB: #ff9ff3;
+      --neonC: #9cffb5;
+      --text: #dde8ff;
+      --muted: rgba(221,232,255,0.6);
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body { height: 100%; scroll-behavior: smooth; }
+    body {
+      background: #04050f;
+      color: var(--text);
+      font-family: 'DM Mono', monospace;
+      overflow-x: hidden;
+    }
 
+    /* 3D canvas */
+    #scene {
+      position: fixed;
+      inset: 0;
+      width: 100vw;
+      height: 100vh;
+      display: block;
+      z-index: 0;
+    }
+
+    /* HERO */
+    .hero {
+      position: relative;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 1;
+      pointer-events: none;
+    }
+    .hud {
+      text-align: center;
+      pointer-events: auto;
+      user-select: none;
+      padding: 1rem;
+    }
+    .hud-eyebrow {
+      font-family: 'DM Mono', monospace;
+      font-size: clamp(9px, 1.1vw, 12px);
+      letter-spacing: 0.35em;
+      text-transform: uppercase;
+      color: var(--neonA);
+      opacity: 0.75;
+      margin-bottom: 0.6rem;
+    }
+    .hud h1 {
+      font-family: 'Syne', sans-serif;
+      font-weight: 800;
+      font-size: clamp(42px, 10vw, 108px);
+      letter-spacing: -0.02em;
+      line-height: 0.95;
+      margin-bottom: 0.4rem;
+      background: linear-gradient(135deg, #ffffff 0%, #c5d8ff 45%, var(--neonA) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      filter: drop-shadow(0 0 40px rgba(124,247,255,0.3));
+    }
+    .hud-sub {
+      font-family: 'DM Mono', monospace;
+      font-size: clamp(11px, 1.5vw, 15px);
+      color: var(--muted);
+      margin-bottom: 2rem;
+      letter-spacing: 0.04em;
+    }
+    .cta {
+      display: inline-flex;
+      gap: 0.5rem;
+      padding: 0.4rem 0.5rem;
+      background: rgba(0,0,0,0.3);
+      border: 1px solid rgba(255,255,255,.12);
+      border-radius: 14px;
+      backdrop-filter: blur(12px);
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    .button {
+      display: inline-block;
+      padding: 0.6rem 1.1rem;
+      border-radius: 10px;
+      border: 1px solid var(--stroke);
+      background: var(--glass);
+      color: white;
+      text-decoration: none;
+      font-family: 'DM Mono', monospace;
+      font-size: 0.78rem;
+      letter-spacing: 0.05em;
+      font-weight: 500;
+      backdrop-filter: blur(10px);
+      transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s;
+    }
+    .button:hover {
+      transform: translateY(-2px);
+      border-color: rgba(124,247,255,0.4);
+      box-shadow: 0 0 20px rgba(124,247,255,0.25), 0 0 40px rgba(179,136,255,0.15);
+    }
+
+    /* DOM labels for moons */
+    #labels {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 2;
+    }
+    .label {
+      position: absolute;
+      transform: translate(-50%, -130%);
+      padding: 0.22rem 0.55rem;
+      font-family: 'DM Mono', monospace;
+      font-size: 0.72rem;
+      letter-spacing: 0.06em;
+      color: #dff9ff;
+      background: rgba(4,5,15,0.65);
+      border: 1px solid rgba(255,255,255,.15);
+      border-radius: 8px;
+      white-space: nowrap;
+      text-shadow: 0 0 8px rgba(124,247,255,0.6);
+      opacity: 0.9;
+      pointer-events: none;
+    }
+    .label a {
+      color: inherit;
+      text-decoration: none;
+      pointer-events: auto;
+    }
+
+    /* MAIN content */
+    main {
+      position: relative;
+      z-index: 1;
+      padding-top: 0;
+    }
+
+    section {
+      width: min(960px, 92vw);
+      margin: 10vh auto;
+      padding: 2.5rem 2.5rem;
+      border: 1px solid rgba(255,255,255,0.06);
+      background: linear-gradient(160deg, rgba(255,255,255,.022) 0%, rgba(255,255,255,.008) 100%);
+      backdrop-filter: blur(8px);
+      border-radius: 20px;
+      box-shadow: 0 24px 80px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.04);
+    }
+
+    .section-label {
+      font-size: 0.68rem;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--neonA);
+      opacity: 0.7;
+      margin-bottom: 0.5rem;
+      font-family: 'DM Mono', monospace;
+    }
+
+    h2 {
+      font-family: 'Syne', sans-serif;
+      font-weight: 700;
+      font-size: clamp(24px, 3.5vw, 38px);
+      margin-bottom: 1.5rem;
+      color: var(--neonB);
+      text-shadow: 0 0 18px rgba(255,159,243,0.5);
+      letter-spacing: -0.01em;
+    }
+
+    /* PROJECTS */
+    .cards {
+      list-style: none;
+      display: grid;
+      gap: 1rem;
+    }
+    .cards li {
+      padding: 1.25rem 1.5rem;
+      border: 1px solid rgba(255,255,255,0.07);
+      border-radius: 14px;
+      background: rgba(0,0,0,.12);
+      transition: border-color 0.25s, transform 0.25s, box-shadow 0.25s;
+      position: relative;
+      overflow: hidden;
+    }
+    .cards li::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(124,247,255,0.04) 0%, transparent 60%);
+      opacity: 0;
+      transition: opacity 0.25s;
+    }
+    .cards li:hover {
+      border-color: rgba(124,247,255,0.3);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 32px rgba(124,247,255,0.1);
+    }
+    .cards li:hover::before { opacity: 1; }
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 1rem;
+      margin-bottom: 0.6rem;
+      flex-wrap: wrap;
+    }
+    .cards h3 {
+      font-family: 'Syne', sans-serif;
+      font-weight: 600;
+      font-size: 1.05rem;
+      color: white;
+      letter-spacing: -0.005em;
+    }
+    .cards p {
+      font-size: 0.82rem;
+      line-height: 1.6;
+      color: var(--muted);
+    }
+    .card-tags {
+      display: flex;
+      gap: 0.35rem;
+      flex-wrap: wrap;
+      margin-top: 0.75rem;
+    }
+    .tag {
+      padding: 0.15rem 0.5rem;
+      border-radius: 6px;
+      font-size: 0.65rem;
+      letter-spacing: 0.07em;
+      text-transform: uppercase;
+      border: 1px solid rgba(124,247,255,0.25);
+      color: var(--neonA);
+      background: rgba(124,247,255,0.06);
+    }
+    .gh-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.3rem;
+      padding: 0.3rem 0.7rem;
+      border-radius: 8px;
+      border: 1px solid rgba(255,255,255,0.15);
+      background: rgba(255,255,255,0.06);
+      color: rgba(255,255,255,0.75);
+      text-decoration: none;
+      font-size: 0.7rem;
+      letter-spacing: 0.04em;
+      font-family: 'DM Mono', monospace;
+      transition: border-color 0.2s, color 0.2s, background 0.2s;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+    .gh-link:hover {
+      border-color: rgba(124,247,255,0.4);
+      color: var(--neonA);
+      background: rgba(124,247,255,0.08);
+    }
+    .gh-link svg {
+      width: 13px;
+      height: 13px;
+      fill: currentColor;
+      flex-shrink: 0;
+    }
+
+    /* PUBLICATION */
+    .pub-card {
+      padding: 1.5rem;
+      border: 1px solid rgba(156,255,181,0.2);
+      border-radius: 14px;
+      background: rgba(0,0,0,0.3);
+      transition: border-color 0.25s, box-shadow 0.25s;
+    }
+    .pub-card:hover {
+      border-color: rgba(156,255,181,0.4);
+      box-shadow: 0 8px 32px rgba(156,255,181,0.08);
+    }
+    .pub-card h3 {
+      font-family: 'Syne', sans-serif;
+      font-size: 1rem;
+      font-weight: 600;
+      color: white;
+      margin-bottom: 0.5rem;
+      line-height: 1.4;
+    }
+    .pub-meta {
+      font-size: 0.72rem;
+      color: var(--neonC);
+      margin-bottom: 0.6rem;
+      letter-spacing: 0.04em;
+      opacity: 0.85;
+    }
+    .pub-desc {
+      font-size: 0.82rem;
+      line-height: 1.6;
+      color: var(--muted);
+      margin-bottom: 1rem;
+    }
+    .pub-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 0.4rem 0.9rem;
+      border-radius: 8px;
+      border: 1px solid rgba(156,255,181,0.3);
+      background: rgba(156,255,181,0.06);
+      color: var(--neonC);
+      text-decoration: none;
+      font-size: 0.72rem;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    .pub-link:hover {
+      border-color: rgba(156,255,181,0.5);
+      box-shadow: 0 0 16px rgba(156,255,181,0.15);
+    }
+
+    /* ABOUT */
+    .about-text {
+      font-size: 0.9rem;
+      line-height: 1.8;
+      color: var(--muted);
+      margin-bottom: 1.5rem;
+    }
+    .links {
+      list-style: none;
+      display: flex;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+    }
+    .links a {
+      display: inline-block;
+      padding: 0.45rem 0.9rem;
+      border-radius: 10px;
+      border: 1px solid var(--stroke);
+      background: var(--glass);
+      color: var(--neonA);
+      text-decoration: none;
+      font-size: 0.75rem;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      transition: border-color 0.2s, color 0.2s, box-shadow 0.2s;
+    }
+    .links a:hover {
+      color: var(--neonB);
+      border-color: rgba(255,159,243,0.4);
+      box-shadow: 0 0 14px rgba(255,159,243,0.2);
+    }
+
+    footer {
+      text-align: center;
+      padding: 2rem 0 5rem;
+      opacity: 0.45;
+      font-size: 0.72rem;
+      letter-spacing: 0.1em;
+    }
+  </style>
+</head>
 <body>
-  <!-- 3D Canvas -->
   <canvas id="scene"></canvas>
+
   <section class="hero">
     <header class="hud">
+      <p class="hud-eyebrow">Portfolio</p>
       <h1>Pramithas</h1>
-      <p>Computer × Math through a philosophizing lens.</p>
+      <p class="hud-sub">Computer × Math through a philosophizing lens</p>
       <nav class="cta">
         <a class="button" href="#projects">Projects</a>
+        <a class="button" href="https://arxiv.org/abs/2409.15094" target="_blank" rel="noopener">Publications ↗</a>
         <a class="button" href="#about">About</a>
-        <a class="button" href="/Resume.pdf" target="_blank" rel="noopener">Resume</a>
+        <a class="button" href="https://github.com/pralfredo" target="_blank" rel="noopener">GitHub ↗</a>
+        <a class="button" href="/Resume.pdf" target="_blank" rel="noopener">Résumé ↗</a>
       </nav>
     </header>
   </section>
 
-  <!-- Sections -->
   <main>
+    <!-- PROJECTS -->
     <section id="projects">
+      <p class="section-label">// work</p>
       <h2>Projects</h2>
       <ul class="cards">
         <li>
-          <h3>Quantum Particle Simulator</h3>
-          <p>1D potential, probabilistic dynamics, validated against QM principles.</p>
+          <div class="card-header">
+            <h3>Quantum Particle Simulator</h3>
+            <a class="gh-link" href="https://github.com/pralfredo/qps" target="_blank" rel="noopener">
+              <svg viewBox="0 0 16 16"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0 0 16 8c0-4.42-3.58-8-8-8z"/></svg>
+              pralfredo/qps
+            </a>
+          </div>
+          <p>Simulates a quantum particle in a bounded 1D potential. Users define wavefunctions Ψ(x) and potentials V(x) via GUI, with real-time unitary time evolution, probability density toggling, and interactive mouse drawing.</p>
+          <div class="card-tags">
+            <span class="tag">Python</span>
+            <span class="tag">NumPy</span>
+            <span class="tag">SciPy</span>
+            <span class="tag">Tkinter</span>
+            <span class="tag">Quantum Mechanics</span>
+          </div>
         </li>
         <li>
-          <h3>AI Trash Detection Model</h3>
-          <p>TensorFlow/Keras + Computer Vision for mapping accumulation across complex terrain.</p>
+          <div class="card-header">
+            <h3>AI Trash Detection Model</h3>
+            <a class="gh-link" href="https://github.com/pralfredo" target="_blank" rel="noopener">
+              <svg viewBox="0 0 16 16"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0 0 16 8c0-4.42-3.58-8-8-8z"/></svg>
+              GitHub
+            </a>
+          </div>
+          <p>TensorFlow/Keras computer vision pipeline for detecting and mapping trash accumulation across complex terrain. Combines geographic data analysis with deep learning classification for environmental impact assessment.</p>
+          <div class="card-tags">
+            <span class="tag">TensorFlow</span>
+            <span class="tag">Keras</span>
+            <span class="tag">Computer Vision</span>
+            <span class="tag">GIS</span>
+          </div>
         </li>
         <li>
-          <h3>Bibliometric Analysis of Ice-core Science</h3>
-          <p>Dynamic Topic Classification using Guided ML and Geographic data analysis</p>
+          <div class="card-header">
+            <h3>Bibliometric Analysis of Ice-Core Science</h3>
+            <a class="gh-link" href="https://github.com/pralfredo/ice-core" target="_blank" rel="noopener">
+              <svg viewBox="0 0 16 16"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0 0 16 8c0-4.42-3.58-8-8-8z"/></svg>
+              pralfredo/ice-core
+            </a>
+          </div>
+          <p>Dynamic topic classification using guided machine learning on scientific literature, combined with geographic data analysis to trace the evolution of ice-core research across time and institutions.</p>
+          <div class="card-tags">
+            <span class="tag">Python</span>
+            <span class="tag">NLP</span>
+            <span class="tag">Topic Modeling</span>
+            <span class="tag">Bibliometrics</span>
+          </div>
         </li>
       </ul>
     </section>
 
+    <!-- PUBLICATIONS -->
+    <section id="publications">
+      <p class="section-label">// research</p>
+      <h2>Publications</h2>
+      <div class="pub-card">
+        <h3>Bibliometric Analysis of Ice-Core Science: Mapping the Evolution of a Discipline</h3>
+        <p class="pub-meta">arXiv · 2409.15094 · 2024</p>
+        <p class="pub-desc">A comprehensive bibliometric study examining the intellectual structure and geographic distribution of ice-core research. Applies guided machine learning for dynamic topic classification to trace how this interdisciplinary field has evolved across decades of scientific literature.</p>
+        <a class="pub-link" href="https://arxiv.org/abs/2409.15094" target="_blank" rel="noopener">
+          Read on arXiv ↗
+        </a>
+      </div>
+    </section>
+
+    <!-- ABOUT -->
     <section id="about">
+      <p class="section-label">// me</p>
       <h2>About</h2>
-      <p>
-        Student at Colby College (CS, Math, & Philosophy).
-        Interested in logic, algorithms and AI.
-        Hobbies include photography, cooking and chilling.
+      <p class="about-text">
+        Student at Colby College studying Computer Science, Mathematics, and Philosophy.
+        Drawn to the intersections — logic in algorithms, structure in proofs, meaning in computation.
+        Outside of that: photography, cooking, and the occasional moment of doing nothing at all.
       </p>
       <ul class="links">
         <li><a href="mailto:pupret26@colby.edu">Email</a></li>
         <li><a href="https://linkedin.com/in/pramithasupreti/" target="_blank" rel="noopener">LinkedIn</a></li>
-        <li><a href="https://arxiv.org/abs/2409.15094" target="_blank" rel="noopener">Publication</a></li>
+        <li><a href="https://github.com/pralfredo" target="_blank" rel="noopener">GitHub</a></li>
       </ul>
     </section>
 
-    <footer>
-      © <span id="year"></span> Pramithas Upreti
-    </footer>
+    <footer>© <span id="year"></span> Pramithas Upreti</footer>
   </main>
-  <script type="module" src="main.js"></script>
-  <div id="labels"></div>
-</body>
 
+  <div id="labels"></div>
+
+  <script type="importmap">
+    {
+      "imports": {
+        "three": "https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.module.js"
+      }
+    }
+  </script>
+  <script type="module">
+    import * as THREE from 'three';
+
+    /* ---- renderer ---- */
+    const canvas = document.getElementById('scene');
+    const renderer = new THREE.WebGLRenderer({ canvas, antialias: true });
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.setClearColor(0x04050f, 1);
+    renderer.outputEncoding = THREE.sRGBEncoding;
+    renderer.toneMapping = THREE.ACESFilmicToneMapping;
+    renderer.toneMappingExposure = 1.1;
+
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(52, window.innerWidth / window.innerHeight, 0.1, 900);
+    camera.position.set(0, 1.5, 9.5);
+
+    /* ---- simplex noise GLSL ---- */
+    const SNOISE = `
+vec4 _mod289(vec4 x){return x-floor(x*(1./289.))*289.;}
+vec4 _perm(vec4 x){return _mod289(((x*34.)+1.)*x);}
+vec4 _tis(vec4 r){return 1.79284291400159-0.85373472095314*r;}
+float snoise(vec3 v){
+  const vec2 C=vec2(1./6.,1./3.);
+  const vec4 D=vec4(0.,.5,1.,2.);
+  vec3 i=floor(v+dot(v,C.yyy));
+  vec3 x0=v-i+dot(i,C.xxx);
+  vec3 g=step(x0.yzx,x0.xyz);
+  vec3 l=1.-g;
+  vec3 i1=min(g.xyz,l.zxy);
+  vec3 i2=max(g.xyz,l.zxy);
+  vec3 x1=x0-i1+C.xxx;
+  vec3 x2=x0-i2+C.yyy;
+  vec3 x3=x0-D.yyy;
+  i=_mod289(i);
+  vec4 p=_perm(_perm(_perm(i.z+vec4(0.,i1.z,i2.z,1.))+i.y+vec4(0.,i1.y,i2.y,1.))+i.x+vec4(0.,i1.x,i2.x,1.));
+  float n_=.142857142857;
+  vec3 ns=n_*D.wyz-D.xzx;
+  vec4 j=p-49.*floor(p*ns.z*ns.z);
+  vec4 x_=floor(j*ns.z);
+  vec4 y_=floor(j-7.*x_);
+  vec4 x=x_*ns.x+ns.yyyy;
+  vec4 y=y_*ns.x+ns.yyyy;
+  vec4 h=1.-abs(x)-abs(y);
+  vec4 b0=vec4(x.xy,y.xy);
+  vec4 b1=vec4(x.zw,y.zw);
+  vec4 s0=floor(b0)*2.+1.;
+  vec4 s1=floor(b1)*2.+1.;
+  vec4 sh=-step(h,vec4(0.));
+  vec4 a0=b0.xzyw+s0.xzyw*sh.xxyy;
+  vec4 a1=b1.xzyw+s1.xzyw*sh.zzww;
+  vec3 p0=vec3(a0.xy,h.x);
+  vec3 p1=vec3(a1.xy,h.y);
+  vec3 p2=vec3(a0.zw,h.z);
+  vec3 p3=vec3(a1.zw,h.w);
+  vec4 norm=_tis(vec4(dot(p0,p0),dot(p1,p1),dot(p2,p2),dot(p3,p3)));
+  p0*=norm.x;p1*=norm.y;p2*=norm.z;p3*=norm.w;
+  vec4 m=max(.6-vec4(dot(x0,x0),dot(x1,x1),dot(x2,x2),dot(x3,x3)),0.);
+  m=m*m;
+  return 42.*dot(m*m,vec4(dot(p0,x0),dot(p1,x1),dot(p2,x2),dot(p3,x3)));
+}`;
+
+    /* ---- planet material factory ---- */
+    const allPlanetUniforms = [];
+
+    const STRIPE_FRAG = `
+vec3 stripeColor(float t,vec3 c0,vec3 c1,vec3 c2,vec3 c3,vec3 c4,vec3 c5){
+  t=fract(t); float s=t*6.; int idx=int(floor(s)); float f=fract(s);
+  if(idx==0)return mix(c0,c1,f);
+  if(idx==1)return mix(c1,c2,f);
+  if(idx==2)return mix(c2,c3,f);
+  if(idx==3)return mix(c3,c4,f);
+  if(idx==4)return mix(c4,c5,f);
+  return mix(c5,c0,f);
+}`;
+
+    function makePlanetMat(opts = {}) {
+      const p = {
+        roughness: 0.48, metalness: 0.08, clearcoat: 0.65, clearcoatRoughness: 0.3,
+        emissive: 0x08102a, emissiveIntensity: 0.22,
+        scale: 2.2, disp: 0.048, bandFreq: 9.0,
+        sheenColor: 0x1a2a6d, baseColor: 0xffffff,
+        c0: 0xc87941, c1: 0xe8c49a, c2: 0xa0522d,
+        c3: 0xd4a96a, c4: 0x7a3b1e, c5: 0xf0dbb0,
+        spotColor: 0x8b2000, spotLat: 0.28, spotLon: 1.1, spotSize: 0.18,
+        capColor: 0xfff0e8,
+        ...opts
+      };
+      const mat = new THREE.MeshPhysicalMaterial({
+        color: p.baseColor,
+        roughness: p.roughness, metalness: p.metalness,
+        clearcoat: p.clearcoat, clearcoatRoughness: p.clearcoatRoughness,
+        sheen: 0.35, sheenColor: new THREE.Color(p.sheenColor),
+        emissive: new THREE.Color(p.emissive), emissiveIntensity: p.emissiveIntensity
+      });
+      mat.onBeforeCompile = (shader) => {
+        shader.uniforms.pTime    = { value: 0 };
+        shader.uniforms.pScale   = { value: p.scale };
+        shader.uniforms.pDisp    = { value: p.disp };
+        shader.uniforms.pFreq    = { value: p.bandFreq };
+        shader.uniforms.pC0      = { value: new THREE.Color(p.c0) };
+        shader.uniforms.pC1      = { value: new THREE.Color(p.c1) };
+        shader.uniforms.pC2      = { value: new THREE.Color(p.c2) };
+        shader.uniforms.pC3      = { value: new THREE.Color(p.c3) };
+        shader.uniforms.pC4      = { value: new THREE.Color(p.c4) };
+        shader.uniforms.pC5      = { value: new THREE.Color(p.c5) };
+        shader.uniforms.pSpot    = { value: new THREE.Color(p.spotColor) };
+        shader.uniforms.pSpotLat = { value: p.spotLat };
+        shader.uniforms.pSpotLon = { value: p.spotLon };
+        shader.uniforms.pSpotSz  = { value: p.spotSize };
+        shader.uniforms.pCap     = { value: new THREE.Color(p.capColor) };
+        allPlanetUniforms.push(shader.uniforms);
+
+        shader.vertexShader = shader.vertexShader
+          .replace('#include <common>', `#include <common>\n${SNOISE}\nvarying vec3 vWPos; varying vec3 vOPos;`)
+          .replace('#include <worldpos_vertex>', '#include <worldpos_vertex>\nvWPos=worldPosition.xyz; vOPos=position;')
+          .replace('#include <project_vertex>', `
+float nd=snoise(normalize(position)*pScale*0.6+vec3(pTime*0.03));
+vec3 displaced=position+normal*(nd*pDisp);
+vec4 mvPosition=modelViewMatrix*vec4(displaced,1.0);
+gl_Position=projectionMatrix*mvPosition;
+`);
+
+        shader.fragmentShader = shader.fragmentShader
+          .replace('#include <common>', `
+#include <common>
+${SNOISE}
+${STRIPE_FRAG}
+varying vec3 vWPos; varying vec3 vOPos;
+uniform float pTime,pScale,pFreq,pSpotLat,pSpotLon,pSpotSz;
+uniform vec3 pC0,pC1,pC2,pC3,pC4,pC5,pSpot,pCap;
+`)
+          .replace('vec4 diffuseColor = vec4( diffuse, opacity );', `
+vec3 nrm=normalize(vOPos);
+float lat=asin(clamp(nrm.y,-1.,1.));
+float lon=atan(nrm.z,nrm.x);
+// turbulence warps the bands so they look organic
+float turb1=snoise(nrm*pScale       +vec3(pTime*0.04));
+float turb2=snoise(nrm*pScale*2.3   +vec3(pTime*0.025,1.7,0.));
+float warp=turb1*0.18+turb2*0.07;
+float bandT=(lat/3.14159+0.5)*pFreq+warp*pFreq*0.5+pTime*0.012;
+vec3 bandCol=stripeColor(bandT,pC0,pC1,pC2,pC3,pC4,pC5);
+// fibrous streak texture within bands
+float streak=snoise(nrm*pScale*4.+vec3(pTime*0.06,0.,lon));
+bandCol*=0.82+streak*0.22;
+// polar caps
+float abslat=abs(lat)/1.5708;
+bandCol=mix(bandCol,pCap,smoothstep(0.68,0.95,abslat)*0.6);
+// Great Spot vortex
+vec3 spotDir=vec3(cos(pSpotLat)*cos(pSpotLon+pTime*0.008),sin(pSpotLat),cos(pSpotLat)*sin(pSpotLon+pTime*0.008));
+float spotDist=length(nrm-spotDir);
+float spotMask=smoothstep(pSpotSz,pSpotSz*0.3,spotDist);
+float spotSwirl=snoise(nrm*pScale*3.-spotDir*5.+vec3(pTime*0.05));
+spotMask*=0.7+spotSwirl*0.3;
+bandCol=mix(bandCol,pSpot,spotMask*0.85);
+// limb darkening
+vec3 vDir=normalize(cameraPosition-vWPos);
+float limb=pow(max(dot(nrm,vDir),0.),0.4);
+bandCol*=0.5+0.5*limb;
+// sun highlight
+bandCol+=vec3(pow(clamp(dot(nrm,normalize(vec3(0.6,0.4,0.7))),0.,1.),4.)*0.1);
+diffuse*=bandCol;
+roughnessFactor=clamp(roughnessFactor+spotMask*0.15,0.,1.);
+vec4 diffuseColor=vec4(diffuse,opacity);
+`);
+      };
+      return mat;
+    }
+
+    /* ---- glow sprite helper ---- */
+    function makeGlowSprite(size, inner, outer) {
+      const c = document.createElement('canvas'); c.width = c.height = 256;
+      const g = c.getContext('2d');
+      const grd = g.createRadialGradient(128,128,8,128,128,128);
+      grd.addColorStop(0, inner); grd.addColorStop(1, outer);
+      g.fillStyle = grd; g.fillRect(0,0,256,256);
+      const sp = new THREE.Sprite(new THREE.SpriteMaterial({
+        map: new THREE.CanvasTexture(c),
+        transparent: true, blending: THREE.AdditiveBlending, depthWrite: false
+      }));
+      sp.scale.set(size,size,1);
+      return sp;
+    }
+
+    /* ---- ring texture ---- */
+    function makeRingTex(colorStop) {
+      const c = document.createElement('canvas'); c.width = c.height = 512;
+      const g = c.getContext('2d');
+      const cx=256, cy=256, ri=195, ro=252;
+      for (let r=ri; r<=ro; r++) {
+        const t=(r-ri)/(ro-ri);
+        const a=0.42*(1-Math.abs(t-0.5)*2);
+        g.strokeStyle=colorStop ? `rgba(${colorStop},${a})` : `rgba(124,247,255,${a})`;
+        g.beginPath(); g.arc(cx,cy,r,0,Math.PI*2); g.stroke();
+      }
+      const alpha=g.createRadialGradient(cx,cy,ri-25,cx,cy,ro+25);
+      alpha.addColorStop(0,'rgba(255,255,255,1)');
+      alpha.addColorStop(0.07,'rgba(255,255,255,0.75)');
+      alpha.addColorStop(0.93,'rgba(255,255,255,0.75)');
+      alpha.addColorStop(1,'rgba(255,255,255,0)');
+      g.globalCompositeOperation='destination-in';
+      g.fillStyle=alpha; g.fillRect(0,0,512,512);
+      const t = new THREE.CanvasTexture(c);
+      t.wrapS = t.wrapT = THREE.ClampToEdgeWrapping;
+      return t;
+    }
+
+    /* ---- lights ---- */
+    scene.add(new THREE.AmbientLight(0x687088, 0.5));
+    const keyLight = new THREE.PointLight(0x9ecfff, 120, 160);
+    keyLight.position.set(8, 6, 10); scene.add(keyLight);
+    const fillLight = new THREE.PointLight(0xff9ff3, 60, 100);
+    fillLight.position.set(-8, -4, -9); scene.add(fillLight);
+    const rimLight = new THREE.DirectionalLight(0xa6d2ff, 1.3);
+    rimLight.position.set(-2.5, 1.5, -4.5); scene.add(rimLight);
+
+    const sunGlow = makeGlowSprite(24,'rgba(124,247,255,0.4)','rgba(124,247,255,0)');
+    sunGlow.position.set(-2.2, 1.2, -6); scene.add(sunGlow);
+
+    /* ===== MAIN PLANET ===== */
+    const planetGroup = new THREE.Group(); scene.add(planetGroup);
+
+    const planet = new THREE.Mesh(
+      new THREE.SphereGeometry(2, 192, 192),
+      makePlanetMat({
+        // Jupiter-like: warm ochres, tans, rusty browns, cream belts
+        scale:2.2, disp:0.045, bandFreq:11.0,
+        c0: 0xc8743a, c1: 0xeecfa0, c2: 0x9b4a1f,
+        c3: 0xddb478, c4: 0x6b2e10, c5: 0xf5e0bb,
+        spotColor: 0x7a1800, spotLat: -0.35, spotLon: 0.9, spotSize: 0.22,
+        capColor: 0xffe8cc,
+        emissive: 0x140800, emissiveIntensity: 0.2,
+        roughness: 0.55, clearcoat: 0.5, sheenColor: 0x8a4a20
+      })
+    );
+    planet.castShadow = planet.receiveShadow = true;
+    planet.renderOrder = 1;
+    planetGroup.add(planet);
+
+    // thick atmosphere with limb brightening
+    const atmMat = new THREE.MeshBasicMaterial({ color:0xffb060, transparent:true, opacity:0.12, depthWrite:false });
+    const atm = new THREE.Mesh(new THREE.SphereGeometry(2.16, 96, 96), atmMat);
+    atm.renderOrder = 2; planetGroup.add(atm);
+
+    // cloud shell
+    const cloudsMat = new THREE.MeshStandardMaterial({ transparent:true, opacity:0.2, emissive:0xffffff, emissiveIntensity:0.04, depthWrite:false });
+    const clouds = new THREE.Mesh(new THREE.SphereGeometry(2.07, 96, 96), cloudsMat);
+    clouds.renderOrder = 3; planetGroup.add(clouds);
+
+    // outer glow halo
+    const haloSprite = makeGlowSprite(11,'rgba(90,200,255,0.18)','rgba(90,200,255,0)');
+    haloSprite.renderOrder = 4; planetGroup.add(haloSprite);
+
+    // neon arcs
+    function addArc(lat, lon0, span, color) {
+      const g=new THREE.BufferGeometry(); const pts=[];
+      for(let t=0;t<=1;t+=0.02){
+        const lon=lon0+t*span, r=2.025;
+        pts.push(new THREE.Vector3(r*Math.cos(lat)*Math.cos(lon),r*Math.sin(lat),r*Math.cos(lat)*Math.sin(lon)));
+      }
+      g.setFromPoints(pts);
+      const l=new THREE.Line(g,new THREE.LineBasicMaterial({color,transparent:true,opacity:0.55}));
+      planetGroup.add(l);
+    }
+    for(let i=0;i<28;i++){
+      addArc((Math.random()*Math.PI)-Math.PI/2,Math.random()*Math.PI*2,0.85*Math.PI,i%2?0xff9ff3:0x7cf7ff);
+    }
+
+    // aurora ribbon
+    function makeAurora() {
+      const c=document.createElement('canvas'); c.width=256; c.height=256;
+      const g=c.getContext('2d');
+      const grd=g.createLinearGradient(0,0,0,256);
+      grd.addColorStop(0,'rgba(156,255,181,0)');
+      grd.addColorStop(0.35,'rgba(156,255,181,0.4)');
+      grd.addColorStop(1,'rgba(124,247,255,0)');
+      g.fillStyle=grd; g.fillRect(0,0,256,256);
+      const mat=new THREE.MeshBasicMaterial({map:new THREE.CanvasTexture(c),transparent:true,blending:THREE.AdditiveBlending,depthWrite:false});
+      const geo=new THREE.PlaneGeometry(5,2,40,1);
+      const pos=geo.attributes.position;
+      for(let i=0;i<pos.count;i++) pos.setZ(i,Math.sin(pos.getX(i)*1.4)*0.25);
+      const m=new THREE.Mesh(geo,mat);
+      m.rotation.y=Math.PI/3; m.position.set(0,1.65,0.1);
+      m.renderOrder=5; return m;
+    }
+    const aurora=makeAurora(); planetGroup.add(aurora);
+
+    // ring system
+    const ring=new THREE.Mesh(
+      new THREE.RingGeometry(2.6,3.3,256,1),
+      new THREE.MeshBasicMaterial({map:makeRingTex(),transparent:true,depthWrite:false,side:THREE.DoubleSide})
+    );
+    ring.rotation.x=Math.PI*0.53; ring.rotation.y=Math.PI*0.18; ring.position.y=0.05;
+    planetGroup.add(ring);
+
+    // asteroid belt
+    {
+      const pg=new THREE.DodecahedronGeometry(0.024,0);
+      const pm=new THREE.MeshStandardMaterial({color:0xcfefff,roughness:0.9,metalness:0.05,emissive:0x7cf7ff,emissiveIntensity:0.06});
+      const inst=new THREE.InstancedMesh(pg,pm,500);
+      const m=new THREE.Matrix4();
+      for(let i=0;i<500;i++){
+        const a=Math.random()*Math.PI*2;
+        const r=2.68+Math.random()*0.56;
+        const y=(Math.random()-0.5)*0.1;
+        m.makeRotationFromEuler(new THREE.Euler(Math.random(),Math.random(),Math.random()));
+        m.setPosition(Math.cos(a)*r,y,Math.sin(a)*r);
+        inst.setMatrixAt(i,m);
+      }
+      inst.instanceMatrix.needsUpdate=true;
+      inst.rotation.x=ring.rotation.x; inst.rotation.y=ring.rotation.y;
+      inst.position.copy(ring.position);
+      planetGroup.add(inst);
+    }
+
+    /* ===== BACKGROUND PLANETS ===== */
+
+    // --- Planet B: warm dusty rust planet (top-left far) ---
+    const planetBGroup = new THREE.Group();
+    planetBGroup.position.set(-16, 8, -38);
+    scene.add(planetBGroup);
+
+    const planetB = new THREE.Mesh(
+      new THREE.SphereGeometry(3.2, 160, 160),
+      makePlanetMat({
+        // Saturn-like: golden yellows, caramel, pale cream bands
+        scale:1.9, disp:0.05, bandFreq:8.0,
+        c0: 0xc8a050, c1: 0xf0dfa0, c2: 0xa07830,
+        c3: 0xe8cf88, c4: 0x7a5820, c5: 0xfff0c0,
+        spotColor: 0x6a3800, spotLat: 0.20, spotLon: 2.5, spotSize: 0.14,
+        capColor: 0xfff8e0,
+        emissive: 0x140a00, emissiveIntensity: 0.22,
+        roughness: 0.6, clearcoat: 0.4, sheenColor: 0x9a7830
+      })
+    );
+    planetB.renderOrder = 1;
+    planetBGroup.add(planetB);
+
+    const planetBAtm = new THREE.Mesh(new THREE.SphereGeometry(3.32,64,64),
+      new THREE.MeshBasicMaterial({color:0xffe090,transparent:true,opacity:0.12,depthWrite:false}));
+    planetBAtm.renderOrder=2; planetBGroup.add(planetBAtm);
+
+    const planetBGlow = makeGlowSprite(22,'rgba(255,210,100,0.2)','rgba(220,170,60,0)');
+    planetBGroup.add(planetBGlow);
+
+    // ring on planet B
+    const ringB=new THREE.Mesh(
+      new THREE.RingGeometry(3.8,5.2,200,1),
+      new THREE.MeshBasicMaterial({map:makeRingTex('255,160,80'),transparent:true,depthWrite:false,side:THREE.DoubleSide})
+    );
+    ringB.rotation.x=Math.PI*0.65; ringB.rotation.y=Math.PI*0.3;
+    planetBGroup.add(ringB);
+
+    // --- Planet C: icy teal gas giant (right far) ---
+    const planetCGroup = new THREE.Group();
+    planetCGroup.position.set(18, -5, -42);
+    scene.add(planetCGroup);
+
+    const planetC = new THREE.Mesh(
+      new THREE.SphereGeometry(2.8, 160, 160),
+      makePlanetMat({
+        // Neptune/Uranus-like: deep blue, teal, cyan, pale aqua
+        scale:2.4, disp:0.035, bandFreq:7.0,
+        c0: 0x1a5080, c1: 0x40a8c0, c2: 0x0a3060,
+        c3: 0x60c8e0, c4: 0x082848, c5: 0x90e0f0,
+        spotColor: 0x003870, spotLat: 0.30, spotLon: 3.8, spotSize: 0.16,
+        capColor: 0xd0f8ff,
+        emissive: 0x020e18, emissiveIntensity: 0.28,
+        roughness: 0.38, clearcoat: 0.75, clearcoatRoughness: 0.2, sheenColor: 0x2080a0
+      })
+    );
+    planetC.renderOrder=1;
+    planetCGroup.add(planetC);
+
+    const planetCAtm=new THREE.Mesh(new THREE.SphereGeometry(2.92,64,64),
+      new THREE.MeshBasicMaterial({color:0x40ffcc,transparent:true,opacity:0.15,depthWrite:false}));
+    planetCAtm.renderOrder=2; planetCGroup.add(planetCAtm);
+
+    const planetCGlow=makeGlowSprite(18,'rgba(60,220,180,0.22)','rgba(40,180,140,0)');
+    planetCGroup.add(planetCGlow);
+
+    // thin rings on C
+    const ringC=new THREE.Mesh(
+      new THREE.RingGeometry(3.2,4.4,200,1),
+      new THREE.MeshBasicMaterial({map:makeRingTex('80,255,210'),transparent:true,depthWrite:false,side:THREE.DoubleSide})
+    );
+    ringC.rotation.x=Math.PI*0.42; ringC.rotation.z=Math.PI*0.12;
+    planetCGroup.add(ringC);
+
+    // --- Planet D: purple deep giant (bottom-right far) ---
+    const planetDGroup = new THREE.Group();
+    planetDGroup.position.set(22, -14, -55);
+    scene.add(planetDGroup);
+
+    const planetD = new THREE.Mesh(
+      new THREE.SphereGeometry(4.5, 160, 160),
+      makePlanetMat({
+        // exotic purple giant: deep indigo, violet, lavender, magenta accents
+        scale:1.8, disp:0.04, bandFreq:6.5,
+        c0: 0x2a0858, c1: 0x7030c0, c2: 0x180440,
+        c3: 0x9858e0, c4: 0x3a10a0, c5: 0xc080f8,
+        spotColor: 0xff40a0, spotLat: -0.25, spotLon: 5.2, spotSize: 0.20,
+        capColor: 0xe8c0ff,
+        emissive: 0x0e0220, emissiveIntensity: 0.30,
+        roughness: 0.5, clearcoat: 0.6, sheenColor: 0x6020c0
+      })
+    );
+    planetD.renderOrder=1;
+    planetDGroup.add(planetD);
+
+    const planetDAtm=new THREE.Mesh(new THREE.SphereGeometry(4.68,96,96),
+      new THREE.MeshBasicMaterial({color:0xb060ff,transparent:true,opacity:0.13,depthWrite:false}));
+    planetDAtm.renderOrder=2; planetDGroup.add(planetDAtm);
+
+    const planetDGlow=makeGlowSprite(32,'rgba(180,80,255,0.18)','rgba(120,40,200,0)');
+    planetDGroup.add(planetDGlow);
+
+    // D has faint atmosphere bands visible via rings
+    const ringD=new THREE.Mesh(
+      new THREE.RingGeometry(5.5,7.8,200,1),
+      new THREE.MeshBasicMaterial({map:makeRingTex('180,120,255'),transparent:true,depthWrite:false,side:THREE.DoubleSide})
+    );
+    ringD.rotation.x=Math.PI*0.58; ringD.rotation.y=Math.PI*0.22;
+    planetDGroup.add(ringD);
+
+    /* ===== STARFIELD — spectral colored stars ===== */
+    // Spectral classes: O(blue-white), B(blue), A(white-blue), F(yellow-white),
+    //                   G(yellow), K(orange), M(red) — weighted toward common types
+    const SPECTRAL = [
+      { color: 0x9bb8ff, weight: 1  },  // O — hot blue
+      { color: 0xaacfff, weight: 3  },  // B — blue-white
+      { color: 0xd4e8ff, weight: 8  },  // A — white-blue
+      { color: 0xfff4e0, weight: 15 },  // F — yellow-white
+      { color: 0xffeda0, weight: 20 },  // G — yellow (sun-like)
+      { color: 0xffbc60, weight: 18 },  // K — orange
+      { color: 0xff7040, weight: 10 },  // M — red dwarf
+    ];
+    const SPECTRAL_TOTAL = SPECTRAL.reduce((s,c)=>s+c.weight,0);
+
+    function pickSpectral() {
+      let r = Math.random() * SPECTRAL_TOTAL;
+      for (const s of SPECTRAL) { r -= s.weight; if (r <= 0) return s.color; }
+      return 0xffffff;
+    }
+
+    function randSpherePos(minR, maxR) {
+      const r  = minR + Math.random()*(maxR-minR);
+      const th = Math.random()*Math.PI*2;
+      const ph = Math.acos(2*Math.random()-1);
+      return new THREE.Vector3(
+        r*Math.sin(ph)*Math.cos(th),
+        r*Math.cos(ph),
+        r*Math.sin(ph)*Math.sin(th)
+      );
+    }
+
+    // Layered colored point star clouds
+    function coloredStarLayer(count, sizeMin, sizeMax, minR, maxR) {
+      const geo = new THREE.BufferGeometry();
+      const pos = new Float32Array(count*3);
+      const col = new Float32Array(count*3);
+      const sz  = new Float32Array(count);
+      const c   = new THREE.Color();
+      for (let i=0; i<count; i++) {
+        const p = randSpherePos(minR, maxR);
+        pos[i*3]=p.x; pos[i*3+1]=p.y; pos[i*3+2]=p.z;
+        c.set(pickSpectral());
+        col[i*3]=c.r; col[i*3+1]=c.g; col[i*3+2]=c.b;
+        sz[i] = sizeMin + Math.random()*(sizeMax-sizeMin);
+      }
+      geo.setAttribute('position', new THREE.BufferAttribute(pos,3));
+      geo.setAttribute('color',    new THREE.BufferAttribute(col,3));
+      const mat = new THREE.PointsMaterial({
+        vertexColors: true, size: (sizeMin+sizeMax)/2,
+        sizeAttenuation: true, transparent: true, opacity: 0.92
+      });
+      return new THREE.Points(geo, mat);
+    }
+
+    const starsFar  = coloredStarLayer(2200, 0.05, 0.09, 180, 380);
+    const starsMid  = coloredStarLayer(1600, 0.09, 0.16, 75,  185);
+    const starsNear = coloredStarLayer(800,  0.15, 0.28, 42,  95);
+    scene.add(starsFar, starsMid, starsNear);
+
+    // Prominent individual stars with colored glows + diffraction spikes
+    const brightStarData = [
+      { r:90,  color:'160,200,255', size:5.5, spikes:true  },   // Rigel-blue
+      { r:110, color:'255,220,140', size:4.8, spikes:true  },   // Arcturus-orange
+      { r:75,  color:'255,255,255', size:4.2, spikes:false },   // Sirius-white
+      { r:130, color:'255,160,80',  size:5.0, spikes:true  },   // Betelgeuse-red
+      { r:95,  color:'180,210,255', size:3.8, spikes:false },   // Vega-blue
+      { r:105, color:'255,240,180', size:3.5, spikes:false },   // Sun-yellow
+      { r:85,  color:'255,100,60',  size:4.5, spikes:true  },   // red giant
+      { r:120, color:'140,180,255', size:3.2, spikes:false },   // hot B-star
+      { r:98,  color:'255,200,100', size:3.6, spikes:false },   // K-giant
+      { r:115, color:'200,220,255', size:4.0, spikes:true  },   // blue-white
+    ];
+
+    function makeDiffractionSprite(colorStr, size) {
+      // 4-point star spike texture baked on canvas
+      const c = document.createElement('canvas'); c.width = c.height = 128;
+      const g = c.getContext('2d');
+      // core glow
+      const grd = g.createRadialGradient(64,64,2,64,64,55);
+      grd.addColorStop(0, `rgba(${colorStr},1)`);
+      grd.addColorStop(0.15, `rgba(${colorStr},0.7)`);
+      grd.addColorStop(1, `rgba(${colorStr},0)`);
+      g.fillStyle = grd; g.fillRect(0,0,128,128);
+      // spike lines
+      g.save(); g.globalCompositeOperation='lighter';
+      [[0,64,128,64],[64,0,64,128],[20,20,108,108],[108,20,20,108]].forEach(([x1,y1,x2,y2],si) => {
+        if (si>=2) return; // only cross spikes
+        const sg = g.createLinearGradient(x1,y1,x2,y2);
+        sg.addColorStop(0,`rgba(${colorStr},0)`);
+        sg.addColorStop(0.5,`rgba(${colorStr},0.6)`);
+        sg.addColorStop(1,`rgba(${colorStr},0)`);
+        g.strokeStyle=sg; g.lineWidth=2; g.beginPath(); g.moveTo(x1,y1); g.lineTo(x2,y2); g.stroke();
+      });
+      g.restore();
+      const sp = new THREE.Sprite(new THREE.SpriteMaterial({
+        map: new THREE.CanvasTexture(c), transparent: true,
+        blending: THREE.AdditiveBlending, depthWrite: false
+      }));
+      sp.scale.set(size,size,1);
+      return sp;
+    }
+
+    const brightStarSprites = [];
+    brightStarData.forEach(d => {
+      const p = randSpherePos(d.r-10, d.r+10);
+      const sp = makeDiffractionSprite(d.color, d.size);
+      sp.position.copy(p);
+      scene.add(sp);
+      brightStarSprites.push({ sp, phase: Math.random()*Math.PI*2, freq: 0.5+Math.random()*1.5 });
+    });
+
+    /* ===== GALAXIES ===== */
+    function makeGalaxySprite(type, size) {
+      const c = document.createElement('canvas'); c.width = c.height = 256;
+      const g = c.getContext('2d');
+
+      if (type === 'spiral') {
+        // Milky Way-style spiral: two symmetric arms + core
+        const cx=128, cy=128;
+        g.globalCompositeOperation='lighter';
+        // core bulge
+        const core = g.createRadialGradient(cx,cy,0,cx,cy,40);
+        core.addColorStop(0,'rgba(255,240,200,0.9)');
+        core.addColorStop(0.4,'rgba(255,220,150,0.4)');
+        core.addColorStop(1,'rgba(255,200,100,0)');
+        g.fillStyle=core; g.fillRect(0,0,256,256);
+        // spiral arms
+        for (let arm=0; arm<2; arm++) {
+          const armOffset = arm * Math.PI;
+          for (let i=0; i<500; i++) {
+            const angle = (i/500)*Math.PI*3.5 + armOffset;
+            const r = (i/500)*100 + 5;
+            const spread = (i/500)*14;
+            const x = cx + Math.cos(angle)*r + (Math.random()-0.5)*spread;
+            const y = cy + Math.sin(angle)*r*0.38 + (Math.random()-0.5)*spread*0.5;
+            const brightness = Math.max(0, 1-(i/500)*0.7);
+            const starR = Math.random()<0.15?Math.random()*1.5+0.5:0.5;
+            // pick arm star color (blend blue outer, yellow inner)
+            const t = i/500;
+            const cr = Math.round(mix(200,255,t)), cg = Math.round(mix(200,220,t*0.5)), cb = Math.round(mix(255,150,t));
+            g.fillStyle=`rgba(${cr},${cg},${cb},${brightness*0.85})`;
+            g.beginPath(); g.arc(x,y,starR,0,Math.PI*2); g.fill();
+          }
+        }
+        // dust lanes
+        for (let i=0; i<120; i++) {
+          const angle = (i/120)*Math.PI*3.5;
+          const r = (i/120)*95+8;
+          const x = cx + Math.cos(angle)*r + (Math.random()-0.5)*8;
+          const y = cy + Math.sin(angle)*r*0.38 + (Math.random()-0.5)*4;
+          g.fillStyle=`rgba(0,0,20,${0.12+Math.random()*0.1})`;
+          g.beginPath(); g.arc(x,y,Math.random()*3+1,0,Math.PI*2); g.fill();
+        }
+
+      } else if (type === 'elliptical') {
+        // Smooth elliptical galaxy — warm yellow-white gradient, no structure
+        const e = g.createRadialGradient(128,96,2,128,96,110);
+        e.addColorStop(0,'rgba(255,240,200,0.95)');
+        e.addColorStop(0.3,'rgba(255,220,160,0.55)');
+        e.addColorStop(0.7,'rgba(255,190,100,0.18)');
+        e.addColorStop(1,'rgba(255,160,80,0)');
+        g.fillStyle=e; g.fillRect(0,0,256,256);
+
+      } else if (type === 'barred') {
+        // Barred spiral: central bar + two arms
+        const cx=128,cy=128;
+        g.globalCompositeOperation='lighter';
+        // bar
+        for (let i=0; i<200; i++) {
+          const x = cx + (Math.random()-0.5)*120;
+          const y = cy + (Math.random()-0.5)*22;
+          g.fillStyle=`rgba(255,230,180,${0.3+Math.random()*0.4})`;
+          g.beginPath(); g.arc(x,y,Math.random()*1.5+0.3,0,Math.PI*2); g.fill();
+        }
+        // arms from bar ends
+        for (let arm=0; arm<2; arm++) {
+          const startAngle = arm===0?0:Math.PI;
+          for (let i=0; i<300; i++) {
+            const angle = startAngle + (i/300)*Math.PI*1.8;
+            const r = 60 + (i/300)*70;
+            const x = cx + Math.cos(angle)*r*0.9 + (Math.random()-0.5)*10;
+            const y = cy + Math.sin(angle)*r*0.35 + (Math.random()-0.5)*8;
+            const b = 1-(i/300)*0.75;
+            g.fillStyle=`rgba(180,210,255,${b*0.7})`;
+            g.beginPath(); g.arc(x,y,Math.random()+0.4,0,Math.PI*2); g.fill();
+          }
+        }
+        // core
+        const coreG=g.createRadialGradient(cx,cy,0,cx,cy,28);
+        coreG.addColorStop(0,'rgba(255,245,210,0.9)'); coreG.addColorStop(1,'rgba(255,220,160,0)');
+        g.fillStyle=coreG; g.fillRect(0,0,256,256);
+      }
+
+      const sp = new THREE.Sprite(new THREE.SpriteMaterial({
+        map: new THREE.CanvasTexture(c), transparent: true,
+        blending: THREE.AdditiveBlending, depthWrite: false
+      }));
+      sp.scale.set(size,size,1);
+      return sp;
+    }
+
+    function mix(a,b,t){ return a+(b-a)*t; }
+
+    const galaxyDefs = [
+      { type:'spiral',    pos:[-95, 22, -180], rot:0.4,  size:28 },
+      { type:'elliptical',pos:[ 130,-18, -220], rot:0.0,  size:18 },
+      { type:'barred',    pos:[-60,-45, -260], rot:0.7,  size:22 },
+      { type:'spiral',    pos:[ 80, 55, -310], rot:-0.3, size:20 },
+      { type:'elliptical',pos:[-130, 10, -190], rot:0.0,  size:14 },
+    ];
+
+    const galaxyObjects = [];
+    galaxyDefs.forEach(d => {
+      const sp = makeGalaxySprite(d.type, d.size);
+      sp.position.set(...d.pos);
+      sp.material.rotation = d.rot;
+      scene.add(sp);
+      galaxyObjects.push({ sp, baseOp: 0.55+Math.random()*0.25, phase: Math.random()*Math.PI*2 });
+    });
+
+    /* ===== NEBULAE ===== */
+    function makeNebulaSprite(r1,g1,b1, r2,g2,b2, size) {
+      const c = document.createElement('canvas'); c.width = c.height = 256;
+      const ctx = c.getContext('2d');
+      // multi-blob nebula using overlapping radial gradients
+      const blobs = [
+        [128,128,90], [100,100,60], [160,140,70], [110,160,55], [145,105,65]
+      ];
+      ctx.globalCompositeOperation='lighter';
+      blobs.forEach(([bx,by,br], i) => {
+        const t = i/blobs.length;
+        const cr=Math.round(r1+(r2-r1)*t), cg=Math.round(g1+(g2-g1)*t), cb=Math.round(b1+(b2-b1)*t);
+        const grd = ctx.createRadialGradient(bx,by,3,bx,by,br);
+        grd.addColorStop(0,`rgba(${cr},${cg},${cb},0.6)`);
+        grd.addColorStop(0.5,`rgba(${cr},${cg},${cb},0.18)`);
+        grd.addColorStop(1,`rgba(${cr},${cg},${cb},0)`);
+        ctx.fillStyle=grd; ctx.fillRect(0,0,256,256);
+      });
+      // scattered stars within nebula
+      for (let i=0; i<60; i++) {
+        const x=40+Math.random()*176, y=40+Math.random()*176;
+        ctx.fillStyle=`rgba(255,255,255,${0.3+Math.random()*0.5})`;
+        ctx.beginPath(); ctx.arc(x,y,Math.random()*0.8+0.2,0,Math.PI*2); ctx.fill();
+      }
+      const sp = new THREE.Sprite(new THREE.SpriteMaterial({
+        map: new THREE.CanvasTexture(c), transparent: true,
+        blending: THREE.AdditiveBlending, depthWrite: false
+      }));
+      sp.scale.set(size,size,1);
+      return sp;
+    }
+
+    const nebulaDefs = [
+      { colors:[120,40,200, 200,80,255],  pos:[ 70,-60,-160], size:55 },  // purple/violet
+      { colors:[20,120,200, 60,220,255],  pos:[-80, 40,-140], size:48 },  // blue nebula
+      { colors:[200,60,40,  255,140,80],  pos:[ 50, 70,-200], size:42 },  // red emission
+      { colors:[40,200,120, 100,255,180], pos:[-110,-20,-230], size:38 },  // green/teal
+      { colors:[180,160,40, 255,240,100], pos:[ 100,-40,-175], size:32 },  // golden
+    ];
+
+    const nebulaObjects = [];
+    nebulaDefs.forEach(d => {
+      const [r1,g1,b1,r2,g2,b2] = d.colors;
+      const sp = makeNebulaSprite(r1,g1,b1,r2,g2,b2, d.size);
+      sp.position.set(...d.pos);
+      scene.add(sp);
+      nebulaObjects.push({ sp, phase: Math.random()*Math.PI*2, freq: 0.2+Math.random()*0.3 });
+    });
+
+    /* ===== PULSARS ===== */
+    function makePulsarSystem(pos, color1, color2) {
+      const group = new THREE.Group();
+      group.position.set(...pos);
+
+      // compact star body
+      const core = new THREE.Mesh(
+        new THREE.SphereGeometry(0.18,16,16),
+        new THREE.MeshBasicMaterial({ color: 0xffffff })
+      );
+      group.add(core);
+
+      // inner glow
+      const innerGlow = makeGlowSprite(2.5, `rgba(${color1},1)`, `rgba(${color1},0)`);
+      group.add(innerGlow);
+
+      // outer diffuse halo
+      const outerGlow = makeGlowSprite(7, `rgba(${color2},0.5)`, `rgba(${color2},0)`);
+      group.add(outerGlow);
+
+      // two rotating beam cones (opposite directions)
+      function makeBeam(flip) {
+        const geo = new THREE.ConeGeometry(0.12, 4.5, 12, 1, true);
+        const mat = new THREE.MeshBasicMaterial({
+          color: new THREE.Color(`rgb(${color1})`),
+          transparent: true, opacity: 0.55,
+          blending: THREE.AdditiveBlending, depthWrite: false, side: THREE.DoubleSide
+        });
+        const m = new THREE.Mesh(geo, mat);
+        m.position.y = flip * 2.25;
+        m.rotation.x = flip > 0 ? 0 : Math.PI;
+        return m;
+      }
+      const beam1 = makeBeam(1);
+      const beam2 = makeBeam(-1);
+      const beamGroup = new THREE.Group();
+      beamGroup.add(beam1, beam2);
+      group.add(beamGroup);
+
+      // sweeping disc (equatorial)
+      const discMat = new THREE.MeshBasicMaterial({
+        color: new THREE.Color(`rgb(${color2})`),
+        transparent: true, opacity: 0.18,
+        blending: THREE.AdditiveBlending, depthWrite: false, side: THREE.DoubleSide
+      });
+      const disc = new THREE.Mesh(new THREE.RingGeometry(0.4, 2.2, 48), discMat);
+      disc.rotation.x = Math.PI/2;
+      group.add(disc);
+
+      scene.add(group);
+      return { group, beamGroup, innerGlow, outerGlow, disc,
+               phase: Math.random()*Math.PI*2,
+               speed: 1.8+Math.random()*2.5,
+               color1, color2 };
+    }
+
+    const pulsars = [
+      makePulsarSystem([-55, 28, -95],  '120,220,255', '60,150,255'),   // blue X-ray pulsar
+      makePulsarSystem([ 65,-30,-110],  '255,160,80',  '255,80,40'),    // orange magnetar
+      makePulsarSystem([-35,-55,-130],  '180,255,180', '60,200,100'),   // green ms-pulsar
+    ];
+
+    /* ===== MOON / SATELLITE NODES ===== */
+    const satellites = new THREE.Group(); scene.add(satellites);
+
+    const moonNoise = `
+float mhash(vec3 p){p=fract(p*0.3183099+.1);p*=17.;return fract(p.x*p.y*p.z*(p.x+p.y+p.z));}
+float mfbm(vec3 p){float v=0.;v+=.5*mhash(p);v+=.25*mhash(p*2.1);v+=.125*mhash(p*4.3);v+=.0625*mhash(p*8.7);return v;}
+`;
+
+    function makeMoonMat(color) {
+      return new THREE.ShaderMaterial({
+        uniforms:{uColor:{value:new THREE.Color(color)},uTime:{value:0}},
+        vertexShader:`varying vec3 vPos;void main(){vPos=position;gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.);}`,
+        fragmentShader:`varying vec3 vPos;uniform vec3 uColor;uniform float uTime;${moonNoise}
+void main(){
+  vec3 p=normalize(vPos)*3.;
+  float n=mfbm(p+vec3(uTime*.08));
+  float crater=smoothstep(.2,.8,abs(n));
+  // subtle limb darkening
+  float limb=pow(max(dot(normalize(vPos),vec3(0.6,0.4,0.7)),0.),1.5)*0.3;
+  vec3 c=mix(uColor*.65,uColor*1.25,crater)+vec3(limb)*0.12;
+  gl_FragColor=vec4(c,1.);
+}`,lights:false
+      });
+    }
+
+    function makeMoon(color, radius, speed, label, href, size=0.28) {
+      const g=new THREE.Group();
+      const mat=makeMoonMat(color);
+      g.add(new THREE.Mesh(new THREE.SphereGeometry(size,64,64),mat));
+      const haloC=document.createElement('canvas'); haloC.width=haloC.height=256;
+      const ctx=haloC.getContext('2d');
+      const gr=ctx.createRadialGradient(128,128,18,128,128,128);
+      gr.addColorStop(0,'rgba(255,255,255,0.35)'); gr.addColorStop(1,'rgba(255,255,255,0)');
+      ctx.fillStyle=gr; ctx.fillRect(0,0,256,256);
+      const halo=new THREE.Sprite(new THREE.SpriteMaterial({map:new THREE.CanvasTexture(haloC),transparent:true,blending:THREE.AdditiveBlending,depthWrite:false}));
+      halo.scale.set(1.3,1.3,1); g.add(halo);
+      g.userData={radius,angle:Math.random()*Math.PI*2,speed,label,href,mat};
+      satellites.add(g);
+      return g;
+    }
+
+    const satProjects=makeMoon(0x7cf7ff,3.7,0.60,'Projects','#projects');
+    const satAbout=makeMoon(0xff9ff3,4.7,0.42,'About','#about');
+    const satResume=makeMoon(0x9cffb5,5.5,0.28,'Résumé','/Resume.pdf');
+
+    // DOM labels
+    const labelsRoot=document.getElementById('labels');
+    const labelFor=new Map();
+    [satProjects,satAbout,satResume].forEach(g=>{
+      const d=document.createElement('div'); d.className='label';
+      const {label,href}=g.userData;
+      d.innerHTML=href.endsWith('.pdf')
+        ?`<a href="${href}" target="_blank" rel="noopener">${label} ↗</a>`
+        :`<a href="${href}">${label}</a>`;
+      labelsRoot.appendChild(d); labelFor.set(g,d);
+    });
+
+    /* ---- raycaster ---- */
+    const raycaster=new THREE.Raycaster();
+    const pointer=new THREE.Vector2();
+    window.addEventListener('pointermove',e=>{
+      pointer.x=(e.clientX/window.innerWidth)*2-1;
+      pointer.y=-(e.clientY/window.innerHeight)*2+1;
+    });
+    window.addEventListener('click',()=>{
+      raycaster.setFromCamera(pointer,camera);
+      const hits=raycaster.intersectObjects(satellites.children,true);
+      if(hits[0]){
+        let g=hits[0].object;
+        while(g.parent&&!g.userData.href) g=g.parent;
+        const {href}=g.userData;
+        if(href&&href.endsWith('.pdf')) window.open(href,'_blank','noopener');
+        else if(href) window.location.hash=href;
+      }
+    });
+
+    /* ---- resize ---- */
+    window.addEventListener('resize',()=>{
+      camera.aspect=window.innerWidth/window.innerHeight;
+      camera.updateProjectionMatrix();
+      renderer.setSize(window.innerWidth,window.innerHeight);
+    });
+
+    /* ---- animate ---- */
+    let t=0;
+    function animate(){
+      requestAnimationFrame(animate);
+      t+=0.005;
+
+      planet.rotation.y+=0.0013;
+      clouds.rotation.y+=0.0019;
+      planetGroup.rotation.y+=0.0008;
+      atmMat.opacity=0.17+Math.sin(t*2)*0.025;
+      aurora.position.y=1.6+Math.sin(t*1.4)*0.06;
+      ring.rotation.z+=0.0005;
+
+      planetBGroup.rotation.y-=0.0007;
+      ringB.rotation.z+=0.0004;
+
+      planetCGroup.rotation.y+=0.0011;
+      ringC.rotation.z-=0.0006;
+
+      planetDGroup.rotation.y-=0.0004;
+      ringD.rotation.z+=0.0003;
+
+      // glow pulse
+      sunGlow.material.opacity=0.28+Math.sin(t*1.2)*0.07;
+      planetBGroup.children[2].material.opacity=0.18+Math.sin(t*0.9+1)*0.05;
+      planetCGroup.children[2].material.opacity=0.2+Math.sin(t*1.1+2)*0.05;
+      planetDGroup.children[2].material.opacity=0.16+Math.sin(t*0.7+3)*0.05;
+
+      starsFar.rotation.y-=0.00008;
+      starsMid.rotation.y-=0.00022;
+      starsNear.rotation.y-=0.00042;
+      starsNear.material.opacity=0.82+Math.sin(t*4.5)*0.12;
+      starsMid.material.opacity=0.7+Math.sin(t*3+1)*0.16;
+      starsFar.material.opacity=0.62+Math.sin(t*2+2)*0.14;
+
+      // bright star twinkle
+      brightStarSprites.forEach(({sp,phase,freq}) => {
+        sp.material.opacity = 0.55 + Math.sin(t*freq*6+phase)*0.35 + Math.sin(t*freq*13+phase)*0.1;
+      });
+
+      // galaxy gentle pulse + slow spin
+      galaxyObjects.forEach(({sp,baseOp,phase}) => {
+        sp.material.opacity = baseOp + Math.sin(t*0.4+phase)*0.08;
+        sp.material.rotation += 0.00015;
+      });
+
+      // nebula slow breathe
+      nebulaObjects.forEach(({sp,phase,freq}) => {
+        sp.material.opacity = 0.38 + Math.sin(t*freq+phase)*0.12;
+      });
+
+      // pulsars — fast beam rotation + intensity pulse
+      pulsars.forEach(({group,beamGroup,innerGlow,outerGlow,disc,phase,speed}) => {
+        beamGroup.rotation.x += 0.012 * speed;
+        beamGroup.rotation.z += 0.005 * speed;
+        // flash on pole crossing
+        const pulse = Math.pow(Math.max(0, Math.sin(t*speed*4+phase)), 6);
+        innerGlow.material.opacity = 0.6 + pulse * 0.5;
+        outerGlow.material.opacity = 0.12 + pulse * 0.25;
+        beamGroup.children.forEach(b => { b.material.opacity = 0.35 + pulse * 0.55; });
+        disc.material.opacity = 0.1 + pulse * 0.15;
+        // slow group drift
+        group.rotation.y += 0.0004;
+      });
+
+      satellites.children.forEach(g=>{
+        const u=g.userData;
+        u.angle+=0.01*u.speed;
+        g.position.set(Math.cos(u.angle)*u.radius,Math.sin(u.angle*1.1)*0.5,Math.sin(u.angle)*u.radius);
+        g.rotation.y+=0.01;
+        if(u.mat) u.mat.uniforms.uTime.value+=0.006;
+      });
+
+      // DOM labels
+      const W=renderer.domElement.clientWidth, H=renderer.domElement.clientHeight;
+      satellites.children.forEach(g=>{
+        const d=labelFor.get(g); if(!d) return;
+        const p=g.position.clone().project(camera);
+        d.style.display=p.z>1?'none':'block';
+        d.style.left=`${(p.x*0.5+0.5)*W}px`;
+        d.style.top=`${(-p.y*0.5+0.5)*H}px`;
+      });
+
+      // advance planet shader time
+      allPlanetUniforms.forEach(u=>{ if(u.pTime) u.pTime.value+=0.016*0.5; });
+
+      renderer.render(scene, camera);
+    }
+    animate();
+
+    document.getElementById('year').textContent=new Date().getFullYear();
+  </script>
+</body>
 </html>
