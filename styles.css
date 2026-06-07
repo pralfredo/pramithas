@@ -351,6 +351,22 @@ html.light body::after {
     inset 7px 7px 13px rgba(255,255,255,.08);
 }
 
+.highlight-ring {
+  background: transparent !important;
+}
+
+.highlight-inner {
+  background: transparent !important;
+}
+
+.highlight-inner img {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important;
+  border-radius: 50% !important;
+  display: block !important;
+}
+
 /* planet color map by menu position */
 .cta .button:nth-child(1) { --menu-planet-a:#7cf7ff; --menu-planet-b:#264f7c; }
 .cta .button:nth-child(2) { --menu-planet-a:#9cffb5; --menu-planet-b:#236449; }
