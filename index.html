@@ -3846,7 +3846,16 @@ void main(){
     const satShows=makeMoon(0xb388ff,7.00,0.21,'Shows','#shows',0.24);
     const satGithub=makeMoon(0x9cffb5,7.45,0.18,'GitHub','https://github.com/pralfredo',0.23);
     const satResume=makeMoon(0xffffff,7.85,0.16,'Résumé','/Resume.pdf',0.23);
-    const menuMoons=[satProjects,satAtlas,satFigures,satPublication,satAbout,satHighlights,satShows,satGithub,satResume];
+    const menuMoons = [
+    satProjects,
+    satAtlas,
+    satPublication,
+    satAbout,
+    satHighlights,
+    satShows,
+    satGithub,
+    satResume
+  ].filter(Boolean);
 
     // DOM labels
     const labelsRoot=document.getElementById('labels');
