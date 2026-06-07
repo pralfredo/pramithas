@@ -4853,6 +4853,22 @@ const menuMoons = [];
       label.id = "themeLabel";
       btn.append(label);
     }
+    function applyThemeVisuals(isLight) {
+    document.documentElement.classList.toggle('light', isLight);
+    document.documentElement.classList.toggle('dark', !isLight);
+
+    // Hide the giant redundant shell in light mode
+    if (centerPlanetOuter) centerPlanetOuter.visible = !isLight;
+
+    // Keep the actual inner hero planet visible in both
+    if (centerPlanetInner) centerPlanetInner.visible = true;
+
+    // Light-mode accent planets
+    lightAccentPlanets.forEach(p => p.visible = isLight);
+
+    // Dark-mode accent planets if you have a separate set
+    darkAccentPlanets.forEach(p => p.visible = !isLight);
+  }
 
     function applyTheme(mode) {
       const isLight = mode === "light";
@@ -5159,7 +5175,6 @@ const menuMoons = [];
   }
 })();
 </script>
-
 
 <script id="FINAL_SINGLE_THEME_TOGGLE">
 (() => {
