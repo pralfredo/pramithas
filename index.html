@@ -2616,11 +2616,33 @@ html[data-theme="light"] .hero {
   isolation: isolate;
 }
 
-/* remove redundant centered outer shell in light mode */
 html.light .hero .hud::before,
 html[data-theme="light"] .hero .hud::before {
-  content: none !important;
-  display: none !important;
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 48%;
+  width: min(34rem, 58vw);
+  aspect-ratio: 1 / 1;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  z-index: -1;
+  pointer-events: none;
+  opacity: .22;
+  background:
+    radial-gradient(circle at 34% 27%, rgba(255,255,255,.42), transparent 12%),
+    repeating-linear-gradient(
+      7deg,
+      rgba(166,126,82,.16) 0 8px,
+      rgba(212,185,139,.14) 8px 17px,
+      rgba(117,145,168,.12) 17px 27px,
+      rgba(232,215,176,.13) 27px 39px
+    ),
+    linear-gradient(145deg, #caa173 0%, #a57e5f 42%, #8499ad 72%, #667088 100%);
+  box-shadow:
+    inset -3rem -2.5rem 6rem rgba(58, 58, 68, .20),
+    inset 2rem 1.5rem 3.5rem rgba(255,255,255,.17),
+    0 0 5rem rgba(93, 102, 130, .08);
 }
 
 /* Toggle must remain clickable above everything, including while scrolled. */
@@ -2635,8 +2657,114 @@ html[data-theme="light"] .hero .hud::before {
   transform: translateZ(0) !important;
 }
 
+
+/* === v10 final polish: real highlight images, no fake circles, no duplicate hero shell === */
+
+/* Remove all old centered CSS shells. The real WebGL planet stays. */
+html.light .hero::before,
+html[data-theme="light"] .hero::before,
+html.light .hero::after,
+html[data-theme="light"] .hero::after,
+html.light .hero .hud::before,
+html[data-theme="light"] .hero .hud::before,
+html.light .hero .hud::after,
+html[data-theme="light"] .hero .hud::after {
+  content: none !important;
+  display: none !important;
+  opacity: 0 !important;
+}
+
+/* Highlights should not display pretty gradient circles when the actual images are missing. */
+.highlight-ring {
+  background: transparent !important;
+}
+.highlight-inner {
+  background: rgba(8, 12, 22, .18) !important;
+}
+html.light .highlight-inner,
+html[data-theme="light"] .highlight-inner {
+  background: rgba(255,255,255,.18) !important;
+}
+.highlight-inner img {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important;
+  border-radius: 50% !important;
+  display: block !important;
+}
+.highlight-item.missing-highlight .highlight-inner {
+  outline: 1px dashed rgba(140, 80, 140, .35);
+}
+.highlight-item.missing-highlight .highlight-inner::after {
+  content: "missing";
+  display: grid;
+  place-items: center;
+  width: 100%;
+  height: 100%;
+  font: 600 .58rem/1 var(--mono, monospace);
+  color: rgba(80, 55, 95, .65);
+}
+
+/* Light-mode planets: extra ambient bodies, not pasted onto cards. */
+#lightPlanetLayer {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  display: none;
+  overflow: hidden;
+}
+html.light #lightPlanetLayer,
+html[data-theme="light"] #lightPlanetLayer {
+  display: block;
+}
+.light-planet {
+  position: absolute;
+  border-radius: 50%;
+  opacity: .30;
+  filter: blur(.05px) drop-shadow(0 14px 34px rgba(75,85,105,.12));
+  animation: lightPlanetFloat 18s ease-in-out infinite;
+  background:
+    radial-gradient(circle at 31% 24%, rgba(255,255,255,.48), transparent 13%),
+    linear-gradient(145deg, var(--lp1), var(--lp2) 52%, var(--lp3));
+  box-shadow:
+    inset -18px -16px 36px rgba(44,44,52,.16),
+    inset 10px 9px 22px rgba(255,255,255,.13);
+}
+.light-planet::after {
+  content: "";
+  position: absolute;
+  inset: 43% -33%;
+  height: 14%;
+  border-radius: 50%;
+  border-top: 1.5px solid rgba(70,78,98,.18);
+  border-bottom: 1px solid rgba(70,78,98,.08);
+  transform: rotate(-16deg);
+  opacity: var(--ring, 0);
+}
+.lp-a { width: 8.5rem; height: 8.5rem; left: 11%; top: 17%; --lp1:#c9b28a; --lp2:#a58b67; --lp3:#70624f; animation-duration: 21s; }
+.lp-b { width: 6.8rem; height: 6.8rem; right: 11%; top: 19%; --lp1:#a8bdc9; --lp2:#748a96; --lp3:#52656d; animation-duration: 25s; animation-delay: -7s; --ring: 1; }
+.lp-c { width: 5.5rem; height: 5.5rem; right: 18%; bottom: 18%; --lp1:#b1a3cb; --lp2:#81709d; --lp3:#5e526f; animation-duration: 17s; animation-delay: -4s; }
+.lp-d { width: 7rem; height: 7rem; left: 7%; bottom: 12%; --lp1:#d4d1c4; --lp2:#aaa896; --lp3:#858579; opacity:.18; animation-duration: 28s; animation-delay: -11s; }
+.lp-e { width: 4.7rem; height: 4.7rem; left: 27%; top: 9%; --lp1:#cde3df; --lp2:#91aaa4; --lp3:#657e79; opacity:.22; animation-duration: 19s; animation-delay: -3s; }
+.lp-f { width: 4.2rem; height: 4.2rem; right: 4%; top: 49%; --lp1:#b7c8ed; --lp2:#7c91be; --lp3:#52668d; opacity:.20; animation-duration: 24s; animation-delay: -14s; }
+@keyframes lightPlanetFloat {
+  0%, 100% { transform: translate3d(0,0,0) rotate(0deg); }
+  50% { transform: translate3d(1.2rem,-.8rem,0) rotate(2deg); }
+}
+
 </style></head>
 <body>
+
+<div id="lightPlanetLayer" aria-hidden="true">
+  <span class="light-planet lp-a"></span>
+  <span class="light-planet lp-b"></span>
+  <span class="light-planet lp-c"></span>
+  <span class="light-planet lp-d"></span>
+  <span class="light-planet lp-e"></span>
+  <span class="light-planet lp-f"></span>
+</div>
+
   <div class="constellation-sky" id="constellationSky" aria-hidden="true"></div>
   <canvas id="scene"></canvas>
 
@@ -3103,13 +3231,13 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   gallery.innerHTML = "";
- const HIGHLIGHT_BASE = new URL('./highlights/', window.location.href).href;
+  const HIGHLIGHT_BASE = new URL('./highlights/', window.location.href).href;
 
-const stories = highlightFiles.map((file, index) => ({
-  file,
-  name: NAMES[index] || `Highlight ${index + 1}`,
-  src: new URL(file, HIGHLIGHT_BASE).href
-}));
+  const stories = highlightFiles.map((file, index) => ({
+    file,
+    name: NAMES[index] || `Highlight ${index + 1}`,
+    src: new URL(file, HIGHLIGHT_BASE).href
+  }));
 
   stories.forEach((story, index) => {
     const item = document.createElement("button");
@@ -3119,7 +3247,7 @@ const stories = highlightFiles.map((file, index) => ({
     item.innerHTML = `
       <span class="highlight-ring">
         <span class="highlight-inner">
-          <img src="${story.src}" alt="${story.name}" loading="lazy">
+          <img src="${story.src}" alt="${story.name}" loading="lazy" onerror="this.closest('.highlight-item')?.classList.add('missing-highlight')">
         </span>
       </span>
       <span class="highlight-label">${story.name}</span>
@@ -3152,11 +3280,11 @@ const stories = highlightFiles.map((file, index) => ({
     if (!story) return;
 
     hlImg.style.opacity = 0;
-    hlImg.src = `highlights/${story.file}`;
+    hlImg.src = story.src;
     hlImg.onload = () => { hlImg.style.opacity = 1; };
     hlName.textContent = story.name;
     hlIndex.textContent = `${i + 1} / ${stories.length}`;
-    hlAvatar.style.backgroundImage = `url(highlights/${story.file})`;
+    hlAvatar.style.backgroundImage = `url(${story.src})`;
     hlPrev.style.opacity = i === 0 ? "0.2" : "1";
     hlNext.style.opacity = i === stories.length - 1 ? "0.2" : "1";
     startProgress();
@@ -4835,20 +4963,6 @@ const menuMoons = [];
       btn.append(label);
     }
 
-    function applyThemeVisuals(isLight) {
-  document.documentElement.classList.toggle('light', isLight);
-  document.documentElement.classList.toggle('dark', !isLight);
-
-  // KEEP the real center planet
-  if (centerPlanetInner) centerPlanetInner.visible = true;
-
-  // HIDE the big pale duplicate shell in light mode
-  if (centerPlanetOuter) centerPlanetOuter.visible = !isLight;
-
-  // If you want it gone in both themes:
-  // if (centerPlanetOuter) centerPlanetOuter.visible = false;
-  }
-
     function applyTheme(mode) {
       const isLight = mode === "light";
       root.classList.toggle("light", isLight);
@@ -4992,6 +5106,81 @@ const menuMoons = [];
 
 
 <script>
+/* v7 final theme controller: works after scroll, removes old listeners, keeps state stable. */
+(function () {
+  function ready(fn) {
+    if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", fn, { once: true });
+    else fn();
+  }
+
+  ready(function () {
+    const root = document.documentElement;
+    const oldBtn = document.getElementById("themeToggle");
+    if (!oldBtn) return;
+
+    const btn = oldBtn.cloneNode(true);
+    oldBtn.replaceWith(btn);
+
+    const icon = btn.querySelector("#themeIcon");
+    const label = btn.querySelector("#themeLabel");
+
+    function currentTheme() {
+      if (root.dataset.theme === "light" || root.classList.contains("light")) return "light";
+      return "dark";
+    }
+
+    function applyTheme(theme) {
+      const isLight = theme === "light";
+      root.classList.toggle("light", isLight);
+      root.dataset.theme = isLight ? "light" : "dark";
+      root.style.colorScheme = isLight ? "light" : "dark";
+
+      btn.setAttribute("aria-pressed", String(isLight));
+      btn.setAttribute("aria-label", isLight ? "Switch to dark mode" : "Switch to light mode");
+
+      if (icon) icon.textContent = isLight ? "∗" : "☽";
+      if (label) label.textContent = isLight ? "Light Mode" : "Dark Mode";
+
+      try { localStorage.setItem("portfolio-theme", isLight ? "light" : "dark"); } catch (_) {}
+      try { localStorage.setItem("theme", isLight ? "light" : "dark"); } catch (_) {}
+
+      window.dispatchEvent(new CustomEvent("portfolio-theme-change", { detail: { isLight } }));
+    }
+
+    let saved = null;
+    try { saved = localStorage.getItem("portfolio-theme") || localStorage.getItem("theme"); } catch (_) {}
+    applyTheme(saved === "light" ? "light" : currentTheme());
+
+    function toggle(e) {
+      if (e) {
+        e.preventDefault();
+        e.stopPropagation();
+      }
+      applyTheme(currentTheme() === "light" ? "dark" : "light");
+    }
+
+    btn.addEventListener("click", toggle, true);
+    btn.addEventListener("pointerup", function (e) {
+      if (e.pointerType === "touch") toggle(e);
+    }, true);
+
+    // Reassert fixed placement after scroll/resize because earlier scripts/styles move things.
+    function pin() {
+      btn.style.position = "fixed";
+      btn.style.top = "max(1rem, env(safe-area-inset-top))";
+      btn.style.right = "max(1rem, env(safe-area-inset-right))";
+      btn.style.zIndex = "2147483647";
+      btn.style.pointerEvents = "auto";
+    }
+    pin();
+    window.addEventListener("scroll", pin, { passive: true });
+    window.addEventListener("resize", pin, { passive: true });
+  });
+})();
+</script>
+
+
+<script>
 /* v8: rebuild denser constellations so they remain visible in both themes. */
 (function(){
   function rebuildConstellationSky() {
@@ -5083,190 +5272,115 @@ const menuMoons = [];
     rebuildConstellationSky();
   }
   window.addEventListener('load', rebuildConstellationSky);
+  window.addEventListener('portfolio-theme-change', () => setTimeout(rebuildConstellationSky, 30));
   setTimeout(rebuildConstellationSky, 400);
   setTimeout(rebuildConstellationSky, 1400);
 })();
 </script>
 
+
 <script>
-(() => {
-  const root = document.documentElement;
+/* v9: scroll-proof theme toggle. Capture-phase handler beats overlapping sections/canvas. */
+(function () {
+  function installThemeToggle() {
+    const root = document.documentElement;
+    let btn = document.getElementById("themeToggle");
+    if (!btn) return;
 
-  function initThemeToggle() {
-    const oldBtn = document.getElementById("themeToggle");
-    if (!oldBtn) return;
-
-    const btn = oldBtn.cloneNode(true);
-    oldBtn.replaceWith(btn);
+    // Clone to remove older fragile listeners; preserve markup.
+    const fresh = btn.cloneNode(true);
+    btn.replaceWith(fresh);
+    btn = fresh;
 
     const icon = btn.querySelector("#themeIcon");
     const label = btn.querySelector("#themeLabel");
 
-    function apply(theme) {
-      const isLight = theme === "light";
+    function themeNow() {
+      return (root.dataset.theme === "light" || root.classList.contains("light")) ? "light" : "dark";
+    }
 
+    function setTheme(theme) {
+      const isLight = theme === "light";
       root.classList.toggle("light", isLight);
       root.classList.toggle("dark", !isLight);
       root.dataset.theme = isLight ? "light" : "dark";
       root.style.colorScheme = isLight ? "light" : "dark";
 
+      btn.setAttribute("aria-pressed", String(isLight));
+      btn.setAttribute("aria-label", isLight ? "Switch to dark mode" : "Switch to light mode");
       if (icon) icon.textContent = isLight ? "∗" : "☽";
       if (label) label.textContent = isLight ? "Light Mode" : "Dark Mode";
 
-      localStorage.setItem("portfolio-theme", isLight ? "light" : "dark");
+      try { localStorage.setItem("portfolio-theme", isLight ? "light" : "dark"); } catch (_) {}
+      try { localStorage.setItem("theme", isLight ? "light" : "dark"); } catch (_) {}
 
-      window.dispatchEvent(
-        new CustomEvent("portfolio-theme-change", {
-          detail: { isLight }
-        })
-      );
+      window.dispatchEvent(new CustomEvent("portfolio-theme-change", { detail: { isLight } }));
     }
 
-    const saved = localStorage.getItem("portfolio-theme");
-    apply(saved === "light" ? "light" : "dark");
+    function pin() {
+      btn.style.position = "fixed";
+      btn.style.top = "max(1rem, env(safe-area-inset-top))";
+      btn.style.right = "max(1rem, env(safe-area-inset-right))";
+      btn.style.zIndex = "2147483647";
+      btn.style.pointerEvents = "auto";
+      btn.style.touchAction = "manipulation";
+    }
 
-    btn.onclick = (e) => {
-      e.preventDefault();
-      e.stopPropagation();
+    function toggle(e) {
+      if (e) {
+        e.preventDefault();
+        e.stopPropagation();
+        if (typeof e.stopImmediatePropagation === "function") e.stopImmediatePropagation();
+      }
+      setTheme(themeNow() === "light" ? "dark" : "light");
+      pin();
+    }
 
-      const next =
-        root.dataset.theme === "light" || root.classList.contains("light")
-          ? "dark"
-          : "light";
+    let saved = null;
+    try { saved = localStorage.getItem("portfolio-theme") || localStorage.getItem("theme"); } catch (_) {}
+    setTheme(saved === "light" ? "light" : themeNow());
+    pin();
 
-      apply(next);
-    };
+    btn.addEventListener("click", toggle, true);
+    btn.addEventListener("pointerdown", function (e) { e.stopPropagation(); }, true);
+    btn.addEventListener("pointerup", toggle, true);
 
-    Object.assign(btn.style, {
-      position: "fixed",
-      top: "1rem",
-      right: "1rem",
-      zIndex: "2147483647",
-      pointerEvents: "auto",
-      cursor: "pointer"
-    });
+    // If the button is visually clicked but an overlay/canvas catches it, route top-right clicks to the toggle.
+    document.addEventListener("click", function (e) {
+      const r = btn.getBoundingClientRect();
+      const pad = 16;
+      const inBox = e.clientX >= r.left - pad && e.clientX <= r.right + pad && e.clientY >= r.top - pad && e.clientY <= r.bottom + pad;
+      if (inBox && e.target !== btn && !btn.contains(e.target)) toggle(e);
+    }, true);
+
+    window.addEventListener("scroll", pin, { passive: true });
+    window.addEventListener("resize", pin, { passive: true });
+    setInterval(pin, 750);
   }
 
   if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", initThemeToggle);
+    document.addEventListener("DOMContentLoaded", installThemeToggle, { once: true });
   } else {
-    initThemeToggle();
+    installThemeToggle();
   }
+  window.addEventListener("load", installThemeToggle);
+  setTimeout(installThemeToggle, 500);
+  setTimeout(installThemeToggle, 1500);
 })();
 </script>
 
-<script id="FINAL_SINGLE_THEME_TOGGLE">
-(() => {
-  const root = document.documentElement;
-  let lastToggle = 0;
 
-  function getButton() {
-    return document.getElementById("themeToggle");
-  }
-
-  function isLight() {
-    return root.dataset.theme === "light" || root.classList.contains("light");
-  }
-
-  function setTheme(theme) {
-    const light = theme === "light";
-
-    root.classList.toggle("light", light);
-    root.classList.toggle("dark", !light);
-    root.dataset.theme = light ? "light" : "dark";
-    root.style.colorScheme = light ? "light" : "dark";
-
-    const btn = getButton();
-    const icon = document.getElementById("themeIcon");
-    const label = document.getElementById("themeLabel");
-
-    if (btn) {
-      btn.setAttribute("aria-pressed", String(light));
-      btn.setAttribute("aria-label", light ? "Switch to dark mode" : "Switch to light mode");
-      Object.assign(btn.style, {
-        position: "fixed",
-        top: "1rem",
-        right: "1rem",
-        zIndex: "2147483647",
-        pointerEvents: "auto",
-        cursor: "pointer",
-        touchAction: "manipulation"
-      });
+<script>
+/* v10: highlight asset diagnostic for GitHub Pages. */
+(function () {
+  window.addEventListener("load", () => {
+    const imgs = Array.from(document.querySelectorAll("#hlRow img"));
+    if (!imgs.length) return;
+    const bad = imgs.filter(img => !img.complete || img.naturalWidth === 0).map(img => img.getAttribute("src"));
+    if (bad.length) {
+      console.warn("Missing highlight images. Check that these files exist on GitHub Pages:", bad);
     }
-
-    if (icon) icon.textContent = light ? "∗" : "☽";
-    if (label) label.textContent = light ? "Light Mode" : "Dark Mode";
-
-    try {
-      localStorage.setItem("portfolio-theme", light ? "light" : "dark");
-      localStorage.setItem("theme", light ? "light" : "dark");
-    } catch (_) {}
-
-    window.dispatchEvent(new CustomEvent("portfolio-theme-change", {
-      detail: { isLight: light }
-    }));
-  }
-
-  function inToggleArea(e) {
-    const btn = getButton();
-    if (!btn) return false;
-
-    const r = btn.getBoundingClientRect();
-    const pad = 18;
-
-    return (
-      e.clientX >= r.left - pad &&
-      e.clientX <= r.right + pad &&
-      e.clientY >= r.top - pad &&
-      e.clientY <= r.bottom + pad
-    );
-  }
-
-  function handlePointerDown(e) {
-    if (!inToggleArea(e)) return;
-
-    e.preventDefault();
-    e.stopPropagation();
-    if (e.stopImmediatePropagation) e.stopImmediatePropagation();
-
-    const now = Date.now();
-    if (now - lastToggle < 350) return;
-    lastToggle = now;
-
-    setTheme(isLight() ? "dark" : "light");
-  }
-
-  function blockFollowupClick(e) {
-    if (!inToggleArea(e)) return;
-    e.preventDefault();
-    e.stopPropagation();
-    if (e.stopImmediatePropagation) e.stopImmediatePropagation();
-  }
-
-  function boot() {
-    const saved = (() => {
-      try {
-        return localStorage.getItem("portfolio-theme") || localStorage.getItem("theme");
-      } catch (_) {
-        return null;
-      }
-    })();
-
-    setTheme(saved === "light" ? "light" : "dark");
-
-    // Use document capture only. Do not attach button click listeners.
-    document.addEventListener("pointerdown", handlePointerDown, true);
-    document.addEventListener("click", blockFollowupClick, true);
-
-    window.addEventListener("scroll", () => setTheme(isLight() ? "light" : "dark"), { passive: true });
-    window.addEventListener("resize", () => setTheme(isLight() ? "light" : "dark"), { passive: true });
-  }
-
-  if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", boot, { once: true });
-  } else {
-    boot();
-  }
+  });
 })();
 </script>
 
