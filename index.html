@@ -2302,6 +2302,19 @@ html.light .hero::after {
   pointer-events: none;
 }
 
+/* keep hero visuals alive */
+.hero::before,
+.hero::after {
+  display: block;
+}
+
+/* only disable the known duplicate shell */
+html.light .hero .hud::before,
+html[data-theme="light"] .hero .hud::before {
+  content: none !important;
+  display: none !important;
+}
+
 /* Keep the real WebGL canvas available, but don't depend on it for the light hero planet. */
 html[data-theme="light"] #scene,
 html.light #scene {
