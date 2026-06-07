@@ -2172,6 +2172,11 @@ html[data-theme="light"] .network-dot {
   margin-right: auto !important;
 }
 
+:root {
+  --planet-alpha-dark: 0.42;
+  --planet-alpha-light: 0.34;
+}
+
 /* Swiss typography consistency. */
 :root {
   --swiss: "Inter", "Helvetica Neue", Helvetica, Arial, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
@@ -4605,6 +4610,22 @@ const menuMoons = [];
 
     animate();
 
+    function setOpacity(obj, opacity) {
+  if (!obj) return;
+  obj.traverse((node) => {
+    if (!node.material) return;
+
+    const mats = Array.isArray(node.material) ? node.material : [node.material];
+    mats.forEach((m) => {
+      if (!m) return;
+      if ("opacity" in m) {
+        m.transparent = true;
+        m.opacity = opacity;
+      }
+    });
+  });
+}
+
     // Let the independent theme switch also retune the 3D scene.
     window.addEventListener('portfolio-theme-change', (event) => {
       applyThemeToScene(Boolean(event.detail && event.detail.isLight));
@@ -4614,50 +4635,55 @@ const menuMoons = [];
     renderer.toneMappingExposure = document.documentElement.classList.contains('light') ? 0.74 : 1.02;
 
     function applyThemeToScene(isLight) {
-      if (isLight) {
-        renderer.setClearColor(0xd9e3ec, 0);
-        keyLight.color.set(0xffe1a8);
-        keyLight.intensity = 110;
-        fillLight.color.set(0x8fc8ff);
-        fillLight.intensity = 42;
-        rimLight.color.set(0x5e7fb3);
-        rimLight.intensity = 1.05;
+  if (isLight) {
+    renderer.setClearColor(0xaecfe8, 0);
+    keyLight.color.set(0xfff2a0);
+    keyLight.intensity = 170;
+    fillLight.color.set(0xffe090);
+    fillLight.intensity = 65;
 
-        // Keep the real 3D planet visible in light mode. The sun sprite was washing it white.
-        sunGlow.material.color.set(0xffc46a);
-        sunGlow.material.opacity = 0.12;
-        sunSprite.visible = false;
-        scene.fog = null;
+    sunGlow.material.color.set(0xffee88);
+    sunGlow.material.opacity = 0;
+    sunSprite.visible = true;
+    scene.fog = new THREE.Fog(0xaecfe8, 90, 340);
 
-        if (planet && planet.material) {
-          planet.material.opacity = 1;
-          planet.material.transparent = false;
-          planet.material.emissiveIntensity = 0.16;
-        }
-        if (atmMat) atmMat.opacity = 0.07;
-        if (clouds && clouds.material) clouds.material.opacity = 0.13;
-      } else {
-        renderer.setClearColor(0x04050f, 0);
-        keyLight.color.set(0x9ecfff);
-        keyLight.intensity = 120;
-        fillLight.color.set(0xff9ff3);
-        fillLight.intensity = 60;
-        rimLight.color.set(0xa6d2ff);
-        rimLight.intensity = 1.3;
-        sunGlow.material.color.set(0x7cf7ff);
-        sunGlow.material.opacity = 0.36;
-        sunSprite.visible = false;
-        scene.fog = null;
+    // Main center planet: keep visible, but softer
+    setOpacity(planetGroup, 0.72);
 
-        if (planet && planet.material) {
-          planet.material.opacity = 1;
-          planet.material.transparent = false;
-          planet.material.emissiveIntensity = 0.20;
-        }
-        if (atmMat) atmMat.opacity = 0.12;
-        if (clouds && clouds.material) clouds.material.opacity = 0.20;
-      }
-    }
+    // Side planets: darker + unified transparency
+    setOpacity(planetBGroup, 0.42);
+    setOpacity(planetCGroup, 0.42);
+    setOpacity(planetDGroup, 0.42);
+
+    // Rings / glows a bit softer in light mode
+    if (ring.material) ring.material.opacity = 0.18;
+    if (ringB.material) ringB.material.opacity = 0.16;
+    if (ringC.material) ringC.material.opacity = 0.16;
+    if (ringD.material) ringD.material.opacity = 0.16;
+  } else {
+    renderer.setClearColor(0x04050f, 0);
+    keyLight.color.set(0x9ecfff);
+    keyLight.intensity = 120;
+    fillLight.color.set(0xff9ff3);
+    fillLight.intensity = 60;
+
+    sunGlow.material.color.set(0x7cf7ff);
+    sunGlow.material.opacity = 1;
+    sunSprite.visible = false;
+    scene.fog = null;
+
+    // Restore dark-mode strength
+    setOpacity(planetGroup, 1);
+    setOpacity(planetBGroup, 1);
+    setOpacity(planetCGroup, 1);
+    setOpacity(planetDGroup, 1);
+
+    if (ring.material) ring.material.opacity = 0.28;
+    if (ringB.material) ringB.material.opacity = 0.22;
+    if (ringC.material) ringC.material.opacity = 0.22;
+    if (ringD.material) ringD.material.opacity = 0.22;
+  }
+}
   </script>
 
 
@@ -4907,6 +4933,12 @@ const menuMoons = [];
   .constellation-label {
     display: none !important;
   }
+
+  html[data-theme="light"] .section-world,
+html.light .section-world {
+  opacity: 0.18 !important;
+  filter: saturate(0.8) brightness(0.95);
+}
 
   html.light #constellationSky,
   html[data-theme="light"] #constellationSky {
@@ -5436,6 +5468,100 @@ html:not(.light) #realThemeToggle {
     const next = root.classList.contains("light") ? "dark" : "light";
     apply(next);
   }, true);
+})();
+</script>
+
+<script id="FINAL_CONSTELLATION_RESTYLE">
+(() => {
+  function rebuildConstellations() {
+    const sky = document.getElementById("constellationSky");
+    if (!sky) return;
+
+    sky.innerHTML = "";
+
+    const NS = "http://www.w3.org/2000/svg";
+    const svg = document.createElementNS(NS, "svg");
+    svg.setAttribute("viewBox", "0 0 100 100");
+    svg.setAttribute("preserveAspectRatio", "none");
+    sky.appendChild(svg);
+
+    const groups = [
+      [[3,8],[15,5],[21,17],[14,29],[4,24],[3,8],[10,15],[21,17]],
+      [[34,3],[49,9],[63,5],[78,12],[94,8]],
+      [[7,50],[18,44],[31,52],[22,61],[10,58]],
+      [[58,39],[70,36],[83,45],[96,39]],
+      [[3,75],[15,82],[29,77],[42,86]],
+      [[63,71],[76,66],[89,74],[96,70]],
+      [[38,24],[44,13],[55,22],[49,32],[38,24]],
+      [[80,20],[88,14],[96,21],[91,29],[80,20]]
+    ];
+
+    groups.forEach(points => {
+      for (let i = 0; i < points.length - 1; i++) {
+        const [x1, y1] = points[i];
+        const [x2, y2] = points[i + 1];
+
+        const line = document.createElementNS(NS, "line");
+        line.setAttribute("x1", x1);
+        line.setAttribute("y1", y1);
+        line.setAttribute("x2", x2);
+        line.setAttribute("y2", y2);
+        line.setAttribute("class", "network-line constellation-line");
+        svg.appendChild(line);
+      }
+
+      points.forEach(([x, y], i) => {
+        const dot = document.createElementNS(NS, "circle");
+        dot.setAttribute("cx", x);
+        dot.setAttribute("cy", y);
+        dot.setAttribute("r", i % 3 === 0 ? "0.28" : "0.16");
+        dot.setAttribute("class", "network-dot constellation-star");
+        svg.appendChild(dot);
+      });
+    });
+
+    // sparse background network
+    const bg = [
+      [[22,0],[28,11],[36,5],[45,16]],
+      [[52,0],[58,9],[65,3],[74,15]],
+      [[0,35],[11,38],[19,32]],
+      [[78,56],[91,50],[100,57]],
+      [[16,96],[28,88],[42,94]],
+      [[55,95],[67,87],[80,92]]
+    ];
+
+    bg.forEach(points => {
+      for (let i = 0; i < points.length - 1; i++) {
+        const [x1, y1] = points[i];
+        const [x2, y2] = points[i + 1];
+
+        const line = document.createElementNS(NS, "line");
+        line.setAttribute("x1", x1);
+        line.setAttribute("y1", y1);
+        line.setAttribute("x2", x2);
+        line.setAttribute("y2", y2);
+        line.setAttribute("class", "network-line");
+        svg.appendChild(line);
+      }
+
+      points.forEach(([x, y]) => {
+        const dot = document.createElementNS(NS, "circle");
+        dot.setAttribute("cx", x);
+        dot.setAttribute("cy", y);
+        dot.setAttribute("r", "0.11");
+        dot.setAttribute("class", "network-dot");
+        svg.appendChild(dot);
+      });
+    });
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", rebuildConstellations, { once: true });
+  } else {
+    rebuildConstellations();
+  }
+
+  window.addEventListener("portfolio-theme-change", rebuildConstellations);
 })();
 </script>
 

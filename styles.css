@@ -367,6 +367,143 @@ html.light body::after {
   display: block !important;
 }
 
+.section-planets {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  overflow: hidden;
+  opacity: 1;
+}
+
+.section-world {
+  position: absolute;
+  border-radius: 999px;
+  width: var(--w, 13rem);
+  height: var(--w, 13rem);
+  right: var(--right, 4%);
+  top: var(--top, 1.5rem);
+  opacity: var(--planet-alpha-dark);
+  background:
+    radial-gradient(circle at 30% 24%, rgba(255,255,255,.86) 0 8%, transparent 12%),
+    radial-gradient(circle at 62% 68%, rgba(255,255,255,.12), transparent 36%),
+    linear-gradient(145deg, var(--p1, rgba(124,247,255,.42)), var(--p2, rgba(255,159,243,.22)) 46%, rgba(5,7,18,.88));
+  box-shadow:
+    inset -34px -28px 58px rgba(0,0,0,.48),
+    inset 16px 12px 30px rgba(255,255,255,.08),
+    0 0 80px var(--glow, rgba(124,247,255,.22));
+  transform: translateZ(0) rotate(var(--rot, 0deg));
+  animation: worldFloat 10s ease-in-out infinite alternate;
+}
+
+html[data-theme="light"] .section-world,
+html.light .section-world,
+html[data-theme="light"] .fallback-orb,
+html.light .fallback-orb,
+html[data-theme="light"] main > section:not(.hero)::before,
+html.light main > section:not(.hero)::before {
+  opacity: var(--planet-alpha-light) !important;
+  filter: brightness(.82) saturate(.88) contrast(.96);
+}
+
+html[data-theme="light"] .section-world,
+html.light .section-world {
+  background:
+    radial-gradient(circle at 30% 24%, rgba(255,255,255,.92) 0 8%, transparent 12%),
+    linear-gradient(145deg, rgba(92,120,190,.24), rgba(218,161,80,.16), rgba(70,75,95,.48));
+  box-shadow:
+    inset -32px -24px 56px rgba(40,50,70,.20),
+    0 24px 90px rgba(40,55,90,.10);
+}
+
+html[data-theme="light"] main > section:not(.hero)::after,
+html.light main > section:not(.hero)::after {
+  opacity: 0.22;
+  border-color: rgba(40,50,70,.28);
+  border-left-color: transparent;
+  border-right-color: transparent;
+}
+
+/* FINAL constellation style: dark-blue academic network */
+.constellation-sky,
+#constellationSky {
+  opacity: 1 !important;
+  mix-blend-mode: normal !important;
+  pointer-events: none !important;
+}
+
+.constellation-sky svg,
+#constellationSky svg {
+  opacity: 1 !important;
+}
+
+/* Dark mode: blue-grey, subtle, like the screenshot */
+html:not(.light) .network-line,
+html[data-theme="dark"] .network-line,
+html:not(.light) .constellation-line,
+html[data-theme="dark"] .constellation-line {
+  stroke: rgba(96, 144, 165, 0.22) !important;
+  stroke-width: 0.13 !important;
+  opacity: 0.7 !important;
+}
+
+html:not(.light) .network-dot,
+html[data-theme="dark"] .network-dot,
+html:not(.light) .constellation-star,
+html[data-theme="dark"] .constellation-star {
+  fill: rgba(212, 226, 232, 0.78) !important;
+  opacity: 0.85 !important;
+}
+
+/* Light mode: noir version */
+html.light .network-line,
+html[data-theme="light"] .network-line,
+html.light .constellation-line,
+html[data-theme="light"] .constellation-line {
+  stroke: rgba(42, 54, 66, 0.22) !important;
+  stroke-width: 0.13 !important;
+  opacity: 0.7 !important;
+}
+
+html.light .network-dot,
+html[data-theme="light"] .network-dot,
+html.light .constellation-star,
+html[data-theme="light"] .constellation-star {
+  fill: rgba(38, 45, 54, 0.55) !important;
+  opacity: 0.75 !important;
+}
+
+/* Smaller, cleaner nodes */
+.network-dot {
+  r: 0.12;
+}
+
+.constellation-star {
+  r: 0.16;
+}
+
+.orb-small { width: 5rem; height: 5rem; right: 22%; bottom: 21%; animation: floatOrb 11s ease-in-out infinite; }
+.orb-distant { width: 7rem; height: 7rem; left: 18%; bottom: 12%; animation: floatOrb 21s ease-in-out infinite reverse; }
+
+.fallback-orb {
+  position: absolute;
+  border-radius: 50%;
+  opacity: var(--planet-alpha-dark);
+  filter: drop-shadow(0 0 35px rgba(124,247,255,.20));
+}
+
+.fallback-orb span {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background:
+    radial-gradient(circle at 32% 25%, rgba(255,255,255,.8), transparent 11%),
+    linear-gradient(145deg, #344ba0, #111831 60%, #050711);
+  box-shadow:
+    inset -22px -18px 45px rgba(0,0,0,.55),
+    inset 12px 10px 30px rgba(255,255,255,.08);
+}
+
 /* planet color map by menu position */
 .cta .button:nth-child(1) { --menu-planet-a:#7cf7ff; --menu-planet-b:#264f7c; }
 .cta .button:nth-child(2) { --menu-planet-a:#9cffb5; --menu-planet-b:#236449; }
