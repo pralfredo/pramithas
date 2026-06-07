@@ -744,6 +744,148 @@ window.addEventListener("resize", () => {
   renderer.setSize(window.innerWidth, window.innerHeight);
 });
 
+(() => {
+  const canvas = document.getElementById('constellationCanvas');
+  const ctx = canvas.getContext('2d');
+
+  let w = 0, h = 0, dpr = Math.min(window.devicePixelRatio || 1, 2);
+
+  function resize() {
+    w = window.innerWidth;
+    h = window.innerHeight;
+    canvas.width = Math.floor(w * dpr);
+    canvas.height = Math.floor(h * dpr);
+    canvas.style.width = w + 'px';
+    canvas.style.height = h + 'px';
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  }
+  resize();
+  window.addEventListener('resize', resize);
+
+  const isLight = () =>
+    document.documentElement.classList.contains('light') ||
+    document.documentElement.dataset.theme === 'light';
+
+  const NODE_COUNT = 70;
+  const nodes = [];
+
+  function rand(min, max) {
+    return Math.random() * (max - min) + min;
+  }
+
+  function makeNode() {
+    const depth = rand(0.4, 1.0); // pseudo-parallax
+    return {
+      x: rand(0, w),
+      y: rand(0, h),
+      vx: rand(-0.08, 0.08) * depth,
+      vy: rand(-0.05, 0.05) * depth,
+      r: rand(1.2, 2.8) * depth,
+      depth,
+      tw: rand(0, Math.PI * 2)
+    };
+  }
+
+  function init() {
+    nodes.length = 0;
+    for (let i = 0; i < NODE_COUNT; i++) nodes.push(makeNode());
+  }
+  init();
+
+  let mouse = { x: w / 2, y: h / 2, active: false };
+
+  window.addEventListener('mousemove', e => {
+    mouse.x = e.clientX;
+    mouse.y = e.clientY;
+    mouse.active = true;
+  });
+
+  window.addEventListener('mouseleave', () => {
+    mouse.active = false;
+  });
+
+  function draw() {
+    ctx.clearRect(0, 0, w, h);
+
+    const light = isLight();
+
+    const lineColor = light
+      ? 'rgba(80, 88, 100, 0.22)'
+      : 'rgba(120, 190, 255, 0.12)';
+
+    const nodeColor = light
+      ? 'rgba(110, 110, 110, 0.75)'
+      : 'rgba(220, 240, 255, 0.85)';
+
+    const glowColor = light
+      ? 'rgba(255,255,255,0.18)'
+      : 'rgba(120,200,255,0.12)';
+
+    // move nodes
+    for (const n of nodes) {
+      n.x += n.vx;
+      n.y += n.vy;
+      n.tw += 0.01 * n.depth;
+
+      // gentle mouse parallax
+      if (mouse.active) {
+        const dx = (mouse.x - w / 2) * 0.00015 * n.depth;
+        const dy = (mouse.y - h / 2) * 0.00015 * n.depth;
+        n.x += dx;
+        n.y += dy;
+      }
+
+      if (n.x < -20) n.x = w + 20;
+      if (n.x > w + 20) n.x = -20;
+      if (n.y < -20) n.y = h + 20;
+      if (n.y > h + 20) n.y = -20;
+    }
+
+    // draw lines
+    const maxDist = light ? 170 : 190;
+
+    for (let i = 0; i < nodes.length; i++) {
+      for (let j = i + 1; j < nodes.length; j++) {
+        const a = nodes[i], b = nodes[j];
+        const dx = a.x - b.x;
+        const dy = a.y - b.y;
+        const dist = Math.sqrt(dx * dx + dy * dy);
+
+        if (dist < maxDist) {
+          const alpha = (1 - dist / maxDist) * (light ? 0.7 : 1);
+          ctx.strokeStyle = lineColor.replace(/[\d.]+\)\s*$/, `${0.22 * alpha})`);
+          ctx.lineWidth = 1;
+          ctx.beginPath();
+          ctx.moveTo(a.x, a.y);
+          ctx.lineTo(b.x, b.y);
+          ctx.stroke();
+        }
+      }
+    }
+
+    // draw nodes
+    for (const n of nodes) {
+      const twinkle = 0.75 + Math.sin(n.tw) * 0.2;
+
+      // soft glow
+      ctx.beginPath();
+      ctx.fillStyle = glowColor;
+      ctx.arc(n.x, n.y, n.r * 3.2, 0, Math.PI * 2);
+      ctx.fill();
+
+      // core point
+      ctx.beginPath();
+      ctx.fillStyle = nodeColor;
+      ctx.arc(n.x, n.y, n.r * twinkle, 0, Math.PI * 2);
+      ctx.fill();
+    }
+
+    requestAnimationFrame(draw);
+  }
+
+  draw();
+})();
+
 /* ---------- animate ---------- */
 let t = 0;
 function animate() {

@@ -504,6 +504,25 @@ html[data-theme="light"] .constellation-star {
     inset 12px 10px 30px rgba(255,255,255,.08);
 }
 
+#constellationCanvas{
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  pointer-events: none;
+}
+
+html.light #constellationCanvas,
+html[data-theme="light"] #constellationCanvas{
+  opacity: 0.55;
+}
+
+html.dark #constellationCanvas,
+html[data-theme="dark"] #constellationCanvas{
+  opacity: 0.8;
+}
+
 /* planet color map by menu position */
 .cta .button:nth-child(1) { --menu-planet-a:#7cf7ff; --menu-planet-b:#264f7c; }
 .cta .button:nth-child(2) { --menu-planet-a:#9cffb5; --menu-planet-b:#236449; }
