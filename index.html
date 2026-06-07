@@ -2486,6 +2486,177 @@ html[data-theme="light"] .cosmic-fallback::after {
   box-shadow: inset -11px -11px 18px rgba(31,43,70,.18), 0 10px 25px rgba(66,77,111,.12);
 }
 
+
+/* === v9: seamless light-mode planet layer + scroll-proof toggle === */
+
+/* Kill the earlier oversized hero pseudo-planet so the light mode does not look pasted on. */
+html.light .hero::before,
+html[data-theme="light"] .hero::before,
+html.light .hero::after,
+html[data-theme="light"] .hero::after {
+  content: none !important;
+  display: none !important;
+}
+
+/* Make the actual WebGL/cosmic background cleaner in light mode. */
+html.light #scene,
+html[data-theme="light"] #scene {
+  opacity: .72 !important;
+  filter: saturate(.92) contrast(.9) brightness(1.05) !important;
+}
+
+html.light .cosmic-fallback,
+html[data-theme="light"] .cosmic-fallback {
+  opacity: 1 !important;
+  visibility: visible !important;
+  mix-blend-mode: multiply;
+}
+
+/* Softer, lighter, background-integrated fallback planets. */
+html.light .fallback-orb,
+html[data-theme="light"] .fallback-orb {
+  opacity: .28 !important;
+  filter: blur(.15px) drop-shadow(0 14px 42px rgba(102, 111, 132, .12)) !important;
+  pointer-events: none !important;
+}
+
+html.light .fallback-orb span,
+html[data-theme="light"] .fallback-orb span {
+  box-shadow:
+    inset -20px -18px 46px rgba(92, 85, 74, .16),
+    inset 16px 12px 32px rgba(255,255,255,.20),
+    0 0 42px rgba(130,145,165,.08) !important;
+}
+
+/* Reposition so planets feel ambient rather than glued to sections/cards. */
+html.light .orb-primary,
+html[data-theme="light"] .orb-primary {
+  width: 16rem !important;
+  height: 16rem !important;
+  left: 7% !important;
+  top: 13% !important;
+  opacity: .24 !important;
+}
+
+html.light .orb-primary span,
+html[data-theme="light"] .orb-primary span {
+  background:
+    radial-gradient(circle at 32% 25%, rgba(255,255,255,.48), transparent 13%),
+    linear-gradient(145deg, #b7c7d5 0%, #8ea1b8 44%, #6e7890 100%) !important;
+}
+
+html.light .orb-ringed,
+html[data-theme="light"] .orb-ringed {
+  width: 12rem !important;
+  height: 12rem !important;
+  right: 7% !important;
+  top: 14% !important;
+  opacity: .22 !important;
+}
+
+html.light .orb-ringed span,
+html[data-theme="light"] .orb-ringed span {
+  background:
+    radial-gradient(circle at 33% 24%, rgba(255,255,255,.50), transparent 13%),
+    linear-gradient(145deg, #d8c3a6 0%, #bea079 48%, #92816f 100%) !important;
+}
+
+html.light .orb-ringed::after,
+html[data-theme="light"] .orb-ringed::after {
+  border-top-color: rgba(88, 93, 112, .20) !important;
+  border-bottom-color: rgba(88, 93, 112, .10) !important;
+  opacity: .55 !important;
+}
+
+html.light .orb-small,
+html[data-theme="light"] .orb-small {
+  width: 6.5rem !important;
+  height: 6.5rem !important;
+  right: 10% !important;
+  bottom: 12% !important;
+  opacity: .24 !important;
+}
+
+html.light .orb-small span,
+html[data-theme="light"] .orb-small span {
+  background:
+    radial-gradient(circle at 32% 25%, rgba(255,255,255,.45), transparent 14%),
+    linear-gradient(145deg, #c7ada7 0%, #af8375 50%, #80685f 100%) !important;
+}
+
+html.light .orb-distant,
+html[data-theme="light"] .orb-distant {
+  width: 8rem !important;
+  height: 8rem !important;
+  left: 6% !important;
+  bottom: 7% !important;
+  opacity: .16 !important;
+}
+
+html.light .orb-distant span,
+html[data-theme="light"] .orb-distant span {
+  background:
+    radial-gradient(circle at 32% 25%, rgba(255,255,255,.45), transparent 14%),
+    linear-gradient(145deg, #d6d1c4 0%, #aaa895 58%, #8c8d84 100%) !important;
+}
+
+/* Remove the harsh extra pseudo-planets from v8. */
+html.light .cosmic-fallback::before,
+html[data-theme="light"] .cosmic-fallback::before,
+html.light .cosmic-fallback::after,
+html[data-theme="light"] .cosmic-fallback::after {
+  content: none !important;
+  display: none !important;
+}
+
+/* A single subtle central atmospheric planet that stays behind text/cards. */
+html.light .hero,
+html[data-theme="light"] .hero {
+  position: relative;
+  isolation: isolate;
+}
+
+html.light .hero .hud::before,
+html[data-theme="light"] .hero .hud::before {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 48%;
+  width: min(34rem, 58vw);
+  aspect-ratio: 1 / 1;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  z-index: -1;
+  pointer-events: none;
+  opacity: .22;
+  background:
+    radial-gradient(circle at 34% 27%, rgba(255,255,255,.42), transparent 12%),
+    repeating-linear-gradient(
+      7deg,
+      rgba(166,126,82,.16) 0 8px,
+      rgba(212,185,139,.14) 8px 17px,
+      rgba(117,145,168,.12) 17px 27px,
+      rgba(232,215,176,.13) 27px 39px
+    ),
+    linear-gradient(145deg, #caa173 0%, #a57e5f 42%, #8499ad 72%, #667088 100%);
+  box-shadow:
+    inset -3rem -2.5rem 6rem rgba(58, 58, 68, .20),
+    inset 2rem 1.5rem 3.5rem rgba(255,255,255,.17),
+    0 0 5rem rgba(93, 102, 130, .08);
+}
+
+/* Toggle must remain clickable above everything, including while scrolled. */
+#themeToggle.theme-toggle,
+.theme-toggle {
+  position: fixed !important;
+  top: max(1rem, env(safe-area-inset-top)) !important;
+  right: max(1rem, env(safe-area-inset-right)) !important;
+  z-index: 2147483647 !important;
+  pointer-events: auto !important;
+  touch-action: manipulation !important;
+  transform: translateZ(0) !important;
+}
+
 </style></head>
 <body>
   <div class="constellation-sky" id="constellationSky" aria-hidden="true"></div>
@@ -4826,81 +4997,6 @@ const menuMoons = [];
 
 
 <script>
-/* v7 final theme controller: works after scroll, removes old listeners, keeps state stable. */
-(function () {
-  function ready(fn) {
-    if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", fn, { once: true });
-    else fn();
-  }
-
-  ready(function () {
-    const root = document.documentElement;
-    const oldBtn = document.getElementById("themeToggle");
-    if (!oldBtn) return;
-
-    const btn = oldBtn.cloneNode(true);
-    oldBtn.replaceWith(btn);
-
-    const icon = btn.querySelector("#themeIcon");
-    const label = btn.querySelector("#themeLabel");
-
-    function currentTheme() {
-      if (root.dataset.theme === "light" || root.classList.contains("light")) return "light";
-      return "dark";
-    }
-
-    function applyTheme(theme) {
-      const isLight = theme === "light";
-      root.classList.toggle("light", isLight);
-      root.dataset.theme = isLight ? "light" : "dark";
-      root.style.colorScheme = isLight ? "light" : "dark";
-
-      btn.setAttribute("aria-pressed", String(isLight));
-      btn.setAttribute("aria-label", isLight ? "Switch to dark mode" : "Switch to light mode");
-
-      if (icon) icon.textContent = isLight ? "∗" : "☽";
-      if (label) label.textContent = isLight ? "Light Mode" : "Dark Mode";
-
-      try { localStorage.setItem("portfolio-theme", isLight ? "light" : "dark"); } catch (_) {}
-      try { localStorage.setItem("theme", isLight ? "light" : "dark"); } catch (_) {}
-
-      window.dispatchEvent(new CustomEvent("portfolio-theme-change", { detail: { isLight } }));
-    }
-
-    let saved = null;
-    try { saved = localStorage.getItem("portfolio-theme") || localStorage.getItem("theme"); } catch (_) {}
-    applyTheme(saved === "light" ? "light" : currentTheme());
-
-    function toggle(e) {
-      if (e) {
-        e.preventDefault();
-        e.stopPropagation();
-      }
-      applyTheme(currentTheme() === "light" ? "dark" : "light");
-    }
-
-    btn.addEventListener("click", toggle, true);
-    btn.addEventListener("pointerup", function (e) {
-      if (e.pointerType === "touch") toggle(e);
-    }, true);
-
-    // Reassert fixed placement after scroll/resize because earlier scripts/styles move things.
-    function pin() {
-      btn.style.position = "fixed";
-      btn.style.top = "max(1rem, env(safe-area-inset-top))";
-      btn.style.right = "max(1rem, env(safe-area-inset-right))";
-      btn.style.zIndex = "2147483647";
-      btn.style.pointerEvents = "auto";
-    }
-    pin();
-    window.addEventListener("scroll", pin, { passive: true });
-    window.addEventListener("resize", pin, { passive: true });
-  });
-})();
-</script>
-
-
-<script>
 /* v8: rebuild denser constellations so they remain visible in both themes. */
 (function(){
   function rebuildConstellationSky() {
@@ -4992,9 +5088,191 @@ const menuMoons = [];
     rebuildConstellationSky();
   }
   window.addEventListener('load', rebuildConstellationSky);
-  window.addEventListener('portfolio-theme-change', () => setTimeout(rebuildConstellationSky, 30));
   setTimeout(rebuildConstellationSky, 400);
   setTimeout(rebuildConstellationSky, 1400);
+})();
+</script>
+
+<script>
+(() => {
+  const root = document.documentElement;
+
+  function initThemeToggle() {
+    const oldBtn = document.getElementById("themeToggle");
+    if (!oldBtn) return;
+
+    const btn = oldBtn.cloneNode(true);
+    oldBtn.replaceWith(btn);
+
+    const icon = btn.querySelector("#themeIcon");
+    const label = btn.querySelector("#themeLabel");
+
+    function apply(theme) {
+      const isLight = theme === "light";
+
+      root.classList.toggle("light", isLight);
+      root.classList.toggle("dark", !isLight);
+      root.dataset.theme = isLight ? "light" : "dark";
+      root.style.colorScheme = isLight ? "light" : "dark";
+
+      if (icon) icon.textContent = isLight ? "∗" : "☽";
+      if (label) label.textContent = isLight ? "Light Mode" : "Dark Mode";
+
+      localStorage.setItem("portfolio-theme", isLight ? "light" : "dark");
+
+      window.dispatchEvent(
+        new CustomEvent("portfolio-theme-change", {
+          detail: { isLight }
+        })
+      );
+    }
+
+    const saved = localStorage.getItem("portfolio-theme");
+    apply(saved === "light" ? "light" : "dark");
+
+    btn.onclick = (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+
+      const next =
+        root.dataset.theme === "light" || root.classList.contains("light")
+          ? "dark"
+          : "light";
+
+      apply(next);
+    };
+
+    Object.assign(btn.style, {
+      position: "fixed",
+      top: "1rem",
+      right: "1rem",
+      zIndex: "2147483647",
+      pointerEvents: "auto",
+      cursor: "pointer"
+    });
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", initThemeToggle);
+  } else {
+    initThemeToggle();
+  }
+})();
+</script>
+
+
+<script id="FINAL_SINGLE_THEME_TOGGLE">
+(() => {
+  const root = document.documentElement;
+  let lastToggle = 0;
+
+  function getButton() {
+    return document.getElementById("themeToggle");
+  }
+
+  function isLight() {
+    return root.dataset.theme === "light" || root.classList.contains("light");
+  }
+
+  function setTheme(theme) {
+    const light = theme === "light";
+
+    root.classList.toggle("light", light);
+    root.classList.toggle("dark", !light);
+    root.dataset.theme = light ? "light" : "dark";
+    root.style.colorScheme = light ? "light" : "dark";
+
+    const btn = getButton();
+    const icon = document.getElementById("themeIcon");
+    const label = document.getElementById("themeLabel");
+
+    if (btn) {
+      btn.setAttribute("aria-pressed", String(light));
+      btn.setAttribute("aria-label", light ? "Switch to dark mode" : "Switch to light mode");
+      Object.assign(btn.style, {
+        position: "fixed",
+        top: "1rem",
+        right: "1rem",
+        zIndex: "2147483647",
+        pointerEvents: "auto",
+        cursor: "pointer",
+        touchAction: "manipulation"
+      });
+    }
+
+    if (icon) icon.textContent = light ? "∗" : "☽";
+    if (label) label.textContent = light ? "Light Mode" : "Dark Mode";
+
+    try {
+      localStorage.setItem("portfolio-theme", light ? "light" : "dark");
+      localStorage.setItem("theme", light ? "light" : "dark");
+    } catch (_) {}
+
+    window.dispatchEvent(new CustomEvent("portfolio-theme-change", {
+      detail: { isLight: light }
+    }));
+  }
+
+  function inToggleArea(e) {
+    const btn = getButton();
+    if (!btn) return false;
+
+    const r = btn.getBoundingClientRect();
+    const pad = 18;
+
+    return (
+      e.clientX >= r.left - pad &&
+      e.clientX <= r.right + pad &&
+      e.clientY >= r.top - pad &&
+      e.clientY <= r.bottom + pad
+    );
+  }
+
+  function handlePointerDown(e) {
+    if (!inToggleArea(e)) return;
+
+    e.preventDefault();
+    e.stopPropagation();
+    if (e.stopImmediatePropagation) e.stopImmediatePropagation();
+
+    const now = Date.now();
+    if (now - lastToggle < 350) return;
+    lastToggle = now;
+
+    setTheme(isLight() ? "dark" : "light");
+  }
+
+  function blockFollowupClick(e) {
+    if (!inToggleArea(e)) return;
+    e.preventDefault();
+    e.stopPropagation();
+    if (e.stopImmediatePropagation) e.stopImmediatePropagation();
+  }
+
+  function boot() {
+    const saved = (() => {
+      try {
+        return localStorage.getItem("portfolio-theme") || localStorage.getItem("theme");
+      } catch (_) {
+        return null;
+      }
+    })();
+
+    setTheme(saved === "light" ? "light" : "dark");
+
+    // Use document capture only. Do not attach button click listeners.
+    document.addEventListener("pointerdown", handlePointerDown, true);
+    document.addEventListener("click", blockFollowupClick, true);
+
+    window.addEventListener("scroll", () => setTheme(isLight() ? "light" : "dark"), { passive: true });
+    window.addEventListener("resize", () => setTheme(isLight() ? "light" : "dark"), { passive: true });
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", boot, { once: true });
+  } else {
+    boot();
+  }
 })();
 </script>
 
