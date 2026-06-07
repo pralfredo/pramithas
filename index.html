@@ -2713,6 +2713,28 @@ if (gallery) {
   });
 }
 
+function showStory(i) {
+  cur = i;
+
+  const file = highlightFiles[i];
+  const name = NAMES[i] || `Highlight ${i + 1}`;
+
+  hlImg.style.opacity = 0;
+  hlImg.src = `highlights/${file}`;
+  hlImg.onload = () => {
+    hlImg.style.opacity = 1;
+  };
+
+  hlName.textContent = name;
+  hlIndex.textContent = `${i + 1} / ${highlightFiles.length}`;
+  hlAvatar.style.backgroundImage = `url(highlights/${file})`;
+
+  hlPrev.style.opacity = i === 0 ? "0.2" : "1";
+  hlNext.style.opacity = i === highlightFiles.length - 1 ? "0.2" : "1";
+
+  startProgress();
+}
+
 });
 </script>
 
