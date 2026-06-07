@@ -2217,7 +2217,6 @@ html[data-theme="light"] .imdb-mark {
         <a class="button" href="#atlas">Atlas</a>
         <a class="button" href="https://arxiv.org/abs/2409.15094" target="_blank" rel="noopener">Publication ↗</a>
         <a class="button" href="#research-agenda">Research</a>
-        <a class="button" href="#figurate-lab">Figurate Lab</a>
         <a class="button" href="#graduate-study">Graduate Study</a>
         <a class="button" href="#notebook">Notebook</a>
         <a class="button" href="#about">About</a>
@@ -2235,6 +2234,23 @@ html[data-theme="light"] .imdb-mark {
       <p class="section-label">// work</p>
       <h2>Projects</h2>
       <ul class="cards">
+        <li>
+          <div class="card-header">
+            <h3>Logic Wealth</h3>
+            <a class="gh-link" href="https://github.com/pralfredo/LogicWealth" target="_blank" rel="noopener">
+              <svg viewBox="0 0 16 16"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0 0 16 8c0-4.42-3.58-8-8-8z"/></svg>
+              pralfredo/LogicWealth
+            </a>
+            </div>
+          <p>Developed a constraint-rich portfolio optimizer that constructs equity portfolios under realistic investment mandates, including sector exposure limits, ESG/liquidity filters, beta ranges, volatility ceilings, cardinality requirements, and weight bounds. Modeled portfolio selection using Boolean decision variables and arithmetic constraints, framing portfolio construction as an SMT-style feasibility and optimization problem. Built a 50-asset large-cap universe and interactive dashboard that outputs selected holdings, allocation weights, share counts, risk metrics, sector exposure, and exclusion explanations. Implemented static GitHub Pages demo mode and local FastAPI solver mode, separating portfolio presentation from backend solver execution.</p>
+          <div class="card-tags">
+            <span class="tag">Logic</span>
+            <span class="tag">Epistemology</span>
+            <span class="tag">HTML</span>
+            <span class="tag">CSS</span>
+            <span class="tag">Javascript</span>
+          </div>
+        </li>
          <li>
           <div class="card-header">
             <h3>Logica Visualis</h3>
@@ -2367,18 +2383,6 @@ html[data-theme="light"] .imdb-mark {
         <article class="research-card"><span class="grad-kicker">02 · language</span><h3>Formal semantics & grammar</h3><ul><li>Reference and indeterminacy</li><li>From “gavagai” to grammar</li><li>Controlled natural language for mathematics</li></ul></article>
         <article class="research-card"><span class="grad-kicker">03 · agency</span><h3>Decision theory & AI agents</h3><ul><li>Rational choice and foundations</li><li>Agent models under uncertainty</li><li>Formal epistemology for AI systems</li></ul></article>
         <article class="research-card"><span class="grad-kicker">04 · tools</span><h3>Human-machine formalization</h3><ul><li>Semantic editors</li><li>Dependency graphs</li><li>Proof-assistant-oriented workflows</li></ul></article>
-      </div>
-    </section>
-
-    <!-- FIGURATE LAB -->
-    <section id="figurate-lab" class="dashboard-section">
-      <p class="section-label">// mathematical objects</p>
-      <h2>Figurate Lab</h2>
-      <p class="section-intro">Inspired by Dan Cohen’s challenge — “where are the oblong, triangular, and square numbers?” — this section treats elementary number forms as visual objects, semantic definitions, and proof-ready structures.</p>
-      <div class="figurate-grid">
-        <article class="figure-card"><span class="mini-kicker">triangular</span><h3>Triangular Numbers</h3><div class="dot-diagram"><div class="dot-triangle"><div class="dot-row"><i class="math-dot"></i></div><div class="dot-row"><i class="math-dot"></i><i class="math-dot"></i></div><div class="dot-row"><i class="math-dot"></i><i class="math-dot"></i><i class="math-dot"></i></div><div class="dot-row"><i class="math-dot"></i><i class="math-dot"></i><i class="math-dot"></i><i class="math-dot"></i></div></div></div><p class="formula">T<sub>n</sub> = n(n+1)/2</p><p>Numbers arranged as triangular arrays: 1, 3, 6, 10, 15, …</p></article>
-        <article class="figure-card"><span class="mini-kicker">square</span><h3>Square Numbers</h3><div class="dot-diagram"><div class="dot-square"><div class="dot-row"><i class="math-dot"></i><i class="math-dot"></i><i class="math-dot"></i><i class="math-dot"></i></div><div class="dot-row"><i class="math-dot"></i><i class="math-dot"></i><i class="math-dot"></i><i class="math-dot"></i></div><div class="dot-row"><i class="math-dot"></i><i class="math-dot"></i><i class="math-dot"></i><i class="math-dot"></i></div><div class="dot-row"><i class="math-dot"></i><i class="math-dot"></i><i class="math-dot"></i><i class="math-dot"></i></div></div></div><p class="formula">S<sub>n</sub> = n²</p><p>Numbers arranged as equal-sided grids: 1, 4, 9, 16, 25, …</p></article>
-        <article class="figure-card"><span class="mini-kicker">oblong</span><h3>Oblong Numbers</h3><div class="dot-diagram"><div class="dot-oblong"><div class="dot-row"><i class="math-dot"></i><i class="math-dot"></i><i class="math-dot"></i><i class="math-dot"></i><i class="math-dot"></i></div><div class="dot-row"><i class="math-dot"></i><i class="math-dot"></i><i class="math-dot"></i><i class="math-dot"></i><i class="math-dot"></i></div><div class="dot-row"><i class="math-dot"></i><i class="math-dot"></i><i class="math-dot"></i><i class="math-dot"></i><i class="math-dot"></i></div></div></div><p class="formula">O<sub>n</sub> = n(n+1) = 2T<sub>n</sub></p><p>Numbers arranged as rectangles whose sides differ by one: 2, 6, 12, 20, 30, …</p></article>
       </div>
     </section>
 
@@ -3752,7 +3756,6 @@ void main(){
 
     const satProjects=makeMoon(0x7cf7ff,3.70,0.60,'Projects','#projects',0.29);
     const satAtlas=makeMoon(0x9cffb5,4.25,0.52,'Atlas','#atlas',0.24);
-    const satFigures=makeMoon(0xffd35c,4.85,0.44,'Figurate Lab','#figures',0.25);
     const satPublication=makeMoon(0xffd580,5.45,0.36,'Publication','https://arxiv.org/abs/2409.15094',0.26);
     const satAbout=makeMoon(0xff9ff3,6.05,0.30,'About','#about',0.25);
     const satHighlights=makeMoon(0xd8e8ff,6.55,0.25,'Highlights','#highlights',0.23);
