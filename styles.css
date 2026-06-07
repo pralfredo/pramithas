@@ -1,0 +1,295 @@
+:root {
+  --bg: #070713;
+  --glass: rgba(255,255,255,.06);
+  --stroke: rgba(255,255,255,.12);
+  --neonA: #7cf7ff;
+  --neonB: #ff9ff3;
+  --text: #e9e6ff;
+}
+
+:root {
+  --const-line: rgba(255,255,255,0.12);
+  --const-star: rgba(255,255,255,0.45);
+  --const-label: rgba(255,255,255,0.10);
+}
+
+/* Light mode */
+html.light,
+body.light,
+[data-theme="light"] {
+  --const-line: rgba(10, 18, 32, 0.24);
+  --const-star: rgba(10, 18, 32, 0.52);
+  --const-label: rgba(10, 18, 32, 0.16);
+}
+
+/* Dark mode stays as is */
+html.dark,
+body.dark,
+[data-theme="dark"] {
+  --const-line: rgba(255,255,255,0.12);
+  --const-star: rgba(255,255,255,0.45);
+  --const-label: rgba(255,255,255,0.10);
+}
+
+* { box-sizing: border-box; }
+html, body { height: 100%; }
+body {
+  margin: 0;
+  background: radial-gradient(1200px 800px at 70% 10%, #0f0f25 0%, var(--bg) 45%, #05050d 100%);
+  color: var(--text);
+  font-family: "Book Antiqua", system-ui, -apple-system, Book Antiqua, Book Antiqua, sans-serif;
+  overflow-x: hidden;
+}
+
+/* 3D canvas fills the screen */
+#scene {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  display: block;
+  z-index: 0;
+  pointer-events: none !important;
+}
+
+/* NEW: the hero should NOT look like a card */
+.hero {
+  position: relative;
+  min-height: 92vh;
+  display: grid;
+  place-items: center;
+  z-index: 1;
+  pointer-events: none; /* drags reach the canvas */
+  /* override the generic <section> card look */
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  backdrop-filter: none !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+/* let the buttons be clickable */
+.hero .hud { pointer-events: auto; }
+
+/* optional: a tiny translucent chip behind the buttons only */
+.hero .cta {
+  background: rgba(0,0,0,.18);
+  padding: .35rem .5rem;
+  border-radius: 14px;
+  border: 1px solid rgba(255,255,255,.12);
+  display: inline-flex;
+  gap: .25rem;
+}
+
+/* HUD now sits inside hero (not fixed) */
+.hud {
+  text-align: center;
+  user-select: none;
+  pointer-events: auto;         /* re-enable clicking on the buttons */
+}
+.hud h1 {
+  font-size: clamp(28px, 8vw, 72px);
+  margin: 0 0 .25rem;
+  letter-spacing: .5px;
+  text-shadow: 0 0 24px var(--neonA), 0 0 48px rgba(124,247,255,.4);
+}
+.hud p { opacity: .9; margin: 0 0 .75rem; }
+.hint { display: block; opacity: .6; margin-top: .25rem; }
+
+main {
+  position: relative;
+  z-index: 1;
+  padding-top: 0;               /* <-- was 50vh; not needed anymore */
+}
+
+.button {
+  display: inline-block;
+  margin: .25rem;
+  padding: .7rem 1.1rem;
+  border-radius: 12px;
+  border: 1px solid var(--stroke);
+  background: var(--glass);
+  color: white; text-decoration: none; font-weight: 600;
+  backdrop-filter: blur(10px);
+  transition: transform .2s ease, box-shadow .2s ease, border-color .2s ease;
+  box-shadow: 0 0 0 rgba(0,0,0,0);
+}
+.button:hover {
+  transform: translateY(-2px);
+  border-color: rgba(255,255,255,.3);
+  box-shadow: 0 0 24px #00f5ff88, 0 0 48px #b388ff55;
+}
+
+#labels {
+  position: fixed;
+  inset: 0;
+  pointer-events: none; /* clicks pass to canvas */
+  z-index: 2;           /* above canvas, below hero text is fine too */
+}
+.label {
+  position: absolute;
+  transform: translate(-50%, -120%);
+  padding: .25rem .5rem;
+  font-size: .8rem;
+  color: #dff9ff;
+  background: rgba(0,0,0,.45);
+  border: 1px solid rgba(255,255,255,.15);
+  border-radius: 10px;
+  white-space: nowrap;
+  text-shadow: 0 0 8px #7cf7ff88;
+  opacity: .9;
+}
+.label a {
+  color: inherit;
+  text-decoration: none;
+  pointer-events: auto;              /* allow clicking the label itself */
+}
+.label:hover { opacity: 1; }
+
+
+/* Content sections */
+main {
+  position: relative;
+  z-index: 1;
+  padding-top: 50vh; /* gives room above the fold for the planet */
+}
+section {
+  width: min(980px, 92vw);
+  margin: 10vh auto;
+  padding: 2rem;
+  border: 1px solid var(--stroke);
+  background: linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,.02));
+  backdrop-filter: blur(12px);
+  border-radius: 18px;
+  box-shadow: 0 20px 60px rgba(0,0,0,.45);
+}
+h2 {
+  font-size: clamp(22px, 3.4vw, 36px);
+  margin: 0 0 1rem;
+  color: var(--neonB);
+  text-shadow: 0 0 14px #ff9ff3aa;
+}
+.cards { list-style: none; display: grid; gap: 1rem; padding: 0; }
+.cards li {
+  padding: 1rem 1.25rem;
+  border: 1px solid var(--stroke);
+  border-radius: 14px;
+  background: rgba(0,0,0,.25);
+}
+.gh-link {
+  position: relative;
+  z-index: 20;
+  pointer-events: auto;
+}
+#scene {
+  z-index: 0;
+}
+
+/* Reach / Target / Safety panel */
+.rts-section {
+  width: min(1100px, 92vw);
+  margin: 0 auto;
+  text-align: center;
+}
+
+.rts-title {
+  text-align: center;
+  justify-content: center;
+  letter-spacing: 0.18em;
+}
+
+.rts-grid {
+  display: grid;
+  gap: 1.25rem;
+  justify-items: center;
+}
+
+.rts-block {
+  width: min(100%, 1040px);
+  margin: 0 auto;
+  text-align: center;
+}
+
+.rts-block h4,
+.rts-block p,
+.rts-block .school-line,
+.rts-footnote {
+  text-align: center;
+}
+
+.rts-block .school-line {
+  display: block;
+  line-height: 1.7;
+}
+
+/* menu button planets */
+.cta .button {
+  position: relative;
+  overflow: hidden;
+  padding-left: 3.1rem;
+}
+
+.cta .button::before {
+  content: "";
+  position: absolute;
+  left: 1rem;
+  top: 50%;
+  width: 1.25rem;
+  height: 1.25rem;
+  transform: translateY(-50%);
+  border-radius: 50%;
+  background:
+    radial-gradient(circle at 28% 28%, rgba(255,255,255,.9), transparent 0.18rem),
+    radial-gradient(circle at 35% 32%, var(--menu-planet-a, #7cf7ff), transparent 0.55rem),
+    linear-gradient(145deg, var(--menu-planet-a, #7cf7ff), var(--menu-planet-b, #27336f) 62%, #060817);
+  box-shadow:
+    inset -0.35rem -0.25rem 0.45rem rgba(0,0,0,.35),
+    0 0 .65rem color-mix(in srgb, var(--menu-planet-a, #7cf7ff), transparent 35%);
+  z-index: 0;
+}
+
+.cta .button::after {
+  content: "";
+  position: absolute;
+  left: .72rem;
+  top: 50%;
+  width: 1.85rem;
+  height: .58rem;
+  transform: translateY(-50%) rotate(-16deg);
+  border-radius: 50%;
+  border-top: 2px solid color-mix(in srgb, var(--menu-planet-a, #7cf7ff), transparent 8%);
+  border-bottom: 1px solid color-mix(in srgb, var(--menu-planet-a, #7cf7ff), transparent 75%);
+  opacity: .75;
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* planet color map by menu position */
+.cta .button:nth-child(1) { --menu-planet-a:#7cf7ff; --menu-planet-b:#264f7c; }
+.cta .button:nth-child(2) { --menu-planet-a:#9cffb5; --menu-planet-b:#236449; }
+.cta .button:nth-child(3) { --menu-planet-a:#ffd35c; --menu-planet-b:#7c5426; }
+.cta .button:nth-child(4) { --menu-planet-a:#b7c2ff; --menu-planet-b:#37498e; }
+.cta .button:nth-child(5) { --menu-planet-a:#ff9ff3; --menu-planet-b:#773a78; }
+.cta .button:nth-child(6) { --menu-planet-a:#d8e8ff; --menu-planet-b:#4a5b78; }
+.cta .button:nth-child(7) { --menu-planet-a:#b388ff; --menu-planet-b:#553d83; }
+.cta .button:nth-child(8) { --menu-planet-a:#9cffb5; --menu-planet-b:#2d714f; }
+.cta .button:nth-child(9) { --menu-planet-a:#ffffff; --menu-planet-b:#6e7c9b; }
+
+main,
+section,
+.cards,
+.cards li,
+.card-header,
+.gh-link {
+  position: relative;
+  z-index: 50;
+  pointer-events: auto !important;
+}
+.links { list-style:none; display:flex; gap:1rem; padding:0; flex-wrap:wrap }
+.links a { color: var(--neonA); text-decoration: none; }
+.links a:hover { color: var(--neonB); text-shadow: 0 0 10px var(--neonB); }
+
+footer { text-align:center; padding: 2rem 0 5rem; opacity: .8; }
+
+/* Swiss polish + black light-mode constellations are applied in index.html inline patch. */

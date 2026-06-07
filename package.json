@@ -1,0 +1,25 @@
+{
+  "name": "pramithas",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "homepage": "https://pramithas.com",
+  "scripts": {
+    "predeploy": "npm run build",
+    "deploy": "rm -rf docs && mkdir -p docs && cp index.html docs/index.html && cp -R highlights docs/highlights 2>/dev/null || true && cp -R public docs/public 2>/dev/null || true && cp public/Resume.pdf docs/Resume.pdf 2>/dev/null || true",
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "devDependencies": {
+    "rollup-plugin-visualizer": "^6.0.4",
+    "vite": "^7.1.12",
+    "vite-plugin-compression": "^0.5.1"
+  },
+  "dependencies": {
+    "gsap": "^3.13.0",
+    "include-media": "^2.0.0",
+    "sass": "^1.93.2",
+    "three": "^0.180.0"
+  }
+}
