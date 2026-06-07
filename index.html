@@ -584,10 +584,11 @@
 
     /* INSTAGRAM HIGHLIGHTS */
     .highlights-row {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 1.4rem 1.8rem;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(92px, 1fr));
+      gap: 1.1rem 1rem;
       padding: 0.25rem 0;
+      align-items: start;
     }
     .highlight-item {
       display: flex;
@@ -598,45 +599,61 @@
       border: none;
       cursor: pointer;
       padding: 0;
+      appearance: none;
     }
     .highlight-ring {
-      width: 80px;
-      height: 80px;
+      width: 82px;
+      height: 82px;
       border-radius: 50%;
-      padding: 3px;
-      background: linear-gradient(135deg, #b388ff 0%, #7cf7ff 50%, #ff9ff3 100%);
-      transition: transform 0.22s cubic-bezier(.34,1.56,.64,1), box-shadow 0.22s;
+      padding: 2px;
+      background: transparent;
+      border: 1.5px solid rgba(124,247,255,0.35);
+      box-shadow: 0 0 0 1px rgba(255,255,255,0.04) inset;
+      transition: transform 0.22s cubic-bezier(.34,1.56,.64,1), box-shadow 0.22s, border-color 0.22s;
     }
     .highlight-item:hover .highlight-ring {
-      transform: scale(1.1);
-      box-shadow: 0 0 22px rgba(179,136,255,0.5), 0 0 44px rgba(124,247,255,0.2);
+      transform: scale(1.06);
+      border-color: rgba(179,136,255,0.7);
+      box-shadow: 0 0 20px rgba(124,247,255,0.12), 0 0 36px rgba(179,136,255,0.12);
     }
-    .highlight-item:active .highlight-ring { transform: scale(0.96); }
+    .highlight-item:active .highlight-ring { transform: scale(0.97); }
     .highlight-inner {
       width: 100%;
       height: 100%;
       border-radius: 50%;
-      border: 3px solid #04050f;
       overflow: hidden;
-      background: #111;
+      background: #10131c;
     }
-    html.light .highlight-inner { border-color: #f5f0e8; }
+    html.light .highlight-inner { background: #e8e0d5; }
     .highlight-inner img {
       width: 100%;
       height: 100%;
       object-fit: cover;
+      object-position: center;
       display: block;
+      border-radius: 50%;
     }
     .highlight-label {
-      font-size: 0.62rem;
+      font-size: 0.66rem;
       font-family: 'DM Mono', monospace;
       color: var(--muted);
       letter-spacing: 0.03em;
       text-align: center;
-      max-width: 80px;
+      max-width: 84px;
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;
+      line-height: 1.2;
+    }
+    html[data-theme="light"] .highlight-ring,
+    html.light .highlight-ring {
+      border-color: rgba(79, 93, 132, 0.32);
+      box-shadow: 0 1px 8px rgba(70, 80, 95, 0.08);
+    }
+    html[data-theme="light"] .highlight-item:hover .highlight-ring,
+    html.light .highlight-item:hover .highlight-ring {
+      border-color: rgba(110, 95, 155, 0.5);
+      box-shadow: 0 6px 20px rgba(70, 80, 95, 0.12);
     }
 
     /* STORY LIGHTBOX */
@@ -921,6 +938,34 @@
     html.light .dot-diagram { background: rgba(0,0,0,.035); border-color: rgba(0,0,0,.1); }
     @media (max-width: 920px) { .atlas-grid, .number-grid { grid-template-columns: 1fr; } .fallback-star { width: 24rem; height:24rem; } .orb-primary { width: 12rem; height:12rem; } }
 
+    .orb-primary span {
+      background:
+        radial-gradient(circle at 30% 24%, rgba(255,255,255,.68), transparent 12%),
+        linear-gradient(145deg, #8f5a3a 0%, #6d3f28 35%, #2c1f1a 72%, #120d0c 100%);
+    }
+    .orb-ringed span {
+      background:
+        radial-gradient(circle at 34% 24%, rgba(255,255,255,.62), transparent 12%),
+        linear-gradient(145deg, #5d7cc8 0%, #31539d 38%, #17294d 74%, #0b1326 100%);
+    }
+    .orb-small span {
+      background:
+        radial-gradient(circle at 34% 24%, rgba(255,255,255,.62), transparent 12%),
+        linear-gradient(145deg, #b47044 0%, #8d4728 40%, #4a2316 76%, #1a0e09 100%);
+    }
+    .orb-distant span {
+      background:
+        radial-gradient(circle at 30% 24%, rgba(255,255,255,.52), transparent 12%),
+        linear-gradient(145deg, #7aa0b8 0%, #476885 42%, #203043 78%, #0b1017 100%);
+      opacity: .9;
+    }
+    html[data-theme="light"] .fallback-star,
+    html.light .fallback-star {
+      opacity: .12 !important;
+      filter: blur(2px);
+    }
+
+
 
     /* ---- Stability + ambition patch: persistent planets, reliable themes, section worlds ---- */
     html { color-scheme: dark; }
@@ -1053,8 +1098,8 @@
       border-color: rgba(30,45,70,.25) !important;
       box-shadow: 0 14px 34px rgba(65,55,40,.14) !important;
     }
-    html[data-theme="light"] #scene, html.light #scene { opacity: .30 !important; filter: sepia(.12) saturate(.9) contrast(.88); }
-    html[data-theme="light"] .cosmic-fallback, html.light .cosmic-fallback { opacity: .48 !important; filter: sepia(.12) saturate(.75); }
+    html[data-theme="light"] #scene, html.light #scene { opacity: 1 !important; filter: saturate(1.12) contrast(1.04); }
+    html[data-theme="light"] .cosmic-fallback, html.light .cosmic-fallback { opacity: .045 !important; filter: none; }
 
     main > section { position: relative; overflow: hidden; isolation: isolate; }
     .section-planets {
@@ -1148,7 +1193,7 @@
     html.light.cosmic-persistent .cosmic-fallback,
     html[data-theme="light"].webgl-ready .cosmic-fallback,
     html[data-theme="light"].cosmic-persistent .cosmic-fallback {
-      opacity: .28 !important;
+      opacity: .035 !important;
     }
     #scene {
       background: transparent !important;
@@ -2620,127 +2665,155 @@ html[data-theme="light"] .imdb-mark {
 <script>
 document.addEventListener("DOMContentLoaded", () => {
   const highlightFiles = [
-  "IMG_5142.PNG",
-  "IMG_5143.PNG",
-  "IMG_5144.PNG",
-  "IMG_5146.PNG",
-  "IMG_5147.PNG",
-  "IMG_5148.PNG",
-  "IMG_5149.PNG",
-  "IMG_5150.PNG",
-  "IMG_5151.PNG",
-  "IMG_5152.PNG",
-  "IMG_5153.PNG",
-  "IMG_5154.PNG",
-  "IMG_5155.PNG",
-  "IMG_5156.PNG",
-  "IMG_5157.PNG",
-  "IMG_5158.PNG",
-  "IMG_5159.PNG",
-  "IMG_5160.PNG",
-  "IMG_5161.PNG",
-  "IMG_5163.PNG",
-  "IMG_5164.PNG",
-  "IMG_5165.PNG",
-  "IMG_5166.PNG",
-  "IMG_5167.PNG",
-  "IMG_5168.PNG",
-  "IMG_5169.PNG",
-  "IMG_5170.PNG",
-  "IMG_5171.PNG",
-  "IMG_5172.PNG",
-  "IMG_5183.PNG"
-];
+    "IMG_5142.PNG","IMG_5143.PNG","IMG_5183.PNG","IMG_5144.PNG","IMG_5146.PNG","IMG_5147.PNG",
+    "IMG_5148.PNG","IMG_5149.PNG","IMG_5150.PNG","IMG_5151.PNG","IMG_5152.PNG","IMG_5153.PNG",
+    "IMG_5154.PNG","IMG_5155.PNG","IMG_5156.PNG","IMG_5157.PNG","IMG_5158.PNG","IMG_5159.PNG",
+    "IMG_5160.PNG","IMG_5161.PNG","IMG_5163.PNG","IMG_5164.PNG","IMG_5165.PNG","IMG_5166.PNG",
+    "IMG_5167.PNG","IMG_5168.PNG","IMG_5169.PNG","IMG_5170.PNG","IMG_5171.PNG","IMG_5172.PNG"
+  ];
 
-const NAMES = [
-  "Summer 026 I",
-  "Crux 026",
-  "Word 026",
-  "Summer 026 II",
-  "Little 025",
-  "Myth 026",
-  "Air 024",
-  "Rust 024",
-  "Light 024",
-  "Scape 023",
-  "Gavagai 026",
-  "Spring 026",
-  "Midwntr 026",
-  "NYC 026 II",
-  "NYC 026 III",
-  "NYC 026 I",
-  "Early 026",
-  "W 024",
-  "Michaelmas",
-  "Summer 025",
-  "Summer 024 I",
-  "Soph II",
-  "H-Town 024",
-  "JP 024",
-  "NYC 023 II",
-  "Soph I",
-  "T’giving 023",
-  "Summer 023",
-  "NYC 023 I",
-  "Summer 026 III"
-];
+  const NAMES = [
+    "Summer 026 I","Crux 026","Summer 026 III","Word 026","Summer 026 II","Little 025",
+    "Myth 026","Air 024","Rust 024","Light 024","Scape 023","Gavagai 026",
+    "Spring 026","Midwntr 026","NYC 026 II","NYC 026 III","NYC 026 I","Early 026",
+    "W 024","Michaelmas","Summer 025","Summer 024 I","Soph II","H-Town 024",
+    "JP 024","NYC 023 II","Soph I","T’giving 023","Summer 023","NYC 023 I"
+  ];
 
-const gallery =
-  document.getElementById("storyGrid") ||
-  document.getElementById("highlightsGrid") ||
-  document.querySelector(".story-grid") ||
-  document.querySelector(".highlights-grid");
+  const gallery  = document.getElementById("hlRow");
+  const overlay  = document.getElementById("hlOverlay");
+  const hlImg    = document.getElementById("hlImg");
+  const hlName   = document.getElementById("hlName");
+  const hlIndex  = document.getElementById("hlIndex");
+  const hlAvatar = document.getElementById("hlAvatar");
+  const hlProg   = document.getElementById("hlProgressBar");
+  const hlPrev   = document.getElementById("hlPrev");
+  const hlNext   = document.getElementById("hlNext");
+  const hlClose  = document.getElementById("hlClose");
+  const hlBg     = document.getElementById("hlBg");
+  const hlWrap   = document.getElementById("hlImageWrap");
+  const hlPhone  = document.getElementById("hlPhone");
 
-if (gallery) {
+  if (!gallery || !overlay || !hlImg || !hlName || !hlIndex || !hlAvatar || !hlProg || !hlPrev || !hlNext || !hlClose || !hlBg || !hlWrap || !hlPhone) {
+    return;
+  }
+
   gallery.innerHTML = "";
+  const stories = highlightFiles.map((file, index) => ({
+    file,
+    name: NAMES[index] || `Highlight ${index + 1}`
+  }));
 
-  highlightFiles.forEach((file, index) => {
-    const name = NAMES[index] || `Highlight ${index + 1}`;
-
+  stories.forEach((story, index) => {
     const item = document.createElement("button");
-    item.className = "story";
+    item.className = "highlight-item";
     item.type = "button";
-    item.setAttribute("aria-label", name);
-
+    item.setAttribute("aria-label", story.name);
     item.innerHTML = `
-      <span class="story-ring">
-        <img src="highlights/${file}" alt="${name}" loading="lazy">
+      <span class="highlight-ring">
+        <span class="highlight-inner">
+          <img src="highlights/${story.file}" alt="${story.name}" loading="lazy">
+        </span>
       </span>
-      <span class="story-name">${name}</span>
+      <span class="highlight-label">${story.name}</span>
     `;
-
+    item.addEventListener("click", () => openStory(index));
     gallery.appendChild(item);
   });
-}
 
-function showStory(i) {
-  cur = i;
+  let cur = 0;
+  let progressTimer = null;
+  let holdTimer = null;
+  const STORY_DURATION = 6000;
 
-  const file = highlightFiles[i];
-  const name = NAMES[i] || `Highlight ${i + 1}`;
+  function openStory(i) {
+    cur = i;
+    overlay.classList.add("active");
+    document.body.style.overflow = "hidden";
+    showStory(cur);
+  }
 
-  hlImg.style.opacity = 0;
-  hlImg.src = `highlights/${file}`;
-  hlImg.onload = () => {
-    hlImg.style.opacity = 1;
-  };
+  function closeStory() {
+    overlay.classList.remove("active");
+    document.body.style.overflow = "";
+    clearProgress();
+  }
 
-  hlName.textContent = name;
-  hlIndex.textContent = `${i + 1} / ${highlightFiles.length}`;
-  hlAvatar.style.backgroundImage = `url(highlights/${file})`;
+  function showStory(i) {
+    cur = i;
+    const story = stories[i];
+    if (!story) return;
 
-  hlPrev.style.opacity = i === 0 ? "0.2" : "1";
-  hlNext.style.opacity = i === highlightFiles.length - 1 ? "0.2" : "1";
+    hlImg.style.opacity = 0;
+    hlImg.src = `highlights/${story.file}`;
+    hlImg.onload = () => { hlImg.style.opacity = 1; };
+    hlName.textContent = story.name;
+    hlIndex.textContent = `${i + 1} / ${stories.length}`;
+    hlAvatar.style.backgroundImage = `url(highlights/${story.file})`;
+    hlPrev.style.opacity = i === 0 ? "0.2" : "1";
+    hlNext.style.opacity = i === stories.length - 1 ? "0.2" : "1";
+    startProgress();
+  }
 
-  startProgress();
-}
+  function startProgress() {
+    clearProgress();
+    hlProg.style.transition = "none";
+    hlProg.style.width = "0%";
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        hlProg.style.transition = `width ${STORY_DURATION}ms linear`;
+        hlProg.style.width = "100%";
+      });
+    });
+    progressTimer = setTimeout(() => {
+      if (cur < stories.length - 1) showStory(cur + 1);
+      else closeStory();
+    }, STORY_DURATION);
+  }
 
+  function clearProgress() {
+    clearTimeout(progressTimer);
+    hlProg.style.transition = "none";
+    hlProg.style.width = "0%";
+  }
+
+  hlClose.addEventListener("click", closeStory);
+  hlPrev.addEventListener("click", (e) => { e.stopPropagation(); if (cur > 0) showStory(cur - 1); });
+  hlNext.addEventListener("click", (e) => { e.stopPropagation(); if (cur < stories.length - 1) showStory(cur + 1); else closeStory(); });
+  hlBg.addEventListener("click", closeStory);
+
+  hlWrap.addEventListener("click", (e) => {
+    const rect = hlWrap.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    if (x < rect.width * 0.35) {
+      if (cur > 0) showStory(cur - 1);
+    } else if (x > rect.width * 0.65) {
+      if (cur < stories.length - 1) showStory(cur + 1);
+      else closeStory();
+    }
+  });
+
+  document.addEventListener("keydown", (e) => {
+    if (!overlay.classList.contains("active")) return;
+    if (e.key === "ArrowRight" || e.key === "ArrowDown") {
+      if (cur < stories.length - 1) showStory(cur + 1); else closeStory();
+    } else if (e.key === "ArrowLeft" || e.key === "ArrowUp") {
+      if (cur > 0) showStory(cur - 1);
+    } else if (e.key === "Escape") {
+      closeStory();
+    }
+  });
+
+  hlPhone.addEventListener("pointerdown", () => {
+    holdTimer = setTimeout(() => clearProgress(), 300);
+  });
+  hlPhone.addEventListener("pointerup", () => {
+    clearTimeout(holdTimer);
+    if (overlay.classList.contains("active")) startProgress();
+  });
+  hlPhone.addEventListener("pointerleave", () => clearTimeout(holdTimer));
 });
 </script>
-        <span class="highlight-label">${name}</span>`;
-        
-
-    </script>
 
         <!-- TV SHOWS -->
     <section id="shows">
@@ -2976,6 +3049,7 @@ function showStory(i) {
     /* ---- simplex noise GLSL ---- */
     const SNOISE = `
 vec4 _mod289(vec4 x){return x-floor(x*(1./289.))*289.;}
+vec3 _mod289(vec3 x){return x-floor(x*(1./289.))*289.;}
 vec4 _perm(vec4 x){return _mod289(((x*34.)+1.)*x);}
 vec4 _tis(vec4 r){return 1.79284291400159-0.85373472095314*r;}
 float snoise(vec3 v){
@@ -3046,10 +3120,14 @@ vec3 stripeColor(float t,vec3 c0,vec3 c1,vec3 c2,vec3 c3,vec3 c4,vec3 c5){
       };
       const mat = new THREE.MeshPhysicalMaterial({
         color: p.baseColor,
-        roughness: p.roughness, metalness: p.metalness,
-        clearcoat: p.clearcoat, clearcoatRoughness: p.clearcoatRoughness,
-        sheen: 0.35, sheenColor: new THREE.Color(p.sheenColor),
-        emissive: new THREE.Color(p.emissive), emissiveIntensity: p.emissiveIntensity
+        roughness: p.roughness,
+        metalness: p.metalness,
+        clearcoat: p.clearcoat,
+        clearcoatRoughness: p.clearcoatRoughness,
+        sheen: 0.32,
+        sheenColor: new THREE.Color(p.sheenColor),
+        emissive: new THREE.Color(p.emissive),
+        emissiveIntensity: p.emissiveIntensity
       });
       mat.onBeforeCompile = (shader) => {
         shader.uniforms.pTime    = { value: 0 };
@@ -3070,8 +3148,8 @@ vec3 stripeColor(float t,vec3 c0,vec3 c1,vec3 c2,vec3 c3,vec3 c4,vec3 c5){
         allPlanetUniforms.push(shader.uniforms);
 
         shader.vertexShader = shader.vertexShader
-          .replace('#include <common>', `#include <common>\n${SNOISE}\nvarying vec3 vWPos; varying vec3 vOPos;`)
-          .replace('#include <worldpos_vertex>', '#include <worldpos_vertex>\nvWPos=worldPosition.xyz; vOPos=position;')
+          .replace('#include <common>', `#include <common>\n${SNOISE}\nvarying vec3 vWPos; varying vec3 vOPos;\nuniform float pTime,pScale,pDisp;`)
+          .replace('#include <worldpos_vertex>', '#include <worldpos_vertex>\nvWPos=(modelMatrix*vec4(position,1.0)).xyz; vOPos=position;')
           .replace('#include <project_vertex>', `
 float nd=snoise(normalize(position)*pScale*0.6+vec3(pTime*0.03));
 vec3 displaced=position+normal*(nd*pDisp);
@@ -3116,10 +3194,8 @@ vec3 vDir=normalize(cameraPosition-vWPos);
 float limb=pow(max(dot(nrm,vDir),0.),0.4);
 bandCol*=0.5+0.5*limb;
 // sun highlight
-bandCol+=vec3(pow(clamp(dot(nrm,normalize(vec3(0.6,0.4,0.7))),0.,1.),4.)*0.1);
-diffuse*=bandCol;
-roughnessFactor=clamp(roughnessFactor+spotMask*0.15,0.,1.);
-vec4 diffuseColor=vec4(diffuse,opacity);
+bandCol+=vec3(pow(clamp(dot(nrm,normalize(vec3(0.6,0.4,0.7))),0.,1.),4.)*0.08);
+vec4 diffuseColor=vec4(clamp(bandCol, 0.0, 1.0), opacity);
 `);
       };
       return mat;
@@ -3188,7 +3264,7 @@ vec4 diffuseColor=vec4(diffuse,opacity);
         spotColor: 0x7a1800, spotLat: -0.35, spotLon: 0.9, spotSize: 0.22,
         capColor: 0xffe8cc,
         emissive: 0x140800, emissiveIntensity: 0.2,
-        roughness: 0.55, clearcoat: 0.5, sheenColor: 0x8a4a20
+        roughness: 0.55, clearcoat: 0.5, sheen: new THREE.Color(0x8a4a20)
       })
     );
     planet.castShadow = planet.receiveShadow = true;
@@ -3288,7 +3364,7 @@ vec4 diffuseColor=vec4(diffuse,opacity);
         spotColor: 0x6a3800, spotLat: 0.20, spotLon: 2.5, spotSize: 0.14,
         capColor: 0xfff8e0,
         emissive: 0x140a00, emissiveIntensity: 0.22,
-        roughness: 0.6, clearcoat: 0.4, sheenColor: 0x9a7830
+        roughness: 0.6, clearcoat: 0.4, sheen: new THREE.Color(0x9a7830)
       })
     );
     planetB.renderOrder = 1;
@@ -3324,7 +3400,7 @@ vec4 diffuseColor=vec4(diffuse,opacity);
         spotColor: 0x003870, spotLat: 0.30, spotLon: 3.8, spotSize: 0.16,
         capColor: 0xd0f8ff,
         emissive: 0x020e18, emissiveIntensity: 0.28,
-        roughness: 0.38, clearcoat: 0.75, clearcoatRoughness: 0.2, sheenColor: 0x2080a0
+        roughness: 0.38, clearcoat: 0.75, clearcoatRoughness: 0.2, sheen: new THREE.Color(0x2080a0)
       })
     );
     planetC.renderOrder=1;
@@ -3360,7 +3436,7 @@ vec4 diffuseColor=vec4(diffuse,opacity);
         spotColor: 0xff40a0, spotLat: -0.25, spotLon: 5.2, spotSize: 0.20,
         capColor: 0xe8c0ff,
         emissive: 0x0e0220, emissiveIntensity: 0.30,
-        roughness: 0.5, clearcoat: 0.6, sheenColor: 0x6020c0
+        roughness: 0.5, clearcoat: 0.6, sheen: new THREE.Color(0x6020c0)
       })
     );
     planetD.renderOrder=1;
@@ -3996,32 +4072,54 @@ const menuMoons = [];
     // Let the independent theme switch also retune the 3D scene.
     window.addEventListener('portfolio-theme-change', (event) => {
       applyThemeToScene(Boolean(event.detail && event.detail.isLight));
-      renderer.toneMappingExposure = event.detail && event.detail.isLight ? 0.85 : 1.1;
+      renderer.toneMappingExposure = event.detail && event.detail.isLight ? 0.74 : 1.02;
     });
     applyThemeToScene(document.documentElement.classList.contains('light'));
-    renderer.toneMappingExposure = document.documentElement.classList.contains('light') ? 0.85 : 1.1;
+    renderer.toneMappingExposure = document.documentElement.classList.contains('light') ? 0.74 : 1.02;
 
     function applyThemeToScene(isLight) {
       if (isLight) {
-        renderer.setClearColor(0xaecfe8, 0);
-        keyLight.color.set(0xfff2a0);
-        keyLight.intensity = 200;
-        fillLight.color.set(0xffe090);
-        fillLight.intensity = 80;
-        sunGlow.material.color.set(0xffee88);
-        sunGlow.material.opacity = 0;   // hide the neon glow in light mode
-        sunSprite.visible = true;
-        scene.fog = new THREE.Fog(0xaecfe8, 90, 340);
+        renderer.setClearColor(0xd9e3ec, 0);
+        keyLight.color.set(0xffe1a8);
+        keyLight.intensity = 110;
+        fillLight.color.set(0x8fc8ff);
+        fillLight.intensity = 42;
+        rimLight.color.set(0x5e7fb3);
+        rimLight.intensity = 1.05;
+
+        // Keep the real 3D planet visible in light mode. The sun sprite was washing it white.
+        sunGlow.material.color.set(0xffc46a);
+        sunGlow.material.opacity = 0.12;
+        sunSprite.visible = false;
+        scene.fog = null;
+
+        if (planet && planet.material) {
+          planet.material.opacity = 1;
+          planet.material.transparent = false;
+          planet.material.emissiveIntensity = 0.16;
+        }
+        if (atmMat) atmMat.opacity = 0.07;
+        if (clouds && clouds.material) clouds.material.opacity = 0.13;
       } else {
         renderer.setClearColor(0x04050f, 0);
         keyLight.color.set(0x9ecfff);
         keyLight.intensity = 120;
         fillLight.color.set(0xff9ff3);
         fillLight.intensity = 60;
+        rimLight.color.set(0xa6d2ff);
+        rimLight.intensity = 1.3;
         sunGlow.material.color.set(0x7cf7ff);
-        sunGlow.material.opacity = 1;
+        sunGlow.material.opacity = 0.36;
         sunSprite.visible = false;
         scene.fog = null;
+
+        if (planet && planet.material) {
+          planet.material.opacity = 1;
+          planet.material.transparent = false;
+          planet.material.emissiveIntensity = 0.20;
+        }
+        if (atmMat) atmMat.opacity = 0.12;
+        if (clouds && clouds.material) clouds.material.opacity = 0.20;
       }
     }
   </script>
