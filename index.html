@@ -2616,33 +2616,11 @@ html[data-theme="light"] .hero {
   isolation: isolate;
 }
 
+/* remove redundant centered outer shell in light mode */
 html.light .hero .hud::before,
 html[data-theme="light"] .hero .hud::before {
-  content: "";
-  position: absolute;
-  left: 50%;
-  top: 48%;
-  width: min(34rem, 58vw);
-  aspect-ratio: 1 / 1;
-  transform: translate(-50%, -50%);
-  border-radius: 50%;
-  z-index: -1;
-  pointer-events: none;
-  opacity: .22;
-  background:
-    radial-gradient(circle at 34% 27%, rgba(255,255,255,.42), transparent 12%),
-    repeating-linear-gradient(
-      7deg,
-      rgba(166,126,82,.16) 0 8px,
-      rgba(212,185,139,.14) 8px 17px,
-      rgba(117,145,168,.12) 17px 27px,
-      rgba(232,215,176,.13) 27px 39px
-    ),
-    linear-gradient(145deg, #caa173 0%, #a57e5f 42%, #8499ad 72%, #667088 100%);
-  box-shadow:
-    inset -3rem -2.5rem 6rem rgba(58, 58, 68, .20),
-    inset 2rem 1.5rem 3.5rem rgba(255,255,255,.17),
-    0 0 5rem rgba(93, 102, 130, .08);
+  content: none !important;
+  display: none !important;
 }
 
 /* Toggle must remain clickable above everything, including while scrolled. */
@@ -4867,7 +4845,7 @@ const menuMoons = [];
   // If you want it gone in both themes:
   // if (centerPlanetOuter) centerPlanetOuter.visible = false;
   }
-  
+
     function applyTheme(mode) {
       const isLight = mode === "light";
       root.classList.toggle("light", isLight);
