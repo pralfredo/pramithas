@@ -5385,77 +5385,57 @@ const menuMoons = [];
 })();
 </script>
 
-<script id="ABSOLUTE_FINAL_THEME_TOGGLE">
+
+<style>
+#themeToggle { display: none !important; }
+#realThemeToggle {
+  position: fixed;
+  top: 1rem;
+  right: 1rem;
+  z-index: 2147483647;
+  border: 1px solid rgba(120,130,155,.45);
+  border-radius: 999px;
+  padding: .55rem .85rem;
+  background: rgba(255,255,255,.82);
+  color: #12182f;
+  font: 600 .78rem/1.1 "DM Mono", monospace;
+  cursor: pointer;
+  backdrop-filter: blur(14px);
+}
+html:not(.light) #realThemeToggle {
+  background: rgba(5,8,18,.72);
+  color: #7cf7ff;
+}
+</style>
+
+<button id="realThemeToggle" type="button">∗ Light Mode</button>
+
+<script>
 (() => {
-  function install() {
-    const root = document.documentElement;
+  const root = document.documentElement;
+  const btn = document.getElementById("realThemeToggle");
 
-    let old = document.getElementById("themeToggle");
-    if (!old) return;
-
-    const fresh = document.createElement("button");
-    fresh.id = "themeToggle";
-    fresh.className = old.className || "theme-toggle";
-    fresh.type = "button";
-    fresh.innerHTML = `
-      <span id="themeIcon">☽</span>
-      <span id="themeLabel">Dark Mode</span>
-    `;
-
-    old.replaceWith(fresh);
-
-    function apply(theme) {
-      const light = theme === "light";
-
-      root.classList.toggle("light", light);
-      root.classList.toggle("dark", !light);
-      root.dataset.theme = light ? "light" : "dark";
-      root.style.colorScheme = light ? "light" : "dark";
-
-      document.getElementById("themeIcon").textContent = light ? "∗" : "☽";
-      document.getElementById("themeLabel").textContent = light ? "Light Mode" : "Dark Mode";
-
-      localStorage.setItem("portfolio-theme", light ? "light" : "dark");
-      localStorage.setItem("theme", light ? "light" : "dark");
-
-      window.dispatchEvent(new CustomEvent("portfolio-theme-change", {
-        detail: { isLight: light }
-      }));
-    }
-
-    function current() {
-      return root.dataset.theme === "light" || root.classList.contains("light")
-        ? "light"
-        : "dark";
-    }
-
-    Object.assign(fresh.style, {
-      position: "fixed",
-      top: "1rem",
-      right: "1rem",
-      zIndex: "2147483647",
-      pointerEvents: "auto",
-      cursor: "pointer",
-      touchAction: "manipulation"
-    });
-
-    fresh.onclick = (e) => {
-      e.preventDefault();
-      e.stopPropagation();
-      apply(current() === "light" ? "dark" : "light");
-    };
-
-    const saved = localStorage.getItem("portfolio-theme") || localStorage.getItem("theme");
-    apply(saved === "light" ? "light" : "dark");
+  function apply(mode) {
+    const light = mode === "light";
+    root.classList.toggle("light", light);
+    root.classList.toggle("dark", !light);
+    root.dataset.theme = light ? "light" : "dark";
+    root.style.colorScheme = light ? "light" : "dark";
+    btn.textContent = light ? "∗ Light Mode" : "☽ Dark Mode";
+    localStorage.setItem("portfolio-theme", light ? "light" : "dark");
+    localStorage.setItem("theme", light ? "light" : "dark");
+    window.dispatchEvent(new CustomEvent("portfolio-theme-change", { detail: { isLight: light } }));
   }
 
-  if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", install, { once: true });
-  } else {
-    install();
-  }
+  const saved = localStorage.getItem("portfolio-theme") || localStorage.getItem("theme") || "light";
+  apply(saved === "dark" ? "dark" : "light");
 
-  window.addEventListener("load", install, { once: true });
+  btn.addEventListener("mousedown", e => {
+    e.preventDefault();
+    e.stopPropagation();
+    const next = root.classList.contains("light") ? "dark" : "light";
+    apply(next);
+  }, true);
 })();
 </script>
 
