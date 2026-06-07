@@ -2620,82 +2620,78 @@ html[data-theme="light"] .imdb-mark {
 <script>
 document.addEventListener("DOMContentLoaded", () => {
   const highlightFiles = [
-    "IMG_5142.PNG",
-    "IMG_5143.PNG",
-    "IMG_5144.PNG",
-    "IMG_5146.PNG",
-    "IMG_5147.PNG",
-    "IMG_5148.PNG",
-    "IMG_5149.PNG",
-    "IMG_5150.PNG",
-    "IMG_5151.PNG",
-    "IMG_5152.PNG",
-    "IMG_5153.PNG",
-    "IMG_5154.PNG",
-    "IMG_5155.PNG",
-    "IMG_5156.PNG",
-    "IMG_5157.PNG",
-    "IMG_5158.PNG",
-    "IMG_5159.PNG",
-    "IMG_5160.PNG",
-    "IMG_5161.PNG",
-    "IMG_5163.PNG",
-    "IMG_5164.PNG",
-    "IMG_5165.PNG",
-    "IMG_5166.PNG",
-    "IMG_5167.PNG",
-    "IMG_5168.PNG",
-    "IMG_5169.PNG",
-    "IMG_5170.PNG",
-    "IMG_5171.PNG",
-    "IMG_5172.PNG",
-    "IMG_5173.PNG"
-  ];
+  "IMG_5142.PNG",
+  "IMG_5143.PNG",
+  "IMG_5144.PNG",
+  "IMG_5146.PNG",
+  "IMG_5147.PNG",
+  "IMG_5148.PNG",
+  "IMG_5149.PNG",
+  "IMG_5150.PNG",
+  "IMG_5151.PNG",
+  "IMG_5152.PNG",
+  "IMG_5153.PNG",
+  "IMG_5154.PNG",
+  "IMG_5155.PNG",
+  "IMG_5156.PNG",
+  "IMG_5157.PNG",
+  "IMG_5158.PNG",
+  "IMG_5159.PNG",
+  "IMG_5160.PNG",
+  "IMG_5161.PNG",
+  "IMG_5163.PNG",
+  "IMG_5164.PNG",
+  "IMG_5165.PNG",
+  "IMG_5166.PNG",
+  "IMG_5167.PNG",
+  "IMG_5168.PNG",
+  "IMG_5169.PNG",
+  "IMG_5170.PNG",
+  "IMG_5171.PNG",
+  "IMG_5172.PNG",
+  "IMG_5183.PNG"
+];
 
-  const NAMES = [
-    "Summer 026 I",
-    "Crux 026",
-    "Summer 026 II",
-    "Word 026",
-    "Summer 026 III",
-    "Summer 026 IV",
-    "Myth 026",
-    "Air 024",
-    "Rust 024",
-    "Light 024",
-    "Scape 023",
-    "Gavagai 026",
-    "Spring 026",
-    "Midwntr 026",
-    "NYC 026 II",
-    "NYC 026 III",
-    "NYC 026 I",
-    "Early 026",
-    "Little 025",
-    "Michaelmas",
-    "Summer 025",
-    "Summer 024 I",
-    "Soph II",
-    "H-Town 024",
-    "JP 024",
-    "NYC 023 II",
-    "Soph I",
-    "T’giving 023",
-    "Summer 023",
-    "NYC 023 I"
-  ];
+const NAMES = [
+  "Summer 026 I",
+  "Crux 026",
+  "Word 026",
+  "Summer 026 II",
+  "Little 025",
+  "Myth 026",
+  "Air 024",
+  "Rust 024",
+  "Light 024",
+  "Scape 023",
+  "Gavagai 026",
+  "Spring 026",
+  "Midwntr 026",
+  "NYC 026 II",
+  "NYC 026 III",
+  "NYC 026 I",
+  "Early 026",
+  "W 024",
+  "Michaelmas",
+  "Summer 025",
+  "Summer 024 I",
+  "Soph II",
+  "H-Town 024",
+  "JP 024",
+  "NYC 023 II",
+  "Soph I",
+  "T’giving 023",
+  "Summer 023",
+  "NYC 023 I",
+  "Summer 026 III"
+];
 
-  const gallery =
-    document.getElementById("storyGrid") ||
-    document.getElementById("highlightsGrid") ||
-    document.querySelector(".story-grid") ||
-    document.querySelector(".highlights-grid");
+const gallery =
+  document.getElementById("storyGrid") ||
+  document.getElementById("highlightsGrid") ||
+  document.querySelector(".story-grid") ||
+  document.querySelector(".highlights-grid");
 
-  if (!gallery) {
-    console.warn("Highlights container not found.");
-    return;
-  }
-
+if (gallery) {
   gallery.innerHTML = "";
 
   highlightFiles.forEach((file, index) => {
@@ -2715,6 +2711,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
     gallery.appendChild(item);
   });
+}
+
 });
 </script>
 
