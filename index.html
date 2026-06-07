@@ -2771,6 +2771,97 @@ html[data-theme="light"] #lightPlanetLayer {
   50% { transform: translate3d(1.2rem,-.8rem,0) rotate(2deg); }
 }
 
+
+/* === RESTORED HERO CENTER PLANET WITH RINGS === */
+.hero {
+  position: relative;
+  overflow: hidden;
+}
+
+.hero-center-planet {
+  position: absolute;
+  left: 50%;
+  top: 47%;
+  width: clamp(19rem, 36vw, 34rem);
+  height: clamp(19rem, 36vw, 34rem);
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  z-index: 0;
+  pointer-events: none;
+  opacity: 0.82;
+  background:
+    radial-gradient(circle at 32% 27%, rgba(255,255,255,.72), transparent 9%),
+    radial-gradient(circle at 58% 48%, rgba(255,238,170,.24), transparent 22%),
+    repeating-linear-gradient(
+      172deg,
+      rgba(238, 203, 145, .28) 0 10px,
+      rgba(128, 82, 48, .20) 10px 21px,
+      rgba(80, 45, 30, .18) 21px 34px
+    ),
+    linear-gradient(145deg, #c08a59 0%, #8c6044 45%, #493025 100%);
+  box-shadow:
+    inset -52px -42px 90px rgba(0,0,0,.55),
+    inset 28px 22px 55px rgba(255,255,255,.16),
+    0 0 90px rgba(124,247,255,.24),
+    0 0 160px rgba(255,159,243,.11);
+  mix-blend-mode: screen;
+}
+
+.hero-center-planet::before {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 138%;
+  height: 32%;
+  transform: translate(-50%, -50%) rotate(-14deg);
+  border-radius: 50%;
+  border-top: 2px solid rgba(210, 235, 255, .42);
+  border-bottom: 1px solid rgba(210, 235, 255, .24);
+  filter: blur(.2px);
+  opacity: .85;
+}
+
+.hero-center-planet::after {
+  content: "";
+  position: absolute;
+  inset: -18%;
+  border-radius: 50%;
+  background:
+    radial-gradient(circle, transparent 58%, rgba(124,247,255,.16) 64%, transparent 73%);
+  opacity: .75;
+}
+
+/* keep content above planet */
+.hero .hud,
+.hero .hero-content,
+.hero .menu,
+.hero nav,
+.hero h1,
+.hero p {
+  position: relative;
+  z-index: 2;
+}
+
+/* Dark mode: visible cinematic planet */
+html:not(.light) .hero-center-planet,
+html[data-theme="dark"] .hero-center-planet {
+  display: block;
+  opacity: .78;
+}
+
+/* Light mode: softer, still visible */
+html.light .hero-center-planet,
+html[data-theme="light"] .hero-center-planet {
+  opacity: .32;
+  mix-blend-mode: multiply;
+  filter: saturate(.85) brightness(1.06);
+  box-shadow:
+    inset -46px -36px 82px rgba(60,55,50,.26),
+    inset 24px 20px 50px rgba(255,255,255,.20),
+    0 0 80px rgba(70,90,120,.08);
+}
+
 </style></head>
 <body>
 
@@ -2799,6 +2890,7 @@ html[data-theme="light"] #lightPlanetLayer {
   </button>
 
   <section class="hero">
+  <div class="hero-center-planet" aria-hidden="true"></div>
     <header class="hud">
       <p class="hud-eyebrow">Portfolio</p>
       <h1>Pramithas</h1>
