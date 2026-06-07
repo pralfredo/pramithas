@@ -967,6 +967,210 @@ function animate() {
   controls.update();
   renderer.render(scene, camera);
 }
+
+(() => {
+  const canvas = document.getElementById('constellation');
+  if (!canvas) return;
+
+  const ctx = canvas.getContext('2d', { alpha: true });
+
+  let width = 0;
+  let height = 0;
+  let dpr = Math.min(window.devicePixelRatio || 1, 2);
+
+  let nodes = [];
+  let mouse = { x: -9999, y: -9999, active: false };
+
+  function isLightMode() {
+    const root = document.documentElement;
+    return root.classList.contains('light') || root.dataset.theme === 'light';
+  }
+
+  function getPalette() {
+    if (isLightMode()) {
+      return {
+        bgGlow1: 'rgba(120, 140, 170, 0.035)',
+        bgGlow2: 'rgba(70, 90, 120, 0.020)',
+        line: 'rgba(70, 85, 110, 0.18)',
+        lineStrong: 'rgba(60, 72, 92, 0.28)',
+        node: 'rgba(110, 120, 135, 0.82)',
+        nodeGlow: 'rgba(180, 190, 205, 0.18)'
+      };
+    }
+
+    return {
+      bgGlow1: 'rgba(90, 170, 255, 0.06)',
+      bgGlow2: 'rgba(130, 110, 255, 0.04)',
+      line: 'rgba(110, 170, 255, 0.16)',
+      lineStrong: 'rgba(160, 210, 255, 0.26)',
+      node: 'rgba(235, 242, 255, 0.88)',
+      nodeGlow: 'rgba(140, 210, 255, 0.22)'
+    };
+  }
+
+  function resizeConstellation() {
+    dpr = Math.min(window.devicePixelRatio || 1, 2);
+    width = window.innerWidth;
+    height = window.innerHeight;
+
+    canvas.width = Math.floor(width * dpr);
+    canvas.height = Math.floor(height * dpr);
+    canvas.style.width = width + 'px';
+    canvas.style.height = height + 'px';
+
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+
+    createNodes();
+  }
+
+  function createNodes() {
+    const count = Math.max(45, Math.min(110, Math.floor(width / 18)));
+    nodes = Array.from({ length: count }, () => ({
+      x: Math.random() * width,
+      y: Math.random() * height,
+      vx: (Math.random() - 0.5) * 0.18,
+      vy: (Math.random() - 0.5) * 0.18,
+      r: Math.random() * 1.8 + 1.2,
+      tw: Math.random() * Math.PI * 2,
+      mass: Math.random() * 0.6 + 0.7
+    }));
+  }
+
+  function drawBackgroundGlow(palette) {
+    const g = ctx.createRadialGradient(
+      width * 0.72, height * 0.22, 0,
+      width * 0.72, height * 0.22, Math.max(width, height) * 0.65
+    );
+    g.addColorStop(0, palette.bgGlow1);
+    g.addColorStop(0.45, palette.bgGlow2);
+    g.addColorStop(1, 'rgba(0,0,0,0)');
+    ctx.fillStyle = g;
+    ctx.fillRect(0, 0, width, height);
+  }
+
+  function stepNodes() {
+    for (const n of nodes) {
+      n.x += n.vx * n.mass;
+      n.y += n.vy * n.mass;
+      n.tw += 0.015;
+
+      if (n.x < -20) n.x = width + 20;
+      if (n.x > width + 20) n.x = -20;
+      if (n.y < -20) n.y = height + 20;
+      if (n.y > height + 20) n.y = -20;
+
+      if (mouse.active) {
+        const dx = mouse.x - n.x;
+        const dy = mouse.y - n.y;
+        const dist = Math.hypot(dx, dy);
+
+        if (dist < 160 && dist > 0.001) {
+          const pull = (1 - dist / 160) * 0.0025;
+          n.vx += dx * pull * 0.01;
+          n.vy += dy * pull * 0.01;
+        }
+      }
+
+      n.vx *= 0.995;
+      n.vy *= 0.995;
+
+      n.vx = Math.max(-0.22, Math.min(0.22, n.vx));
+      n.vy = Math.max(-0.22, Math.min(0.22, n.vy));
+    }
+  }
+
+  function drawConnections(palette) {
+    const maxDist = isLightMode() ? 145 : 160;
+
+    for (let i = 0; i < nodes.length; i++) {
+      const a = nodes[i];
+
+      // connect only to a few nearest nodes for a cleaner "constellation" look
+      const nearby = [];
+
+      for (let j = i + 1; j < nodes.length; j++) {
+        const b = nodes[j];
+        const dx = a.x - b.x;
+        const dy = a.y - b.y;
+        const d = Math.hypot(dx, dy);
+
+        if (d < maxDist) {
+          nearby.push({ b, d });
+        }
+      }
+
+      nearby.sort((p, q) => p.d - q.d);
+
+      for (const { b, d } of nearby.slice(0, 3)) {
+        const alpha = Math.max(0, 1 - d / maxDist);
+        const strong = d < maxDist * 0.55;
+
+        ctx.beginPath();
+        ctx.moveTo(a.x, a.y);
+        ctx.lineTo(b.x, b.y);
+        ctx.lineWidth = strong ? 1.1 : 0.8;
+        ctx.strokeStyle = strong
+          ? palette.lineStrong.replace(/[\d.]+\)$/, `${(alpha * 0.9).toFixed(3)})`)
+          : palette.line.replace(/[\d.]+\)$/, `${(alpha * 0.8).toFixed(3)})`);
+        ctx.stroke();
+      }
+    }
+  }
+
+  function drawNodes(palette) {
+    for (const n of nodes) {
+      const pulse = 0.82 + Math.sin(n.tw) * 0.18;
+      const rr = n.r * pulse;
+
+      // soft glow
+      ctx.beginPath();
+      ctx.arc(n.x, n.y, rr * 3.2, 0, Math.PI * 2);
+      ctx.fillStyle = palette.nodeGlow;
+      ctx.fill();
+
+      // node
+      ctx.beginPath();
+      ctx.arc(n.x, n.y, rr, 0, Math.PI * 2);
+      ctx.fillStyle = palette.node;
+      ctx.fill();
+    }
+  }
+
+  function tick() {
+    const palette = getPalette();
+
+    ctx.clearRect(0, 0, width, height);
+    drawBackgroundGlow(palette);
+    stepNodes();
+    drawConnections(palette);
+    drawNodes(palette);
+
+    requestAnimationFrame(tick);
+  }
+
+  window.addEventListener('resize', resizeConstellation);
+
+  window.addEventListener('mousemove', (e) => {
+    mouse.x = e.clientX;
+    mouse.y = e.clientY;
+    mouse.active = true;
+  });
+
+  window.addEventListener('mouseleave', () => {
+    mouse.active = false;
+    mouse.x = -9999;
+    mouse.y = -9999;
+  });
+
+  window.addEventListener('portfolio-theme-change', () => {
+    // no full reset needed, but this ensures palette swaps cleanly
+    createNodes();
+  });
+
+  resizeConstellation();
+  tick();
+})();
+
 animate();
 
 /* footer year */

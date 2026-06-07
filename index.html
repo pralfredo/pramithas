@@ -4052,6 +4052,8 @@ vec4 diffuseColor=vec4(clamp(bandCol, 0.0, 1.0), opacity);
       return new THREE.Points(geo, mat);
     }
 
+    <canvas id="constellation" aria-hidden="true"></canvas>
+
     const starsFar  = coloredStarLayer(2200, 0.05, 0.09, 180, 380);
     const starsMid  = coloredStarLayer(1600, 0.09, 0.16, 75,  185);
     const starsNear = coloredStarLayer(800,  0.15, 0.28, 42,  95);
