@@ -553,6 +553,101 @@ html[data-theme="light"] #constellation{
   opacity: 0.95;
 }
 
+/* === ICY CENTER PLANET RING === */
+.hero-center-planet {
+  isolation: isolate;
+}
+
+/* main icy ring */
+.hero-center-planet::before {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 158%;
+  height: 34%;
+  transform: translate(-50%, -50%) rotate(-13deg);
+  border-radius: 50%;
+  z-index: 3;
+  pointer-events: none;
+
+  border-top: 2px solid rgba(215, 245, 255, 0.72);
+  border-bottom: 1px solid rgba(155, 220, 255, 0.38);
+
+  background:
+    linear-gradient(
+      90deg,
+      transparent 0%,
+      rgba(190, 240, 255, 0.08) 18%,
+      rgba(255, 255, 255, 0.28) 48%,
+      rgba(145, 210, 255, 0.10) 76%,
+      transparent 100%
+    );
+
+  box-shadow:
+    0 0 18px rgba(150, 230, 255, 0.28),
+    inset 0 0 18px rgba(255, 255, 255, 0.18);
+
+  filter: blur(0.15px);
+}
+
+/* second thinner orbital streak */
+.hero-center-planet::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 172%;
+  height: 42%;
+  transform: translate(-50%, -50%) rotate(-13deg);
+  border-radius: 50%;
+  z-index: 2;
+  pointer-events: none;
+
+  border-top: 1px solid rgba(235, 250, 255, 0.32);
+  border-bottom: 1px solid rgba(130, 195, 235, 0.20);
+
+  box-shadow:
+    0 0 24px rgba(120, 210, 255, 0.16);
+}
+
+/* dark mode: brighter icy ring */
+html:not(.light) .hero-center-planet::before,
+html[data-theme="dark"] .hero-center-planet::before {
+  border-top-color: rgba(220, 250, 255, 0.78);
+  border-bottom-color: rgba(125, 215, 255, 0.42);
+  box-shadow:
+    0 0 22px rgba(120, 225, 255, 0.36),
+    0 0 50px rgba(120, 225, 255, 0.12),
+    inset 0 0 18px rgba(255, 255, 255, 0.18);
+}
+
+/* light mode: visible but more paper/subtle */
+html.light .hero-center-planet::before,
+html[data-theme="light"] .hero-center-planet::before {
+  border-top-color: rgba(80, 120, 150, 0.38);
+  border-bottom-color: rgba(70, 100, 130, 0.20);
+  background:
+    linear-gradient(
+      90deg,
+      transparent 0%,
+      rgba(80, 120, 150, 0.05) 18%,
+      rgba(255, 255, 255, 0.30) 48%,
+      rgba(70, 100, 130, 0.06) 76%,
+      transparent 100%
+    );
+  box-shadow:
+    0 0 18px rgba(70, 100, 130, 0.12),
+    inset 0 0 16px rgba(255, 255, 255, 0.16);
+}
+
+html.light .hero-center-planet::after,
+html[data-theme="light"] .hero-center-planet::after {
+  border-top-color: rgba(70, 90, 115, 0.20);
+  border-bottom-color: rgba(70, 90, 115, 0.12);
+  box-shadow: 0 0 20px rgba(70, 90, 115, 0.08);
+}
+
 /* planet color map by menu position */
 .cta .button:nth-child(1) { --menu-planet-a:#7cf7ff; --menu-planet-b:#264f7c; }
 .cta .button:nth-child(2) { --menu-planet-a:#9cffb5; --menu-planet-b:#236449; }
