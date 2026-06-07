@@ -265,6 +265,92 @@ h2 {
   z-index: 1;
 }
 
+/* extra light-mode planets */
+html.light .cosmic-fallback::before,
+html[data-theme="light"] .cosmic-fallback::before,
+html.light .cosmic-fallback::after,
+html[data-theme="light"] .cosmic-fallback::after {
+  content: "";
+  position: fixed;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* upper-left olive planet */
+html.light .cosmic-fallback::before,
+html[data-theme="light"] .cosmic-fallback::before {
+  width: 9rem;
+  height: 9rem;
+  left: 16%;
+  top: 18%;
+  opacity: .34;
+  background:
+    radial-gradient(circle at 30% 25%, rgba(255,255,255,.40), transparent 14%),
+    linear-gradient(145deg, #7d826a 0%, #636852 48%, #4d5241 100%);
+  box-shadow:
+    inset -16px -14px 28px rgba(40,44,36,.18),
+    inset 10px 8px 18px rgba(255,255,255,.10),
+    0 12px 30px rgba(70,72,70,.08);
+}
+
+/* right-side blue planet */
+html.light .cosmic-fallback::after,
+html[data-theme="light"] .cosmic-fallback::after {
+  width: 7.5rem;
+  height: 7.5rem;
+  right: 10%;
+  top: 46%;
+  opacity: .34;
+  background:
+    radial-gradient(circle at 30% 25%, rgba(255,255,255,.42), transparent 14%),
+    linear-gradient(145deg, #89a6b0 0%, #617a83 48%, #4c5f66 100%);
+  box-shadow:
+    inset -14px -12px 24px rgba(38,50,56,.16),
+    inset 8px 8px 16px rgba(255,255,255,.10),
+    0 10px 24px rgba(78,92,102,.08);
+}
+
+/* extra lower-right purple planet */
+html.light body::before {
+  content: "";
+  position: fixed;
+  width: 6rem;
+  height: 6rem;
+  right: 11%;
+  bottom: 12%;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 0;
+  opacity: .26;
+  background:
+    radial-gradient(circle at 30% 25%, rgba(255,255,255,.38), transparent 14%),
+    linear-gradient(145deg, #9e86b3 0%, #7b678e 48%, #5f4f70 100%);
+  box-shadow:
+    inset -12px -10px 20px rgba(53,42,62,.16),
+    inset 7px 7px 14px rgba(255,255,255,.10);
+}
+
+/* extra lower-left faint grey planet */
+html.light body::after {
+  content: "";
+  position: fixed;
+  width: 8rem;
+  height: 8rem;
+  left: 7%;
+  bottom: 8%;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 0;
+  opacity: .16;
+  background:
+    radial-gradient(circle at 30% 25%, rgba(255,255,255,.35), transparent 14%),
+    linear-gradient(145deg, #d7d3cb 0%, #b7b1a5 55%, #948f87 100%);
+  box-shadow:
+    inset -12px -10px 22px rgba(90,88,82,.12),
+    inset 7px 7px 13px rgba(255,255,255,.08);
+}
+
 /* planet color map by menu position */
 .cta .button:nth-child(1) { --menu-planet-a:#7cf7ff; --menu-planet-b:#264f7c; }
 .cta .button:nth-child(2) { --menu-planet-a:#9cffb5; --menu-planet-b:#236449; }

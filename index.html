@@ -3103,10 +3103,13 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   gallery.innerHTML = "";
-  const stories = highlightFiles.map((file, index) => ({
-    file,
-    name: NAMES[index] || `Highlight ${index + 1}`
-  }));
+ const HIGHLIGHT_BASE = new URL('./highlights/', window.location.href).href;
+
+const stories = highlightFiles.map((file, index) => ({
+  file,
+  name: NAMES[index] || `Highlight ${index + 1}`,
+  src: new URL(file, HIGHLIGHT_BASE).href
+}));
 
   stories.forEach((story, index) => {
     const item = document.createElement("button");
@@ -3116,7 +3119,7 @@ document.addEventListener("DOMContentLoaded", () => {
     item.innerHTML = `
       <span class="highlight-ring">
         <span class="highlight-inner">
-          <img src="highlights/${story.file}" alt="${story.name}" loading="lazy">
+          <img src="${story.src}" alt="${story.name}" loading="lazy">
         </span>
       </span>
       <span class="highlight-label">${story.name}</span>
