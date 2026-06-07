@@ -5385,5 +5385,79 @@ const menuMoons = [];
 })();
 </script>
 
+<script id="ABSOLUTE_FINAL_THEME_TOGGLE">
+(() => {
+  function install() {
+    const root = document.documentElement;
+
+    let old = document.getElementById("themeToggle");
+    if (!old) return;
+
+    const fresh = document.createElement("button");
+    fresh.id = "themeToggle";
+    fresh.className = old.className || "theme-toggle";
+    fresh.type = "button";
+    fresh.innerHTML = `
+      <span id="themeIcon">☽</span>
+      <span id="themeLabel">Dark Mode</span>
+    `;
+
+    old.replaceWith(fresh);
+
+    function apply(theme) {
+      const light = theme === "light";
+
+      root.classList.toggle("light", light);
+      root.classList.toggle("dark", !light);
+      root.dataset.theme = light ? "light" : "dark";
+      root.style.colorScheme = light ? "light" : "dark";
+
+      document.getElementById("themeIcon").textContent = light ? "∗" : "☽";
+      document.getElementById("themeLabel").textContent = light ? "Light Mode" : "Dark Mode";
+
+      localStorage.setItem("portfolio-theme", light ? "light" : "dark");
+      localStorage.setItem("theme", light ? "light" : "dark");
+
+      window.dispatchEvent(new CustomEvent("portfolio-theme-change", {
+        detail: { isLight: light }
+      }));
+    }
+
+    function current() {
+      return root.dataset.theme === "light" || root.classList.contains("light")
+        ? "light"
+        : "dark";
+    }
+
+    Object.assign(fresh.style, {
+      position: "fixed",
+      top: "1rem",
+      right: "1rem",
+      zIndex: "2147483647",
+      pointerEvents: "auto",
+      cursor: "pointer",
+      touchAction: "manipulation"
+    });
+
+    fresh.onclick = (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      apply(current() === "light" ? "dark" : "light");
+    };
+
+    const saved = localStorage.getItem("portfolio-theme") || localStorage.getItem("theme");
+    apply(saved === "light" ? "light" : "dark");
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", install, { once: true });
+  } else {
+    install();
+  }
+
+  window.addEventListener("load", install, { once: true });
+})();
+</script>
+
 </body>
 </html>
