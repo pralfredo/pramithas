@@ -4853,23 +4853,21 @@ const menuMoons = [];
       label.id = "themeLabel";
       btn.append(label);
     }
+
     function applyThemeVisuals(isLight) {
-    document.documentElement.classList.toggle('light', isLight);
-    document.documentElement.classList.toggle('dark', !isLight);
+  document.documentElement.classList.toggle('light', isLight);
+  document.documentElement.classList.toggle('dark', !isLight);
 
-    // Hide the giant redundant shell in light mode
-    if (centerPlanetOuter) centerPlanetOuter.visible = !isLight;
+  // KEEP the real center planet
+  if (centerPlanetInner) centerPlanetInner.visible = true;
 
-    // Keep the actual inner hero planet visible in both
-    if (centerPlanetInner) centerPlanetInner.visible = true;
+  // HIDE the big pale duplicate shell in light mode
+  if (centerPlanetOuter) centerPlanetOuter.visible = !isLight;
 
-    // Light-mode accent planets
-    lightAccentPlanets.forEach(p => p.visible = isLight);
-
-    // Dark-mode accent planets if you have a separate set
-    darkAccentPlanets.forEach(p => p.visible = !isLight);
+  // If you want it gone in both themes:
+  // if (centerPlanetOuter) centerPlanetOuter.visible = false;
   }
-
+  
     function applyTheme(mode) {
       const isLight = mode === "light";
       root.classList.toggle("light", isLight);
