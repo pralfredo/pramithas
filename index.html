@@ -2720,8 +2720,251 @@ if (gallery) {
 </div>
           </div>
           <span class="highlight-label">${name}</span>`;
-        
-<script type="module">
+        item.addEventListener('click', () => openStory(i));
+        row.appendChild(item);
+      });
+
+      // Lightbox state
+      let cur = 0;
+      let progressTimer = null;
+      const STORY_DURATION = 6000; // ms per story
+
+      const overlay  = document.getElementById('hlOverlay');
+      const hlImg    = document.getElementById('hlImg');
+      const hlName   = document.getElementById('hlName');
+      const hlIndex  = document.getElementById('hlIndex');
+      const hlAvatar = document.getElementById('hlAvatar');
+      const hlProg   = document.getElementById('hlProgressBar');
+      const hlPrev   = document.getElementById('hlPrev');
+      const hlNext   = document.getElementById('hlNext');
+      const hlClose  = document.getElementById('hlClose');
+
+      function openStory(i) {
+        cur = i;
+        overlay.classList.add('active');
+        document.body.style.overflow = 'hidden';
+        showStory(cur);
+      }
+
+      function closeStory() {
+        overlay.classList.remove('active');
+        document.body.style.overflow = '';
+        clearProgress();
+      }
+
+      function showStory(i) {
+        cur = i;
+        hlImg.style.opacity = 0;
+        hlImg.src = 'data:image/jpeg;base64,' + FULLS[i];
+        hlImg.onload = () => { hlImg.style.opacity = 1; };
+        hlName.textContent = NAMES[i];
+        hlIndex.textContent = (i+1) + ' / ' + NAMES.length;
+        hlAvatar.style.backgroundImage = `url(highlights/${highlightFiles[i]})`;
+        hlPrev.style.opacity = i === 0 ? '0.2' : '1';
+        hlNext.style.opacity = i === NAMES.length-1 ? '0.2' : '1';
+        startProgress();
+      }
+
+      function startProgress() {
+        clearProgress();
+        hlProg.style.transition = 'none';
+        hlProg.style.width = '0%';
+        requestAnimationFrame(() => {
+          requestAnimationFrame(() => {
+            hlProg.style.transition = `width ${STORY_DURATION}ms linear`;
+            hlProg.style.width = '100%';
+          });
+        });
+        progressTimer = setTimeout(() => {
+          if (cur < NAMES.length - 1) showStory(cur + 1);
+          else closeStory();
+        }, STORY_DURATION);
+      }
+
+      function clearProgress() {
+        clearTimeout(progressTimer);
+        hlProg.style.transition = 'none';
+        hlProg.style.width = '0%';
+      }
+
+      hlClose.addEventListener('click', closeStory);
+      hlPrev.addEventListener('click', () => { if (cur > 0) showStory(cur - 1); });
+      hlNext.addEventListener('click', () => { if (cur < NAMES.length-1) showStory(cur+1); else closeStory(); });
+
+      // Click sides of image to nav
+      document.getElementById('hlImageWrap').addEventListener('click', e => {
+        const rect = e.currentTarget.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        if (x < rect.width * 0.35) {
+          if (cur > 0) showStory(cur - 1);
+        } else if (x > rect.width * 0.65) {
+          if (cur < NAMES.length-1) showStory(cur+1);
+          else closeStory();
+        }
+      });
+
+      // Keyboard
+      document.addEventListener('keydown', e => {
+        if (!overlay.classList.contains('active')) return;
+        if (e.key === 'ArrowRight' || e.key === 'ArrowDown') { if (cur < NAMES.length-1) showStory(cur+1); else closeStory(); }
+        if (e.key === 'ArrowLeft'  || e.key === 'ArrowUp')   { if (cur > 0) showStory(cur-1); }
+        if (e.key === 'Escape') closeStory();
+      });
+
+      // Tap overlay bg to close
+      document.getElementById('hlBg').addEventListener('click', closeStory);
+
+      // Pause on hold
+      let holdTimer = null;
+      const phone = document.getElementById('hlPhone');
+      phone.addEventListener('pointerdown', () => {
+        holdTimer = setTimeout(() => clearProgress(), 300);
+      });
+      phone.addEventListener('pointerup', () => {
+        clearTimeout(holdTimer);
+        startProgress();
+      });
+    })();
+    </script>
+
+        <!-- TV SHOWS -->
+    <section id="shows">
+      <p class="section-label">// watching</p>
+      <h2>TV Shows</h2>
+      <div class="shows-card">
+        <input class="shows-search" type="text" id="showsSearch" placeholder="Search shows…" autocomplete="off" />
+        <p class="shows-count" id="showsCount">89 shows</p>
+        <div class="shows-grid" id="showsGrid">
+          <a class="show-pill" href="https://www.imdb.com/title/tt31806037/" target="_blank" rel="noopener noreferrer" aria-label="Open Adolescence on IMDb">Adolescence<span class="imdb-mark">IMDb</span></a>
+          <a class="show-pill" href="https://www.imdb.com/title/tt0417299/" target="_blank" rel="noopener noreferrer" aria-label="Open ATLA on IMDb">ATLA<span class="imdb-mark">IMDb</span></a>
+          <a class="show-pill" href="https://www.imdb.com/title/tt4288182/" target="_blank" rel="noopener noreferrer" aria-label="Open Atlanta on IMDb">Atlanta<span class="imdb-mark">IMDb</span></a>
+          <a class="show-pill" href="https://www.imdb.com/title/tt2560140/" target="_blank" rel="noopener noreferrer" aria-label="Open Attack on Titan on IMDb">Attack on Titan<span class="imdb-mark">IMDb</span></a>
+          <a class="show-pill" href="https://www.imdb.com/title/tt2467372/" target="_blank" rel="noopener noreferrer" aria-label="Open B99 on IMDb">B99<span class="imdb-mark">IMDb</span></a>
+          <a class="show-pill" href="https://www.imdb.com/title/tt5348176/" target="_blank" rel="noopener noreferrer" aria-label="Open Barry on IMDb">Barry<span class="imdb-mark">IMDb</span></a>
+          <a class="show-pill" href="https://www.imdb.com/title/tt2188671/" target="_blank" rel="noopener noreferrer" aria-label="Open Bates Motel on IMDb">Bates Motel<span class="imdb-mark">IMDb</span></a>
+          <a class="show-pill" href="https://www.imdb.com/title/tt9698442/" target="_blank" rel="noopener noreferrer" aria-label="Open Behind Her Eyes on IMDb">Behind Her Eyes<span class="imdb-mark">IMDb</span></a>
+          <a class="show-pill" href="https://www.imdb.com/title/tt3032476/" target="_blank" rel="noopener noreferrer" aria-label="Open Better Call Saul on IMDb">Better Call Saul<span class="imdb-mark">IMDb</span></a>
+          <a class="show-pill" href="https://www.imdb.com/title/tt2085059/" target="_blank" rel="noopener noreferrer" aria-label="Open Black Mirror on IMDb">Black Mirror<span class="imdb-mark">IMDb</span></a>
+          <a class="show-pill" href="https://www.imdb.com/title/tt7493974/" target="_blank" rel="noopener noreferrer" aria-label="Open Bodyguard on IMDb">Bodyguard<span class="imdb-mark">IMDb</span></a>
+          <a class="show-pill" href="https://www.imdb.com/title/tt3398228/" target="_blank" rel="noopener noreferrer" aria-label="Open Bojack Horseman on IMDb">Bojack Horseman<span class="imdb-mark">IMDb</span></a>
+          <a class="show-pill" href="https://www.imdb.com/title/tt0903747/" target="_blank" rel="noopener noreferrer" aria-label="Open Breaking Bad on IMDb">Breaking Bad<span class="imdb-mark">IMDb</span></a>
+          <a class="show-pill" href="https://www.imdb.com/title/tt8740790/" target="_blank" rel="noopener noreferrer" aria-label="Open Bridgerton on IMDb">Bridgerton<span class="imdb-mark">IMDb</span></a>
+          <a class="show-pill" href="https://www.imdb.com/title/tt7366338/" target="_blank" rel="noopener noreferrer" aria-label="Open Chernobyl on IMDb">Chernobyl<span class="imdb-mark">IMDb</span></a>
+          <a class="show-pill" href="https://www.imdb.com/title/tt7221388/" target="_blank" rel="noopener noreferrer" aria-label="Open Cobra Kai on IMDb">Cobra Kai<span class="imdb-mark">IMDb</span></a>
+          <a class="show-pill" href="https://www.imdb.com/title/tt0994314/" target="_blank" rel="noopener noreferrer" aria-label="Open Code Geass on IMDb">Code Geass<span class="imdb-mark">IMDb</span></a>
+          <a class="show-pill" href="https://www.imdb.com/title/tt13207736/" target="_blank" rel="noopener noreferrer" aria-label="Open Dahmer on IMDb">Dahmer<span class="imdb-mark">IMDb</span></a>
+          <a class="show-pill" href="https://www.imdb.com/title/tt5753856/" target="_blank" rel="noopener noreferrer" aria-label="Open Dark on IMDb">Dark<span class="imdb-mark">IMDb</span></a>
+          <a class="show-pill" href="https://www.imdb.com/title/tt0877057/" target="_blank" rel="noopener noreferrer" aria-label="Open Death Note on IMDb">Death Note<span class="imdb-mark">IMDb</span></a>
+          <a class="show-pill" href="https://www.imdb.com/title/tt6128300/" target="_blank" rel="noopener noreferrer" aria-label="Open Dynasty on IMDb">Dynasty<span class="imdb-mark">IMDb</span></a>
+          <a class="show-pill" href="https://www.imdb.com/title/tt7134908/" target="_blank" rel="noopener noreferrer" aria-label="Open Elite on IMDb">Elite<span class="imdb-mark">IMDb</span></a>
+          <a class="show-pill" href="https://www.imdb.com/title/tt8772296/" target="_blank" rel="noopener noreferrer" aria-label="Open Euphoria on IMDb">Euphoria<span class="imdb-mark">IMDb</span></a>
+          <a class="show-pill" href="https://www.imdb.com/title/tt0182576/" target="_blank" rel="noopener noreferrer" aria-label="Open Family Guy on IMDb">Family Guy<span class="imdb-mark">IMDb</span></a>
+          <a class="show-pill" href="https://www.imdb.com/title/tt0108778/" target="_blank" rel="noopener noreferrer" aria-label="Open Friends on IMDb">Friends<span class="imdb-mark">IMDb</span></a>
+          <a class="show-pill" href="https://www.imdb.com/title/tt0944947/" target="_blank" rel="noopener noreferrer" aria-label="Open Game of Thrones on IMDb">Game of Thrones<span class="imdb-mark">IMDb</span></a>
+          <a class="show-pill" href="https://www.imdb.com/title/tt0397442/" target="_blank" rel="noopener noreferrer" aria-label="Open Gossip Girl on IMDb">Gossip Girl<span class="imdb-mark">IMDb</span></a>
+          <a class="show-pill" href="https://www.imdb.com/title/tt10638036/" target="_blank" rel="noopener noreferrer" aria-label="Open Heartstopper on IMDb">Heartstopper<span class="imdb-mark">IMDb</span></a>
+          <a class="show-pill" href="https://www.imdb.com/title/tt35495073/" target="_blank" rel="noopener noreferrer" aria-label="Open Heated Rivalry on IMDb">Heated Rivalry<span class="imdb-mark">IMDb</span></a>
+          <a class="show-pill" href="https://www.imdb.com/title/tt11198330/" target="_blank" rel="noopener noreferrer" aria-label="Open House of the Dragon on IMDb">House of the Dragon<span class="imdb-mark">IMDb</span></a>
+          <a class="show-pill" href="https://www.imdb.com/title/tt0460649/" target="_blank" rel="noopener noreferrer" aria-label="Open HIMYM on IMDb">HIMYM<span class="imdb-mark">IMDb</span></a>
+          <a class="show-pill" href="https://www.imdb.com/title/tt3205802/" target="_blank" rel="noopener noreferrer" aria-label="Open HTGAWM on IMDb">HTGAWM<span class="imdb-mark">IMDb</span></a>
+          <a class="show-pill" href="https://www.imdb.com/title/tt2098220/" target="_blank" rel="noopener noreferrer" aria-label="Open Hunter x Hunter on IMDb">Hunter x Hunter<span class="imdb-mark">IMDb</span></a>
+          <a class="show-pill" href="https://www.imdb.com/title/tt12312250/" target="_blank" rel="noopener noreferrer" aria-label="Open Jeffrey Epstein on IMDb">Jeffrey Epstein<span class="imdb-mark">IMDb</span></a>
+          <a class="show-pill" href="https://www.imdb.com/title/tt3581920/" target="_blank" rel="noopener noreferrer" aria-label="Open Last of Us on IMDb">Last of Us<span class="imdb-mark">IMDb</span></a>
+          <a class="show-pill" href="https://www.imdb.com/title/tt6468322/" target="_blank" rel="noopener noreferrer" aria-label="Open La Casa de Papel on IMDb">La Casa de Papel<span class="imdb-mark">IMDb</span></a>
+          <a class="show-pill" href="https://www.imdb.com/title/tt3007572/" target="_blank" rel="noopener noreferrer" aria-label="Open Locke and Key on IMDb">Locke and Key<span class="imdb-mark">IMDb</span></a>
+          <a class="show-pill" href="https://www.imdb.com/title/tt4770018/" target="_blank" rel="noopener noreferrer" aria-label="Open Love Island on IMDb">Love Island<span class="imdb-mark">IMDb</span></a>
+          <a class="show-pill" href="https://www.imdb.com/title/tt4052886/" target="_blank" rel="noopener noreferrer" aria-label="Open Lucifer on IMDb">Lucifer<span class="imdb-mark">IMDb</span></a>
+          <a class="show-pill" href="https://www.imdb.com/title/tt2531336/" target="_blank" rel="noopener noreferrer" aria-label="Open Lupin on IMDb">Lupin<span class="imdb-mark">IMDb</span></a>
+          <a class="show-pill" href="https://www.imdb.com/title/tt8690890/" target="_blank" rel="noopener noreferrer" aria-label="Open Meteor Garden on IMDb">Meteor Garden<span class="imdb-mark">IMDb</span></a>
+          <a class="show-pill" href="https://www.imdb.com/title/tt14492910/" target="_blank" rel="noopener noreferrer" aria-label="Open Money Explained on IMDb">Money Explained<span class="imdb-mark">IMDb</span></a>
+          <a class="show-pill" href="https://www.imdb.com/title/tt5290382/" target="_blank" rel="noopener noreferrer" aria-label="Open Mindhunter on IMDb">Mindhunter<span class="imdb-mark">IMDb</span></a>
+          <a class="show-pill" href="https://www.imdb.com/title/tt10062292/" target="_blank" rel="noopener noreferrer" aria-label="Open Never Have I Ever on IMDb">Never Have I Ever<span class="imdb-mark">IMDb</span></a>
+          <a class="show-pill" href="https://www.imdb.com/title/tt5071412/" target="_blank" rel="noopener noreferrer" aria-label="Open Ozark on IMDb">Ozark<span class="imdb-mark">IMDb</span></a>
+          <a class="show-pill" href="https://www.imdb.com/title/tt2442560/" target="_blank" rel="noopener noreferrer" aria-label="Open Peaky Blinders on IMDb">Peaky Blinders<span class="imdb-mark">IMDb</span></a>
+          <a class="show-pill" href="https://www.imdb.com/title/tt22202452/" target="_blank" rel="noopener noreferrer" aria-label="Open Pluribus on IMDb">Pluribus<span class="imdb-mark">IMDb</span></a>
+          <a class="show-pill" href="https://www.imdb.com/title/tt0112130/" target="_blank" rel="noopener noreferrer" aria-label="Open Pride and Prejudice on IMDb">Pride and Prejudice<span class="imdb-mark">IMDb</span></a>
+          <a class="show-pill" href="https://www.imdb.com/title/tt14661396/" target="_blank" rel="noopener noreferrer" aria-label="Open Queen Charlotte on IMDb">Queen Charlotte<span class="imdb-mark">IMDb</span></a>
+          <a class="show-pill" href="https://www.imdb.com/title/tt10048342/" target="_blank" rel="noopener noreferrer" aria-label="Open Queen's Gambit on IMDb">Queen's Gambit<span class="imdb-mark">IMDb</span></a>
+          <a class="show-pill" href="https://www.imdb.com/title/tt2861424/" target="_blank" rel="noopener noreferrer" aria-label="Open Rick and Morty on IMDb">Rick and Morty<span class="imdb-mark">IMDb</span></a>
+          <a class="show-pill" href="https://www.imdb.com/title/tt5420376/" target="_blank" rel="noopener noreferrer" aria-label="Open Riverdale on IMDb">Riverdale<span class="imdb-mark">IMDb</span></a>
+          <a class="show-pill" href="https://www.imdb.com/title/tt6077448/" target="_blank" rel="noopener noreferrer" aria-label="Open Sacred Games on IMDb">Sacred Games<span class="imdb-mark">IMDb</span></a>
+          <a class="show-pill" href="https://www.imdb.com/title/tt11280740/" target="_blank" rel="noopener noreferrer" aria-label="Open Severance on IMDb">Severance<span class="imdb-mark">IMDb</span></a>
+          <a class="show-pill" href="https://www.imdb.com/title/tt7767422/" target="_blank" rel="noopener noreferrer" aria-label="Open Sex Education on IMDb">Sex Education<span class="imdb-mark">IMDb</span></a>
+          <a class="show-pill" href="https://www.imdb.com/title/tt2403776/" target="_blank" rel="noopener noreferrer" aria-label="Open Shadow and Bone on IMDb">Shadow and Bone<span class="imdb-mark">IMDb</span></a>
+          <a class="show-pill" href="https://www.imdb.com/title/tt1475582/" target="_blank" rel="noopener noreferrer" aria-label="Open Sherlock on IMDb">Sherlock<span class="imdb-mark">IMDb</span></a>
+          <a class="show-pill" href="https://www.imdb.com/title/tt10919420/" target="_blank" rel="noopener noreferrer" aria-label="Open Squid Game on IMDb">Squid Game<span class="imdb-mark">IMDb</span></a>
+          <a class="show-pill" href="https://www.imdb.com/title/tt4574334/" target="_blank" rel="noopener noreferrer" aria-label="Open Stranger Things on IMDb">Stranger Things<span class="imdb-mark">IMDb</span></a>
+          <a class="show-pill" href="https://www.imdb.com/title/tt7660850/" target="_blank" rel="noopener noreferrer" aria-label="Open Succession on IMDb">Succession<span class="imdb-mark">IMDb</span></a>
+          <a class="show-pill" href="https://www.imdb.com/title/tt1632701/" target="_blank" rel="noopener noreferrer" aria-label="Open Suits on IMDb">Suits<span class="imdb-mark">IMDb</span></a>
+          <a class="show-pill" href="https://www.imdb.com/title/tt4477976/" target="_blank" rel="noopener noreferrer" aria-label="Open Superstore on IMDb">Superstore<span class="imdb-mark">IMDb</span></a>
+          <a class="show-pill" href="https://www.imdb.com/title/tt0898266/" target="_blank" rel="noopener noreferrer" aria-label="Open TBBT on IMDb">TBBT<span class="imdb-mark">IMDb</span></a>
+          <a class="show-pill" href="https://www.imdb.com/title/tt1567432/" target="_blank" rel="noopener noreferrer" aria-label="Open Teen Wolf on IMDb">Teen Wolf<span class="imdb-mark">IMDb</span></a>
+          <a class="show-pill" href="https://www.imdb.com/title/tt14452776/" target="_blank" rel="noopener noreferrer" aria-label="Open The Bear on IMDb">The Bear<span class="imdb-mark">IMDb</span></a>
+          <a class="show-pill" href="https://www.imdb.com/title/tt1190634/" target="_blank" rel="noopener noreferrer" aria-label="Open The Boys on IMDb">The Boys<span class="imdb-mark">IMDb</span></a>
+          <a class="show-pill" href="https://www.imdb.com/title/tt4786824/" target="_blank" rel="noopener noreferrer" aria-label="Open The Crown on IMDb">The Crown<span class="imdb-mark">IMDb</span></a>
+          <a class="show-pill" href="https://www.imdb.com/title/tt6257970/" target="_blank" rel="noopener noreferrer" aria-label="Open The End of the F***ing World on IMDb">The End of the F***ing World<span class="imdb-mark">IMDb</span></a>
+          <a class="show-pill" href="https://www.imdb.com/title/tt4955642/" target="_blank" rel="noopener noreferrer" aria-label="Open The Good Place on IMDb">The Good Place<span class="imdb-mark">IMDb</span></a>
+          <a class="show-pill" href="https://www.imdb.com/title/tt2632424/" target="_blank" rel="noopener noreferrer" aria-label="Open The Originals on IMDb">The Originals<span class="imdb-mark">IMDb</span></a>
+          <a class="show-pill" href="https://www.imdb.com/title/tt31938062/" target="_blank" rel="noopener noreferrer" aria-label="Open The Pitt on IMDb">The Pitt<span class="imdb-mark">IMDb</span></a>
+          <a class="show-pill" href="https://www.imdb.com/title/tt7587890/" target="_blank" rel="noopener noreferrer" aria-label="Open The Rookie on IMDb">The Rookie<span class="imdb-mark">IMDb</span></a>
+          <a class="show-pill" href="https://www.imdb.com/title/tt7985576/" target="_blank" rel="noopener noreferrer" aria-label="Open The Serpent on IMDb">The Serpent<span class="imdb-mark">IMDb</span></a>
+          <a class="show-pill" href="https://www.imdb.com/title/tt6048596/" target="_blank" rel="noopener noreferrer" aria-label="Open The Sinner on IMDb">The Sinner<span class="imdb-mark">IMDb</span></a>
+          <a class="show-pill" href="https://www.imdb.com/title/tt14016500/" target="_blank" rel="noopener noreferrer" aria-label="Open The Summer I Turned Pretty on IMDb">The Summer I Turned Pretty<span class="imdb-mark">IMDb</span></a>
+          <a class="show-pill" href="https://www.imdb.com/title/tt1312171/" target="_blank" rel="noopener noreferrer" aria-label="Open The Umbrella Academy on IMDb">The Umbrella Academy<span class="imdb-mark">IMDb</span></a>
+          <a class="show-pill" href="https://www.imdb.com/title/tt5180504/" target="_blank" rel="noopener noreferrer" aria-label="Open The Witcher on IMDb">The Witcher<span class="imdb-mark">IMDb</span></a>
+          <a class="show-pill" href="https://www.imdb.com/title/tt11823076/" target="_blank" rel="noopener noreferrer" aria-label="Open Tiger King on IMDb">Tiger King<span class="imdb-mark">IMDb</span></a>
+          <a class="show-pill" href="https://www.imdb.com/title/tt2356777/" target="_blank" rel="noopener noreferrer" aria-label="Open True Detective on IMDb">True Detective<span class="imdb-mark">IMDb</span></a>
+          <a class="show-pill" href="https://www.imdb.com/title/tt0369179/" target="_blank" rel="noopener noreferrer" aria-label="Open Two and a Half Men on IMDb">Two and a Half Men<span class="imdb-mark">IMDb</span></a>
+          <a class="show-pill" href="https://www.imdb.com/title/tt1845307/" target="_blank" rel="noopener noreferrer" aria-label="Open Two Broke Girls on IMDb">Two Broke Girls<span class="imdb-mark">IMDb</span></a>
+          <a class="show-pill" href="https://www.imdb.com/title/tt8101850/" target="_blank" rel="noopener noreferrer" aria-label="Open Undone on IMDb">Undone<span class="imdb-mark">IMDb</span></a>
+          <a class="show-pill" href="https://www.imdb.com/title/tt13837672/" target="_blank" rel="noopener noreferrer" aria-label="Open Vanishing at Cecil Hotel on IMDb">Vanishing at Cecil Hotel<span class="imdb-mark">IMDb</span></a>
+          <a class="show-pill" href="https://www.imdb.com/title/tt13433812/" target="_blank" rel="noopener noreferrer" aria-label="Open Vincenzo on IMDb">Vincenzo<span class="imdb-mark">IMDb</span></a>
+          <a class="show-pill" href="https://www.imdb.com/title/tt13443470/" target="_blank" rel="noopener noreferrer" aria-label="Open Wednesday on IMDb">Wednesday<span class="imdb-mark">IMDb</span></a>
+          <a class="show-pill" href="https://www.imdb.com/title/tt7335184/" target="_blank" rel="noopener noreferrer" aria-label="Open You on IMDb">You<span class="imdb-mark">IMDb</span></a>
+          <a class="show-pill" href="https://www.imdb.com/title/tt3288518/" target="_blank" rel="noopener noreferrer" aria-label="Open Younger on IMDb">Younger<span class="imdb-mark">IMDb</span></a>
+          <a class="show-pill" href="https://www.imdb.com/title/tt14664414/" target="_blank" rel="noopener noreferrer" aria-label="Open Young Royals on IMDb">Young Royals<span class="imdb-mark">IMDb</span></a>
+          <a class="show-pill" href="https://www.imdb.com/title/tt6226232/" target="_blank" rel="noopener noreferrer" aria-label="Open Young Sheldon on IMDb">Young Sheldon<span class="imdb-mark">IMDb</span></a>
+        </div>
+      </div>
+    </section>
+
+    <footer>© <span id="year"></span> Pramithas Upreti 2026</footer>
+  </main>
+
+  <div id="labels"></div>
+
+
+  <script>
+    // Theme works independently of the Three.js scene. Even if WebGL/CDN fails,
+    // the light/dark switch remains usable.
+    (function () {
+      const root = document.documentElement;
+      const btn = document.getElementById('themeToggle');
+      const icon = document.getElementById('themeIcon');
+      const label = document.getElementById('themeLabel');
+      function applyTheme(theme) {
+        const isLight = theme === 'light';
+        root.classList.toggle('light', isLight);
+        if (icon) icon.textContent = isLight ? '☀' : '☽';
+        if (label) label.textContent = isLight ? 'Light Mode' : 'Dark Mode';
+        try { localStorage.setItem('theme', isLight ? 'light' : 'dark'); } catch (_) {}
+        window.dispatchEvent(new CustomEvent('portfolio-theme-change', { detail: { isLight } }));
+      }
+      let saved = 'dark';
+      try { saved = localStorage.getItem('theme') || 'dark'; } catch (_) {}
+      applyTheme(saved === 'light' ? 'light' : 'dark');
+      if (btn) btn.addEventListener('click', () => applyTheme(root.classList.contains('light') ? 'dark' : 'light'));
+    })();
+  </script>
+
+  <script type="importmap">
+    {
+      "imports": {
+        "three": "https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.module.js"
+      }
+    }
+  </script>
+  <script type="module">
     import * as THREE from 'three';
 
     /* ---- renderer ---- */
