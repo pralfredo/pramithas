@@ -4017,7 +4017,6 @@ void main(){
 
       renderer.render(scene, camera);
     }
-    animate();
 
     document.getElementById('year').textContent=new Date().getFullYear();
 
@@ -4117,6 +4116,8 @@ void main(){
     const sunSprite = makeSunSprite();
     sunSprite.visible = false;
     scene.add(sunSprite);
+
+    animate();
 
     // Let the independent theme switch also retune the 3D scene.
     window.addEventListener('portfolio-theme-change', (event) => {
