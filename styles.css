@@ -41,6 +41,17 @@ body {
   overflow-x: hidden;
 }
 
+canvas {
+  display: block;
+}
+
+#scene,
+#webgl,
+.hero canvas {
+  opacity: 1;
+  visibility: visible;
+}
+
 /* 3D canvas fills the screen */
 #scene {
   position: fixed;
