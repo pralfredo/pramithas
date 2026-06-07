@@ -2742,8 +2742,111 @@ function showStory(i) {
 </div>
           </div>
           <span class="highlight-label">${name}</span>`;
-        
+        item.addEventListener('click', () => openStory(i));
+        row.appendChild(item);
+      });
 
+      // Lightbox state
+      let cur = 0;
+      let progressTimer = null;
+      const STORY_DURATION = 6000; // ms per story
+
+      const overlay  = document.getElementById('hlOverlay');
+      const hlImg    = document.getElementById('hlImg');
+      const hlName   = document.getElementById('hlName');
+      const hlIndex  = document.getElementById('hlIndex');
+      const hlAvatar = document.getElementById('hlAvatar');
+      const hlProg   = document.getElementById('hlProgressBar');
+      const hlPrev   = document.getElementById('hlPrev');
+      const hlNext   = document.getElementById('hlNext');
+      const hlClose  = document.getElementById('hlClose');
+
+      function openStory(i) {
+        cur = i;
+        overlay.classList.add('active');
+        document.body.style.overflow = 'hidden';
+        showStory(cur);
+      }
+
+      function closeStory() {
+        overlay.classList.remove('active');
+        document.body.style.overflow = '';
+        clearProgress();
+      }
+
+      function showStory(i) {
+        cur = i;
+        hlImg.style.opacity = 0;
+        hlImg.src = 'data:image/jpeg;base64,' + FULLS[i];
+        hlImg.onload = () => { hlImg.style.opacity = 1; };
+        hlName.textContent = NAMES[i];
+        hlIndex.textContent = (i+1) + ' / ' + NAMES.length;
+        hlAvatar.style.backgroundImage = `url(highlights/${highlightFiles[i]})`;
+        hlPrev.style.opacity = i === 0 ? '0.2' : '1';
+        hlNext.style.opacity = i === NAMES.length-1 ? '0.2' : '1';
+        startProgress();
+      }
+
+      function startProgress() {
+        clearProgress();
+        hlProg.style.transition = 'none';
+        hlProg.style.width = '0%';
+        requestAnimationFrame(() => {
+          requestAnimationFrame(() => {
+            hlProg.style.transition = `width ${STORY_DURATION}ms linear`;
+            hlProg.style.width = '100%';
+          });
+        });
+        progressTimer = setTimeout(() => {
+          if (cur < NAMES.length - 1) showStory(cur + 1);
+          else closeStory();
+        }, STORY_DURATION);
+      }
+
+      function clearProgress() {
+        clearTimeout(progressTimer);
+        hlProg.style.transition = 'none';
+        hlProg.style.width = '0%';
+      }
+
+      hlClose.addEventListener('click', closeStory);
+      hlPrev.addEventListener('click', () => { if (cur > 0) showStory(cur - 1); });
+      hlNext.addEventListener('click', () => { if (cur < NAMES.length-1) showStory(cur+1); else closeStory(); });
+
+      // Click sides of image to nav
+      document.getElementById('hlImageWrap').addEventListener('click', e => {
+        const rect = e.currentTarget.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        if (x < rect.width * 0.35) {
+          if (cur > 0) showStory(cur - 1);
+        } else if (x > rect.width * 0.65) {
+          if (cur < NAMES.length-1) showStory(cur+1);
+          else closeStory();
+        }
+      });
+
+      // Keyboard
+      document.addEventListener('keydown', e => {
+        if (!overlay.classList.contains('active')) return;
+        if (e.key === 'ArrowRight' || e.key === 'ArrowDown') { if (cur < NAMES.length-1) showStory(cur+1); else closeStory(); }
+        if (e.key === 'ArrowLeft'  || e.key === 'ArrowUp')   { if (cur > 0) showStory(cur-1); }
+        if (e.key === 'Escape') closeStory();
+      });
+
+      // Tap overlay bg to close
+      document.getElementById('hlBg').addEventListener('click', closeStory);
+
+      // Pause on hold
+      let holdTimer = null;
+      const phone = document.getElementById('hlPhone');
+      phone.addEventListener('pointerdown', () => {
+        holdTimer = setTimeout(() => clearProgress(), 300);
+      });
+      phone.addEventListener('pointerup', () => {
+        clearTimeout(holdTimer);
+        startProgress();
+      });
+    })();
     </script>
 
         <!-- TV SHOWS -->
