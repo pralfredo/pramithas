@@ -6,7 +6,7 @@
   "homepage": "https://pramithas.com",
   "scripts": {
     "predeploy": "npm run build",
-    "deploy": "rm -rf docs && mkdir -p docs && cp index.html docs/index.html && cp -R highlights docs/highlights 2>/dev/null || true && cp -R public docs/public 2>/dev/null || true && cp public/Resume.pdf docs/Resume.pdf 2>/dev/null || true",
+    "deploy": "rm -rf docs && mkdir -p docs && cp index.html docs/index.html && cp -R highlights docs/highlights && cp -R public docs/public 2>/dev/null || true && cp public/Resume.pdf docs/Resume.pdf 2>/dev/null || true",
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview"
