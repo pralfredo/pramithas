@@ -277,22 +277,22 @@ const planet = new THREE.Mesh(
   enhancePlanetMaterial(
     new THREE.MeshPhysicalMaterial({
       color: 0xffffff,
-      roughness: 0.52,
-      metalness: 0.08,
-      clearcoat: 0.65,
-      clearcoatRoughness: 0.33,
-      sheen: 0.4,
-      sheenColor: new THREE.Color(0x1a2a6d),
-      emissive: 0x0a1236,
-      emissiveIntensity: 0.33
+      roughness: 0.86,
+      metalness: 0.02,
+      clearcoat: 0.12,
+      clearcoatRoughness: 0.82,
+      sheen: 0.12,
+      sheenColor: new THREE.Color(0x4b281a),
+      emissive: 0x080302,
+      emissiveIntensity: 0.12
     }),
     {
-      scale: 1.7,
-      disp: 0.045,      // was ~0.02 — bump this for visible silhouette
-      bandFreq: 1.9,
-      crater: 0.42,
-      colorA: 0x172148,
-      colorB: 0x3557a8
+      scale: 1.2,
+      disp: 0.014,
+      bandFreq: 1.45,
+      crater: 0.18,
+      colorA: 0x68432f,
+      colorB: 0xa0704c
     }
   )
 );
@@ -303,7 +303,7 @@ planetGroup.add(planet);
 /* atmosphere + faint cloud shell */
 const atm = new THREE.Mesh(
   new THREE.SphereGeometry(2.12, 128, 128),
-  new THREE.MeshBasicMaterial({ color: 0x7cf7ff, transparent: true, opacity: 0.22 })
+  new THREE.MeshBasicMaterial({ color: 0x8e5f45, transparent: true, opacity: 0.08 })
 );
 planetGroup.add(atm);
 
@@ -567,24 +567,24 @@ function addConstellation(def) {
 }
 
 const constellationDefs = [
-  { name: 'Orion', position: [-44, 28, -126], scale: 1.45, color: 0xbfe7ff, labelOffset: [0.2, 4.8], points: [[-3.6,2.4],[-1.5,1.7],[0.4,1.5],[2.8,2.6],[-0.9,0.2],[0.1,-0.55],[1.0,-1.3],[-1.4,-2.9],[1.6,-3.2]], edges: [[0,1],[1,2],[2,3],[1,4],[2,4],[4,5],[5,6],[4,7],[6,8],[7,8]] },
-  { name: 'Ursa Major', position: [-74, 40, -150], scale: 1.25, color: 0xd8ebff, labelOffset: [-0.2,3.9], points: [[-4.5,1.3],[-2.8,1.0],[-1.2,0.6],[0.3,-0.2],[1.8,0.4],[3.0,1.0],[4.4,1.7]], edges: [[0,1],[1,2],[2,3],[3,4],[4,5],[5,6]] },
-  { name: 'Cassiopeia', position: [67, 42, -150], scale: 1.12, color: 0xe9d7ff, labelOffset: [0.2,4.1], points: [[-4.0,1.2],[-2.1,2.3],[-0.2,0.8],[1.8,2.5],[3.9,1.1]], edges: [[0,1],[1,2],[2,3],[3,4]] },
-  { name: 'Cygnus', position: [4, 38, -145], scale: 1.3, color: 0xcbe9ff, labelOffset: [0,5.1], points: [[0,3.8],[0,1.3],[0,-1.4],[0,-4.1],[-2.6,0.5],[2.8,0.7]], edges: [[0,1],[1,2],[2,3],[1,4],[1,5]] },
-  { name: 'Lyra', position: [31, 26, -132], scale: 1.02, color: 0xcfd7ff, labelOffset: [0.1,3.6], points: [[0,2.2],[-1.6,0.7],[-0.7,-1.2],[1.0,-1.0],[1.8,0.8]], edges: [[0,1],[1,2],[2,3],[3,4],[4,0],[1,4]] },
-  { name: 'Aquila', position: [58, 11, -126], scale: 1.18, color: 0xd5e7ff, labelOffset: [0,4.1], points: [[0,2.5],[-2.0,0.8],[-4.0,-0.4],[0,0.1],[3.8,0.9],[6.0,-0.1],[0,-2.2]], edges: [[0,1],[1,2],[1,3],[3,4],[4,5],[3,6]] },
-  { name: 'Taurus', position: [-24, 16, -116], scale: 1.12, color: 0xffe8c4, labelOffset: [0.2,4.0], points: [[0,2.8],[-1.2,1.0],[-3.1,2.6],[1.4,1.1],[3.4,2.7],[-0.2,-0.7],[-1.9,-2.1],[1.7,-2.0]], edges: [[0,1],[1,2],[0,3],[3,4],[1,5],[5,6],[5,7]] },
-  { name: 'Gemini', position: [-4, 22, -120], scale: 1.1, color: 0xd3f0ff, labelOffset: [0.1,4.3], points: [[-2.0,3.0],[-2.1,1.0],[-2.2,-1.6],[1.8,3.2],[1.9,1.1],[2.0,-1.9],[0,-0.2]], edges: [[0,1],[1,2],[3,4],[4,5],[1,6],[4,6]] },
-  { name: 'Leo', position: [77, 10, -140], scale: 1.12, color: 0xffecc4, labelOffset: [0,4.0], points: [[-3.8,2.0],[-2.2,3.1],[-0.9,2.1],[0.7,1.0],[2.2,-0.2],[3.8,-1.0]], edges: [[0,1],[1,2],[2,3],[3,4],[4,5]] },
-  { name: 'Scorpius', position: [54, -21, -128], scale: 1.2, color: 0xffd7b8, labelOffset: [0.5,4.3], points: [[-3.2,2.8],[-1.6,1.2],[0.0,0.0],[1.6,-1.2],[3.2,-2.4],[4.6,-3.6],[4.1,-5.2],[2.8,-6.0]], edges: [[0,1],[1,2],[2,3],[3,4],[4,5],[5,6],[6,7]] },
-  { name: 'Sagittarius', position: [8, -28, -116], scale: 1.18, color: 0xffdfb3, labelOffset: [0.2,4.4], points: [[-2.8,1.7],[-1.2,0.6],[0.2,1.8],[1.7,0.5],[3.2,1.7],[-0.2,-0.6],[1.2,-1.9],[2.9,-0.8]], edges: [[0,1],[1,2],[2,3],[3,4],[1,5],[5,6],[6,7],[3,7]] },
-  { name: 'Pegasus', position: [-52, 5, -138], scale: 1.32, color: 0xdde7ff, labelOffset: [0,4.7], points: [[-2.6,2.6],[2.2,2.4],[2.5,-2.1],[-2.1,-2.3],[0.2,0.0]], edges: [[0,1],[1,2],[2,3],[3,0],[0,4],[2,4]] },
-  { name: 'Andromeda', position: [-16, 39, -152], scale: 1.22, color: 0xf0e0ff, labelOffset: [0.2,4.4], points: [[-4.0,1.0],[-2.0,0.4],[0.0,0.0],[2.3,-0.8],[4.7,-1.7]], edges: [[0,1],[1,2],[2,3],[3,4]] },
-  { name: 'Canis Major', position: [-56, -16, -118], scale: 1.08, color: 0xe9f5ff, labelOffset: [0.2,4.0], points: [[-2.7,2.5],[-1.3,0.9],[0.1,1.5],[1.4,0.4],[2.9,-0.8],[0.0,-1.7],[-1.6,-2.1]], edges: [[0,1],[1,2],[2,3],[3,4],[3,5],[5,6],[1,6]] },
-  { name: 'Delphinus', position: [27, 6, -118], scale: 0.98, color: 0xc9ddff, labelOffset: [0.2,3.6], points: [[0,2.1],[-1.5,0.9],[0.1,-0.2],[1.6,0.8],[0.2,1.1]], edges: [[0,1],[1,2],[2,3],[3,0],[1,4],[4,3]] },
-  { name: 'Pisces', position: [78, -7, -160], scale: 1.05, color: 0xd2deff, labelOffset: [0.3,4.0], points: [[-3.6,1.8],[-1.6,0.6],[0.0,-0.2],[1.6,-1.1],[3.9,-2.0],[0.5,1.9],[2.5,2.9]], edges: [[0,1],[1,2],[2,3],[3,4],[2,5],[5,6]] },
-  { name: 'Ursa Minor', position: [-12, 52, -162], scale: 0.98, color: 0xe7f0ff, labelOffset: [0.2,4.0], points: [[-3.4,1.9],[-1.8,1.1],[-0.3,0.4],[1.2,-0.1],[2.8,-0.8],[4.2,-1.4],[5.5,-0.6]], edges: [[0,1],[1,2],[2,3],[3,4],[4,5],[5,6]] },
-  { name: 'Draco', position: [24, 51, -170], scale: 0.98, color: 0xe1d6ff, labelOffset: [0.2,4.2], points: [[-5.0,1.3],[-3.4,2.0],[-2.0,1.5],[-0.9,0.6],[0.6,0.8],[2.0,0.1],[3.2,-0.9],[4.6,-1.7]], edges: [[0,1],[1,2],[2,3],[3,4],[4,5],[5,6],[6,7]] }
+  { name: 'Orion', position: [-44, 28, -126], scale: 1.45, color: 0xbfe7ff, labelOffset: [0.2, 4.8], points: [[-3.6, 2.4], [-1.5, 1.7], [0.4, 1.5], [2.8, 2.6], [-0.9, 0.2], [0.1, -0.55], [1.0, -1.3], [-1.4, -2.9], [1.6, -3.2]], edges: [[0, 1], [1, 2], [2, 3], [1, 4], [2, 4], [4, 5], [5, 6], [4, 7], [6, 8], [7, 8]] },
+  { name: 'Ursa Major', position: [-74, 40, -150], scale: 1.25, color: 0xd8ebff, labelOffset: [-0.2, 3.9], points: [[-4.5, 1.3], [-2.8, 1.0], [-1.2, 0.6], [0.3, -0.2], [1.8, 0.4], [3.0, 1.0], [4.4, 1.7]], edges: [[0, 1], [1, 2], [2, 3], [3, 4], [4, 5], [5, 6]] },
+  { name: 'Cassiopeia', position: [67, 42, -150], scale: 1.12, color: 0xe9d7ff, labelOffset: [0.2, 4.1], points: [[-4.0, 1.2], [-2.1, 2.3], [-0.2, 0.8], [1.8, 2.5], [3.9, 1.1]], edges: [[0, 1], [1, 2], [2, 3], [3, 4]] },
+  { name: 'Cygnus', position: [4, 38, -145], scale: 1.3, color: 0xcbe9ff, labelOffset: [0, 5.1], points: [[0, 3.8], [0, 1.3], [0, -1.4], [0, -4.1], [-2.6, 0.5], [2.8, 0.7]], edges: [[0, 1], [1, 2], [2, 3], [1, 4], [1, 5]] },
+  { name: 'Lyra', position: [31, 26, -132], scale: 1.02, color: 0xcfd7ff, labelOffset: [0.1, 3.6], points: [[0, 2.2], [-1.6, 0.7], [-0.7, -1.2], [1.0, -1.0], [1.8, 0.8]], edges: [[0, 1], [1, 2], [2, 3], [3, 4], [4, 0], [1, 4]] },
+  { name: 'Aquila', position: [58, 11, -126], scale: 1.18, color: 0xd5e7ff, labelOffset: [0, 4.1], points: [[0, 2.5], [-2.0, 0.8], [-4.0, -0.4], [0, 0.1], [3.8, 0.9], [6.0, -0.1], [0, -2.2]], edges: [[0, 1], [1, 2], [1, 3], [3, 4], [4, 5], [3, 6]] },
+  { name: 'Taurus', position: [-24, 16, -116], scale: 1.12, color: 0xffe8c4, labelOffset: [0.2, 4.0], points: [[0, 2.8], [-1.2, 1.0], [-3.1, 2.6], [1.4, 1.1], [3.4, 2.7], [-0.2, -0.7], [-1.9, -2.1], [1.7, -2.0]], edges: [[0, 1], [1, 2], [0, 3], [3, 4], [1, 5], [5, 6], [5, 7]] },
+  { name: 'Gemini', position: [-4, 22, -120], scale: 1.1, color: 0xd3f0ff, labelOffset: [0.1, 4.3], points: [[-2.0, 3.0], [-2.1, 1.0], [-2.2, -1.6], [1.8, 3.2], [1.9, 1.1], [2.0, -1.9], [0, -0.2]], edges: [[0, 1], [1, 2], [3, 4], [4, 5], [1, 6], [4, 6]] },
+  { name: 'Leo', position: [77, 10, -140], scale: 1.12, color: 0xffecc4, labelOffset: [0, 4.0], points: [[-3.8, 2.0], [-2.2, 3.1], [-0.9, 2.1], [0.7, 1.0], [2.2, -0.2], [3.8, -1.0]], edges: [[0, 1], [1, 2], [2, 3], [3, 4], [4, 5]] },
+  { name: 'Scorpius', position: [54, -21, -128], scale: 1.2, color: 0xffd7b8, labelOffset: [0.5, 4.3], points: [[-3.2, 2.8], [-1.6, 1.2], [0.0, 0.0], [1.6, -1.2], [3.2, -2.4], [4.6, -3.6], [4.1, -5.2], [2.8, -6.0]], edges: [[0, 1], [1, 2], [2, 3], [3, 4], [4, 5], [5, 6], [6, 7]] },
+  { name: 'Sagittarius', position: [8, -28, -116], scale: 1.18, color: 0xffdfb3, labelOffset: [0.2, 4.4], points: [[-2.8, 1.7], [-1.2, 0.6], [0.2, 1.8], [1.7, 0.5], [3.2, 1.7], [-0.2, -0.6], [1.2, -1.9], [2.9, -0.8]], edges: [[0, 1], [1, 2], [2, 3], [3, 4], [1, 5], [5, 6], [6, 7], [3, 7]] },
+  { name: 'Pegasus', position: [-52, 5, -138], scale: 1.32, color: 0xdde7ff, labelOffset: [0, 4.7], points: [[-2.6, 2.6], [2.2, 2.4], [2.5, -2.1], [-2.1, -2.3], [0.2, 0.0]], edges: [[0, 1], [1, 2], [2, 3], [3, 0], [0, 4], [2, 4]] },
+  { name: 'Andromeda', position: [-16, 39, -152], scale: 1.22, color: 0xf0e0ff, labelOffset: [0.2, 4.4], points: [[-4.0, 1.0], [-2.0, 0.4], [0.0, 0.0], [2.3, -0.8], [4.7, -1.7]], edges: [[0, 1], [1, 2], [2, 3], [3, 4]] },
+  { name: 'Canis Major', position: [-56, -16, -118], scale: 1.08, color: 0xe9f5ff, labelOffset: [0.2, 4.0], points: [[-2.7, 2.5], [-1.3, 0.9], [0.1, 1.5], [1.4, 0.4], [2.9, -0.8], [0.0, -1.7], [-1.6, -2.1]], edges: [[0, 1], [1, 2], [2, 3], [3, 4], [3, 5], [5, 6], [1, 6]] },
+  { name: 'Delphinus', position: [27, 6, -118], scale: 0.98, color: 0xc9ddff, labelOffset: [0.2, 3.6], points: [[0, 2.1], [-1.5, 0.9], [0.1, -0.2], [1.6, 0.8], [0.2, 1.1]], edges: [[0, 1], [1, 2], [2, 3], [3, 0], [1, 4], [4, 3]] },
+  { name: 'Pisces', position: [78, -7, -160], scale: 1.05, color: 0xd2deff, labelOffset: [0.3, 4.0], points: [[-3.6, 1.8], [-1.6, 0.6], [0.0, -0.2], [1.6, -1.1], [3.9, -2.0], [0.5, 1.9], [2.5, 2.9]], edges: [[0, 1], [1, 2], [2, 3], [3, 4], [2, 5], [5, 6]] },
+  { name: 'Ursa Minor', position: [-12, 52, -162], scale: 0.98, color: 0xe7f0ff, labelOffset: [0.2, 4.0], points: [[-3.4, 1.9], [-1.8, 1.1], [-0.3, 0.4], [1.2, -0.1], [2.8, -0.8], [4.2, -1.4], [5.5, -0.6]], edges: [[0, 1], [1, 2], [2, 3], [3, 4], [4, 5], [5, 6]] },
+  { name: 'Draco', position: [24, 51, -170], scale: 0.98, color: 0xe1d6ff, labelOffset: [0.2, 4.2], points: [[-5.0, 1.3], [-3.4, 2.0], [-2.0, 1.5], [-0.9, 0.6], [0.6, 0.8], [2.0, 0.1], [3.2, -0.9], [4.6, -1.7]], edges: [[0, 1], [1, 2], [2, 3], [3, 4], [4, 5], [5, 6], [6, 7]] }
 ];
 
 const constellations = constellationDefs.map(addConstellation);
@@ -896,7 +896,8 @@ function animate() {
   planet.rotation.y += 0.0012;
   clouds.rotation.y += 0.0018;
   planetGroup.rotation.y += 0.0009;
-  atm.material.opacity = 0.2 + Math.sin(t * 2) * 0.03;
+  atm.material.opacity = 0.09 + Math.sin(t * 2) * 0.012;
+  sunGlow.material.opacity = 0.18 + Math.sin(t * 1.3) * 0.04;
   aurora.position.y = 1.55 + Math.sin(t * 1.5) * 0.05;
 
   // ring slow precession
