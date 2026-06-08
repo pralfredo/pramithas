@@ -3144,6 +3144,197 @@ html[data-theme="light"] .hero-rock {
     0 0 10px rgba(40,70,82,.14);
 }
 
+
+/* === ABSOLUTE FINAL VENUS PLANET + TOGGLE OVERRIDE === */
+.theme-toggle,
+#themeToggle {
+  position: fixed !important;
+  top: 18px !important;
+  right: 18px !important;
+  z-index: 2147483647 !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  padding: 10px 18px !important;
+  border-radius: 999px !important;
+  border: 1px solid rgba(124,247,255,.35) !important;
+  background: rgba(5,10,24,.62) !important;
+  color: #9ff7ff !important;
+  font-weight: 700 !important;
+  font-family: inherit !important;
+  cursor: pointer !important;
+  pointer-events: auto !important;
+  backdrop-filter: blur(12px) !important;
+  -webkit-backdrop-filter: blur(12px) !important;
+}
+
+html.light .theme-toggle,
+html.light #themeToggle,
+html[data-theme="light"] .theme-toggle,
+html[data-theme="light"] #themeToggle {
+  background: rgba(255,255,255,.78) !important;
+  color: #17224a !important;
+  border-color: rgba(30,40,80,.22) !important;
+}
+
+/* force the center planet to Venus-like colors */
+.hero-center-planet {
+  position: absolute !important;
+  left: 50% !important;
+  top: 48% !important;
+  width: clamp(23rem, 42vw, 39rem) !important;
+  height: clamp(23rem, 42vw, 39rem) !important;
+  transform: translate(-50%, -50%) !important;
+  border-radius: 50% !important;
+  z-index: 0 !important;
+  pointer-events: none !important;
+  overflow: visible !important;
+  opacity: .88 !important;
+  mix-blend-mode: screen !important;
+  filter: none !important;
+
+  background:
+    radial-gradient(circle at 34% 29%,
+      rgba(255,255,255,.54) 0 5%,
+      rgba(255,239,208,.22) 8%,
+      transparent 18%),
+    radial-gradient(circle at 62% 58%,
+      rgba(255,226,178,.16) 0 18%,
+      transparent 35%),
+    repeating-radial-gradient(
+      ellipse at 48% 52%,
+      rgba(255,230,187,.18) 0 8px,
+      rgba(198,148,100,.14) 8px 19px,
+      rgba(126,79,49,.11) 19px 31px
+    ),
+    repeating-linear-gradient(
+      164deg,
+      rgba(255,226,181,.18) 0 16px,
+      rgba(205,152,102,.13) 16px 38px,
+      rgba(116,72,45,.12) 38px 61px
+    ),
+    radial-gradient(circle at 52% 53%,
+      #e1bd8f 0%,
+      #c99162 30%,
+      #a66e49 58%,
+      #70452f 82%,
+      #392019 100%) !important;
+
+  box-shadow:
+    inset -56px -48px 105px rgba(38,18,9,.46),
+    inset 28px 24px 58px rgba(255,238,210,.18),
+    0 0 92px rgba(124,247,255,.19),
+    0 0 170px rgba(120,170,255,.08) !important;
+}
+
+/* hide the old hard stripe layer if it existed */
+.hero-center-planet::before {
+  content: "" !important;
+  position: absolute !important;
+  inset: 0 !important;
+  border-radius: 50% !important;
+  z-index: 2 !important;
+  pointer-events: none !important;
+  background:
+    radial-gradient(circle at 31% 30%,
+      rgba(255,255,255,.32) 0 7%,
+      transparent 19%),
+    repeating-linear-gradient(
+      168deg,
+      transparent 0 18px,
+      rgba(255,237,206,.10) 18px 34px,
+      rgba(95,55,35,.08) 34px 52px,
+      transparent 52px 72px
+    ) !important;
+  opacity: .58 !important;
+  filter: blur(2.2px) !important;
+  mix-blend-mode: screen !important;
+  border: 0 !important;
+  box-shadow: none !important;
+}
+
+/* atmosphere, not a hard Saturn ring */
+.hero-center-planet::after {
+  content: "" !important;
+  position: absolute !important;
+  inset: -13% !important;
+  border-radius: 50% !important;
+  z-index: -1 !important;
+  pointer-events: none !important;
+  background:
+    radial-gradient(circle,
+      rgba(255,215,160,.11) 0 58%,
+      rgba(123,224,255,.13) 69%,
+      rgba(123,224,255,.08) 75%,
+      transparent 84%) !important;
+  filter: blur(14px) !important;
+  border: 0 !important;
+  box-shadow: none !important;
+}
+
+/* keep the smooth orbital ring, but make it softer */
+.hero-ice-ring-main {
+  opacity: .38 !important;
+  border-top-color: rgba(205,240,255,.42) !important;
+  border-bottom-color: rgba(120,205,240,.20) !important;
+}
+
+.hero-ice-ring-thin {
+  opacity: .24 !important;
+}
+
+/* light mode Venus */
+html.light .hero-center-planet,
+html[data-theme="light"] .hero-center-planet {
+  opacity: .46 !important;
+  mix-blend-mode: multiply !important;
+  filter: saturate(.92) brightness(1.07) !important;
+
+  background:
+    radial-gradient(circle at 34% 29%,
+      rgba(255,255,255,.58) 0 5%,
+      rgba(255,246,226,.24) 8%,
+      transparent 18%),
+    repeating-radial-gradient(
+      ellipse at 48% 52%,
+      rgba(255,238,210,.16) 0 8px,
+      rgba(205,165,125,.10) 8px 20px,
+      rgba(130,94,70,.08) 20px 34px
+    ),
+    repeating-linear-gradient(
+      164deg,
+      rgba(255,236,202,.12) 0 18px,
+      rgba(200,158,120,.09) 18px 40px,
+      rgba(120,90,70,.07) 40px 64px
+    ),
+    radial-gradient(circle at 52% 53%,
+      #ead1ad 0%,
+      #d9b184 30%,
+      #bf8f67 58%,
+      #9b7054 82%,
+      #6f5140 100%) !important;
+
+  box-shadow:
+    inset -46px -42px 88px rgba(60,36,20,.18),
+    inset 22px 20px 45px rgba(255,245,226,.22),
+    0 0 70px rgba(70,90,120,.09) !important;
+}
+
+html.light .hero-center-planet::before,
+html[data-theme="light"] .hero-center-planet::before {
+  opacity: .36 !important;
+  filter: blur(2.6px) !important;
+}
+
+html.light .hero-center-planet::after,
+html[data-theme="light"] .hero-center-planet::after {
+  background:
+    radial-gradient(circle,
+      rgba(255,232,190,.10) 0 58%,
+      rgba(80,100,130,.08) 70%,
+      transparent 84%) !important;
+}
+
 </style></head>
 <body>
 
@@ -6190,6 +6381,45 @@ html:not(.light) #realThemeToggle {
     document.addEventListener("DOMContentLoaded", buildRockBelt, { once: true });
   } else {
     buildRockBelt();
+  }
+})();
+</script>
+
+
+<script id="FINAL_RESTORED_THEME_TOGGLE">
+(() => {
+  function initThemeToggle() {
+    const root = document.documentElement;
+    const btn = document.getElementById("themeToggle");
+    if (!btn) return;
+
+    function apply(mode) {
+      const light = mode === "light";
+      root.classList.toggle("light", light);
+      root.classList.toggle("dark", !light);
+      root.dataset.theme = light ? "light" : "dark";
+      root.style.colorScheme = light ? "light" : "dark";
+      btn.textContent = light ? "∗ Light Mode" : "☽ Dark Mode";
+      localStorage.setItem("theme", light ? "light" : "dark");
+      localStorage.setItem("portfolio-theme", light ? "light" : "dark");
+      window.dispatchEvent(new CustomEvent("portfolio-theme-change", { detail: { isLight: light } }));
+    }
+
+    const saved = localStorage.getItem("portfolio-theme") || localStorage.getItem("theme") || "dark";
+    apply(saved === "light" ? "light" : "dark");
+
+    btn.onclick = null;
+    btn.addEventListener("click", (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      apply(root.classList.contains("light") ? "dark" : "light");
+    }, true);
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", initThemeToggle, { once: true });
+  } else {
+    initThemeToggle();
   }
 })();
 </script>
