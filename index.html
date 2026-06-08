@@ -40,6 +40,96 @@
       --h2-shadow: none;
     }
 
+    /* =========================
+   EXTRA DARK-MODE PLANETS
+   ========================= */
+
+    /* upper-left muted teal planet */
+    html:not(.light) .cosmic-fallback::before,
+    html[data-theme="dark"] .cosmic-fallback::before {
+      content: "";
+      position: fixed;
+      width: 8.8rem;
+      height: 8.8rem;
+      left: 15%;
+      top: 17%;
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 0;
+      opacity: .22;
+      background:
+        radial-gradient(circle at 30% 25%, rgba(255, 255, 255, .34), transparent 14%),
+        linear-gradient(145deg, #4d6c68 0%, #324845 48%, #1d2729 100%);
+      box-shadow:
+        inset -16px -14px 28px rgba(0, 0, 0, .28),
+        inset 10px 8px 18px rgba(255, 255, 255, .06),
+        0 10px 28px rgba(76, 155, 165, .10);
+    }
+
+    /* upper-right muted blue planet */
+    html:not(.light) .cosmic-fallback::after,
+    html[data-theme="dark"] .cosmic-fallback::after {
+      content: "";
+      position: fixed;
+      width: 7.2rem;
+      height: 7.2rem;
+      right: 11%;
+      top: 45%;
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 0;
+      opacity: .20;
+      background:
+        radial-gradient(circle at 30% 25%, rgba(255, 255, 255, .34), transparent 14%),
+        linear-gradient(145deg, #6279b0 0%, #3a4e7f 48%, #1c2842 100%);
+      box-shadow:
+        inset -14px -12px 24px rgba(0, 0, 0, .24),
+        inset 8px 8px 16px rgba(255, 255, 255, .05),
+        0 10px 24px rgba(82, 110, 180, .10);
+    }
+
+    /* lower-right purple planet */
+    html:not(.light) body::before,
+    html[data-theme="dark"] body::before {
+      content: "";
+      position: fixed;
+      width: 6rem;
+      height: 6rem;
+      right: 12%;
+      bottom: 11%;
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 0;
+      opacity: .18;
+      background:
+        radial-gradient(circle at 30% 25%, rgba(255, 255, 255, .28), transparent 14%),
+        linear-gradient(145deg, #735a86 0%, #4f3d62 48%, #241d31 100%);
+      box-shadow:
+        inset -12px -10px 20px rgba(0, 0, 0, .22),
+        inset 7px 7px 14px rgba(255, 255, 255, .04);
+    }
+
+    /* lower-left faint grey-blue planet */
+    html:not(.light) body::after,
+    html[data-theme="dark"] body::after {
+      content: "";
+      position: fixed;
+      width: 7.5rem;
+      height: 7.5rem;
+      left: 8%;
+      bottom: 7%;
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 0;
+      opacity: .12;
+      background:
+        radial-gradient(circle at 30% 25%, rgba(255, 255, 255, .26), transparent 14%),
+        linear-gradient(145deg, #7e8596 0%, #565c69 55%, #272b34 100%);
+      box-shadow:
+        inset -12px -10px 22px rgba(0, 0, 0, .20),
+        inset 7px 7px 13px rgba(255, 255, 255, .04);
+    }
+
     /* Theme toggle button */
     .theme-toggle {
       position: fixed;
@@ -5566,7 +5656,7 @@
         <a class="button" href="#highlights">Highlights</a>
         <a class="button" href="#shows">Shows</a>
         <a class="button" href="https://github.com/pralfredo" target="_blank" rel="noopener">GitHub ↗</a>
-        <a class="button" href="/Resume.pdf" target="_blank" rel="noopener">Résumé ↗</a>
+        <a class="button" href="./public/Resume.pdf" target="_blank" rel="noopener">Résumé ↗</a>
       </nav>
     </header>
   </section>
@@ -6829,7 +6919,9 @@ vec3 stripeColor(float t,vec3 c0,vec3 c1,vec3 c2,vec3 c3,vec3 c4,vec3 c5){
           shader.uniforms.pSpotLat = { value: p.spotLat };
           shader.uniforms.pSpotLon = { value: p.spotLon };
           shader.uniforms.pSpotSz = { value: p.spotSize };
+          shader.uniforms.pSpotStrength = { value: p.spotStrength };
           shader.uniforms.pCap = { value: new THREE.Color(p.capColor) };
+          shader.uniforms.pHighlightStrength = { value: p.highlightStrength };
           allPlanetUniforms.push(shader.uniforms);
 
           shader.vertexShader = shader.vertexShader
@@ -6875,12 +6967,10 @@ float spotSwirl=snoise(nrm*pScale*3.-spotDir*5.+vec3(pTime*0.05));
 spotMask*=0.7+spotSwirl*0.3;
 spotMask*=pSpotStrength;
 bandCol=mix(bandCol,pSpot,spotMask*0.85);
-
 // limb darkening
 vec3 vDir=normalize(cameraPosition-vWPos);
 float limb=pow(max(dot(nrm,vDir),0.),0.4);
-bandCol*=0.5+0.5*limb;
-
+bandCol*=0.68+0.32*limb;
 // sun highlight
 bandCol+=vec3(pow(clamp(dot(nrm,normalize(vec3(0.6,0.4,0.7))),0.,1.),4.)*pHighlightStrength);
 vec4 diffuseColor=vec4(clamp(bandCol, 0.0, 1.0), opacity);
@@ -6888,6 +6978,8 @@ vec4 diffuseColor=vec4(clamp(bandCol, 0.0, 1.0), opacity);
         };
         return mat;
       }
+
+
 
       function makeVenusCloudMat(opts = {}) {
         const p = {
@@ -6901,7 +6993,6 @@ vec4 diffuseColor=vec4(clamp(bandCol, 0.0, 1.0), opacity);
           emissiveIntensity: 0.025,
           ...opts
         };
-
         const mat = new THREE.MeshStandardMaterial({
           color: 0xffffff,
           roughness: 1,
@@ -6912,7 +7003,6 @@ vec4 diffuseColor=vec4(clamp(bandCol, 0.0, 1.0), opacity);
           emissiveIntensity: p.emissiveIntensity,
           depthWrite: false
         });
-
         mat.onBeforeCompile = (shader) => {
           shader.uniforms.cTime = { value: 0 };
           shader.uniforms.cScale = { value: p.scale };
@@ -6923,11 +7013,17 @@ vec4 diffuseColor=vec4(clamp(bandCol, 0.0, 1.0), opacity);
           allPlanetUniforms.push(shader.uniforms);
 
           shader.vertexShader = shader.vertexShader
-            .replace('#include <common>', `#include <common>\n${SNOISE}\nvarying vec3 vCWPos; varying vec3 vCPos;`)
-            .replace('#include <worldpos_vertex>', '#include <worldpos_vertex>\nvCWPos=worldPosition.xyz; vCPos=position;');
+            .replace('#include <common>', `#include <common>
+${SNOISE}
+varying vec3 vCWPos; varying vec3 vCPos;`)
+            .replace('#include <worldpos_vertex>', `#include <worldpos_vertex>
+vCWPos=worldPosition.xyz; vCPos=position;`);
 
           shader.fragmentShader = shader.fragmentShader
-            .replace('#include <common>', `#include <common>\n${SNOISE}\nvarying vec3 vCWPos; varying vec3 vCPos;\nuniform float cTime,cScale,cDensity; uniform vec3 cA,cB,cC;`)
+            .replace('#include <common>', `#include <common>
+${SNOISE}
+varying vec3 vCWPos; varying vec3 vCPos;
+uniform float cTime,cScale,cDensity; uniform vec3 cA,cB,cC;`)
             .replace('vec4 diffuseColor = vec4( diffuse, opacity );', `
 vec3 nrm = normalize(vCPos);
 float flow1 = snoise(nrm * cScale + vec3(cTime * 0.04, 0.0, 0.0));
@@ -6944,10 +7040,8 @@ cloudCol += cB * limb * 0.07;
 vec4 diffuseColor = vec4(cloudCol, opacity * mask);
 `);
         };
-
         return mat;
       }
-
       /* ---- glow sprite helper ---- */
       function makeGlowSprite(size, inner, outer) {
         const c = document.createElement('canvas'); c.width = c.height = 256;
@@ -6999,71 +7093,100 @@ vec4 diffuseColor = vec4(cloudCol, opacity * mask);
       sunGlow.position.set(-2.2, 1.2, -6); scene.add(sunGlow);
 
       /* ===== MAIN PLANET ===== */
-      const planetGroup = new THREE.Group(); scene.add(planetGroup);
+      netGroup = new THREE.Group(); scene.add(planetGroup);
+
+      /* ---------- main planet (with ring) ---------- */
+      const planetGroup = new THREE.Group();
+      scene.add(planetGroup);
 
       const planet = new THREE.Mesh(
-        new THREE.SphereGeometry(2, 192, 192),
-        makePlanetMat({
-          // duller Venus-like body
-          scale: 1.5,
-          disp: 0.016,
-          bandFreq: 4.8,
-          c0: 0x75503c,
-          c1: 0x9b7255,
-          c2: 0x5e3d2f,
-          c3: 0x89624a,
-          c4: 0x4b3027,
-          c5: 0xb38965,
-          spotColor: 0x5e3d2f,
-          spotLat: -0.35,
-          spotLon: 0.9,
-          spotSize: 0.22,
-          spotStrength: 0.0,
-          capColor: 0x9f785f,
-          emissive: 0x080302,
-          emissiveIntensity: 0.06,
-          roughness: 0.86,
-          metalness: 0.02,
-          clearcoat: 0.12,
-          clearcoatRoughness: 0.78,
-          sheenColor: 0x4c2718,
-          highlightStrength: 0.02
-        })
+        new THREE.SphereGeometry(2, 160, 160),
+        enhancePlanetMaterial(
+          new THREE.MeshPhysicalMaterial({
+            color: 0xffffff,
+            roughness: 0.66,
+            metalness: 0.01,
+            clearcoat: 0.18,
+            clearcoatRoughness: 0.62,
+            sheen: 0.22,
+            sheenColor: new THREE.Color(0x8b441d),
+            emissive: 0x201008,
+            emissiveIntensity: 0.18
+          }),
+          {
+            scale: 1.85,
+            disp: 0.014,
+            bandFreq: 2.1,
+            crater: 0.10,
+            colorA: 0x9f5626,
+            colorB: 0xd78b47
+          }
+        )
       );
       planet.castShadow = planet.receiveShadow = true;
-      planet.renderOrder = 1;
       planetGroup.add(planet);
 
-      // thick atmosphere with limb brightening
-      const atmMat = new THREE.MeshBasicMaterial({
-        color: 0x8e5f45,
-        transparent: true,
-        opacity: 0.08,
-        depthWrite: false
-      });
-      const atm = new THREE.Mesh(new THREE.SphereGeometry(2.16, 96, 96), atmMat);
-      atm.renderOrder = 2;
+      /* atmosphere */
+      const atm = new THREE.Mesh(
+        new THREE.SphereGeometry(2.12, 128, 128),
+        new THREE.MeshBasicMaterial({
+          color: 0xc57a3e,
+          transparent: true,
+          opacity: 0.055
+        })
+      );
       planetGroup.add(atm);
+      atm.renderOrder = 2; planetGroup.add(atm);
 
-      const cloudsMat = makeVenusCloudMat({
-        opacity: 0.38,
-        scale: 2.9,
-        density: 0.52,
-        colorA: 0x3c1e16,
-        colorB: 0x6c3a2c,
-        colorC: 0x8c573f,
-        emissive: 0x140907,
-        emissiveIntensity: 0.02
-      });
-      const clouds = new THREE.Mesh(new THREE.SphereGeometry(2.07, 96, 96), cloudsMat);
-      clouds.renderOrder = 3;
+      /* Venus clouds */
+      const clouds = new THREE.Mesh(
+        new THREE.SphereGeometry(2.06, 128, 128),
+        makeVenusCloudMaterial({
+          opacity: 0.50,
+          scale: 3.2,
+          density: 0.40,
+          colorA: new THREE.Color(0x5a2414),
+          colorB: new THREE.Color(0x915028),
+          colorC: new THREE.Color(0xe2a45f),
+          emissive: 0x251109,
+          emissiveIntensity: 0.05
+        })
+      );
       planetGroup.add(clouds);
+      clouds.renderOrder = 3; planetGroup.add(clouds);
+
+      // draw after planet
+      planet.renderOrder = 1;
+
+      atm.material.transparent = true;
+      atm.material.depthWrite = false;
+      atm.material.depthTest = true;
+      atm.renderOrder = 2;
+
+      clouds.material.transparent = true;
+      clouds.material.depthWrite = false;
+      clouds.material.depthTest = true;
+      clouds.renderOrder = 3;
+
+      // thick atmosphere with limb brightening
+      const atmMat = new THREE.MeshBasicMaterial({ color: 0xb36a34, transparent: true, opacity: 0.12, depthWrite: false });
+
+      // cloud shell
+      const cloudsMat = makeVenusCloudMat({
+        opacity: 0.42,
+        scale: 3.05,
+        density: 0.48,
+        colorA: 0x45190f,
+        colorB: 0x7b321a,
+        colorC: 0xb35f2b,
+        emissive: 0x1a0803,
+        emissiveIntensity: 0.035
+      });
 
       // outer glow halo
       const haloSprite = makeGlowSprite(8.6, 'rgba(150,90,56,0.12)', 'rgba(150,90,56,0)');
       haloSprite.material.opacity = 0;
-      haloSprite.renderOrder = 4;
-      planetGroup.add(haloSprite);
+      haloSprite.renderOrder = 4; planetGroup.add(haloSprite);
 
       // neon arcs
       function addArc(lat, lon0, span, color) {
@@ -7739,7 +7862,7 @@ void main(){
       planet.rotation.y += 0.0013;
       clouds.rotation.y += 0.0019;
       planetGroup.rotation.y += 0.0008;
-      atmMat.opacity = 0.085 + Math.sin(t * 2) * 0.012;
+      atmMat.opacity = 0.13 + Math.sin(t * 2) * 0.018;
       aurora.position.y = 1.6 + Math.sin(t * 1.4) * 0.06;
       ring.rotation.z += 0.0005;
 
@@ -7753,7 +7876,9 @@ void main(){
       ringD.rotation.z += 0.0003;
 
       // glow pulse
-      if (sunSprite && !sunSprite.visible) sunGlow.material.opacity = 0.18 + Math.sin(t * 1.2) * 0.04;
+      // Keep the center cyan/blue glow dot removed in both themes.
+      sunGlow.visible = false;
+      sunGlow.material.opacity = 0;
       planetBGroup.children[2].material.opacity = 0.18 + Math.sin(t * 0.9 + 1) * 0.05;
       planetCGroup.children[2].material.opacity = 0.2 + Math.sin(t * 1.1 + 2) * 0.05;
       planetDGroup.children[2].material.opacity = 0.16 + Math.sin(t * 0.7 + 3) * 0.05;
@@ -7813,7 +7938,7 @@ void main(){
         d.style.top = `${(-p.y * 0.5 + 0.5) * H}px`;
       });
 
-      // advance planet shader time
+      // advance planet / cloud shader time
       allPlanetUniforms.forEach(u => {
         if (u.pTime) u.pTime.value += 0.016 * 0.5;
         if (u.cTime) u.cTime.value += 0.016 * 0.42;
@@ -7956,8 +8081,9 @@ void main(){
         fillLight.intensity = 65;
 
         sunGlow.material.color.set(0xffee88);
+        sunGlow.visible = false;
         sunGlow.material.opacity = 0;
-        sunSprite.visible = true;
+        sunSprite.visible = false;
         scene.fog = new THREE.Fog(0xaecfe8, 90, 340);
 
         // Main center planet: keep visible, but softer
@@ -7981,7 +8107,8 @@ void main(){
         fillLight.intensity = 60;
 
         sunGlow.material.color.set(0x7cf7ff);
-        sunGlow.material.opacity = 1;
+        sunGlow.visible = false;
+        sunGlow.material.opacity = 0;
         sunSprite.visible = false;
         scene.fog = null;
 
@@ -9089,6 +9216,138 @@ void main(){
     html[data-theme="light"] body::after {
       opacity: .38 !important;
       filter: brightness(1.10) !important;
+    }
+
+
+
+    /* === FINAL: darker Venus + no center dot, dark/light === */
+    .hero-center-planet {
+      background:
+        radial-gradient(circle at 34% 30%, rgba(145, 87, 48, .18) 0 7%, transparent 18%),
+        radial-gradient(circle at 70% 24%, rgba(54, 20, 13, .34) 0 12%, transparent 24%),
+        radial-gradient(circle at 26% 72%, rgba(74, 27, 16, .30) 0 14%, transparent 28%),
+        linear-gradient(145deg,
+          #32140d 0%,
+          #4a1d12 16%,
+          #6b2d1b 31%,
+          #7f3d24 47%,
+          #8f5130 58%,
+          #6f321e 72%,
+          #4c1e13 86%,
+          #2c100a 100%) !important;
+      box-shadow:
+        inset -72px -80px 138px rgba(12, 5, 3, .58),
+        inset 28px 22px 72px rgba(156, 82, 45, .10),
+        0 0 84px rgba(59, 25, 15, .20) !important;
+      filter: saturate(.78) brightness(.70) contrast(1.08) !important;
+    }
+
+    .venus-cloud-layer-a {
+      opacity: .78 !important;
+      mix-blend-mode: multiply !important;
+      filter: blur(6px) contrast(1.24) saturate(.92) brightness(.74) !important;
+      background:
+        radial-gradient(ellipse at 38% 33%, rgba(92, 38, 24, .38) 0 14%, transparent 29%),
+        radial-gradient(ellipse at 66% 44%, rgba(45, 14, 10, .46) 0 13%, transparent 25%),
+        radial-gradient(ellipse at 30% 71%, rgba(103, 45, 27, .34) 0 13%, transparent 27%),
+        repeating-conic-gradient(from 198deg at 52% 51%,
+          rgba(58, 20, 14, .20) 0 8deg,
+          rgba(104, 43, 25, .38) 8deg 19deg,
+          rgba(53, 18, 12, .32) 19deg 31deg,
+          rgba(112, 48, 27, .36) 31deg 44deg,
+          rgba(42, 14, 10, .30) 44deg 58deg,
+          rgba(119, 54, 31, .32) 58deg 71deg,
+          rgba(65, 23, 15, .26) 71deg 86deg,
+          rgba(58, 20, 14, .20) 86deg 100deg) !important;
+    }
+
+    .venus-cloud-layer-b {
+      opacity: .70 !important;
+      mix-blend-mode: multiply !important;
+      filter: blur(3.2px) contrast(1.20) brightness(.72) !important;
+      background:
+        repeating-radial-gradient(circle at 50% 50%,
+          rgba(79, 29, 18, .22) 0 14px,
+          rgba(124, 58, 34, .24) 14px 28px,
+          rgba(45, 16, 11, .24) 28px 42px,
+          rgba(98, 43, 27, .18) 42px 56px,
+          rgba(35, 12, 8, .22) 56px 69px),
+        radial-gradient(ellipse at 28% 30%, rgba(111, 49, 30, .28), transparent 18%),
+        radial-gradient(ellipse at 70% 68%, rgba(35, 12, 8, .32), transparent 23%) !important;
+    }
+
+    .venus-cloud-layer-c {
+      opacity: .50 !important;
+      mix-blend-mode: multiply !important;
+      filter: blur(11px) saturate(.86) brightness(.72) !important;
+      background:
+        radial-gradient(ellipse at 24% 48%, rgba(92, 36, 22, .24) 0 16%, transparent 29%),
+        radial-gradient(ellipse at 60% 34%, rgba(73, 25, 15, .24) 0 13%, transparent 27%),
+        radial-gradient(ellipse at 70% 72%, rgba(36, 11, 8, .28) 0 11%, transparent 24%),
+        repeating-linear-gradient(162deg,
+          rgba(37, 12, 8, 0) 0 10px,
+          rgba(95, 38, 23, .22) 10px 28px,
+          rgba(44, 13, 9, .26) 28px 44px,
+          rgba(120, 58, 35, .18) 44px 58px,
+          rgba(48, 15, 10, .22) 58px 74px,
+          rgba(37, 12, 8, 0) 74px 90px) !important;
+    }
+
+    .venus-center-cover,
+    html.light .venus-center-cover,
+    html[data-theme="light"] .venus-center-cover {
+      content: none !important;
+      display: none !important;
+      opacity: 0 !important;
+      visibility: hidden !important;
+    }
+
+    html.light .hero-center-planet,
+    html[data-theme="light"] .hero-center-planet {
+      background:
+        radial-gradient(circle at 34% 30%, rgba(156, 93, 52, .14) 0 7%, transparent 18%),
+        radial-gradient(circle at 70% 24%, rgba(65, 25, 16, .25) 0 12%, transparent 24%),
+        radial-gradient(circle at 26% 72%, rgba(82, 31, 19, .22) 0 14%, transparent 28%),
+        linear-gradient(145deg,
+          #3a1710 0%,
+          #522114 16%,
+          #73321f 31%,
+          #864329 47%,
+          #935333 58%,
+          #71331f 72%,
+          #4d1e13 86%,
+          #32120c 100%) !important;
+      box-shadow:
+        inset -68px -76px 132px rgba(16, 7, 4, .48),
+        inset 28px 22px 68px rgba(161, 88, 50, .11),
+        0 0 76px rgba(62, 28, 18, .14) !important;
+      filter: saturate(.74) brightness(.76) contrast(1.06) !important;
+    }
+
+    html.light .venus-cloud-layer-a,
+    html[data-theme="light"] .venus-cloud-layer-a,
+    html.light .venus-cloud-layer-b,
+    html[data-theme="light"] .venus-cloud-layer-b,
+    html.light .venus-cloud-layer-c,
+    html[data-theme="light"] .venus-cloud-layer-c {
+      mix-blend-mode: multiply !important;
+      filter: brightness(.78) saturate(.82) contrast(1.12) blur(4px) !important;
+    }
+
+    /* The small decorative button planets stay only inside the nav buttons. */
+    .hud>.math-dot,
+    .hero .hud::after,
+    .hero .hud::before {
+      content: none !important;
+      display: none !important;
+    }
+
+    /* Exact setup tweak: no standalone hero glow/dot in either theme. */
+    .hero .hud::before,
+    .hero .hud::after,
+    .hud>.math-dot {
+      content: none !important;
+      display: none !important;
     }
   </style>
 

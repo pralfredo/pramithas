@@ -2257,6 +2257,92 @@ html[data-theme="light"] .hero-ice-rock {
     0 0 20px rgba(164,182,198,.12) !important;
 }
 
+/* =========================
+   EXTRA DARK-MODE PLANETS
+   ========================= */
+
+html:not(.light) .cosmic-fallback::before,
+html[data-theme="dark"] .cosmic-fallback::before {
+  content: "";
+  position: fixed;
+  width: 8.8rem;
+  height: 8.8rem;
+  left: 14%;
+  top: 16%;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 0;
+  opacity: .22;
+  background:
+    radial-gradient(circle at 30% 25%, rgba(255,255,255,.34), transparent 14%),
+    linear-gradient(145deg, #4f6f68 0%, #334944 48%, #1d2729 100%);
+  box-shadow:
+    inset -16px -14px 28px rgba(0,0,0,.28),
+    inset 10px 8px 18px rgba(255,255,255,.06),
+    0 10px 28px rgba(76, 155, 165, .10);
+}
+
+html:not(.light) .cosmic-fallback::after,
+html[data-theme="dark"] .cosmic-fallback::after {
+  content: "";
+  position: fixed;
+  width: 7.2rem;
+  height: 7.2rem;
+  right: 11%;
+  top: 46%;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 0;
+  opacity: .18;
+  background:
+    radial-gradient(circle at 30% 25%, rgba(255,255,255,.34), transparent 14%),
+    linear-gradient(145deg, #687eb6 0%, #405482 48%, #202a42 100%);
+  box-shadow:
+    inset -14px -12px 24px rgba(0,0,0,.24),
+    inset 8px 8px 16px rgba(255,255,255,.05),
+    0 10px 24px rgba(82,110,180,.10);
+}
+
+html:not(.light) body::before,
+html[data-theme="dark"] body::before {
+  content: "";
+  position: fixed;
+  width: 6rem;
+  height: 6rem;
+  right: 12%;
+  bottom: 11%;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 0;
+  opacity: .18;
+  background:
+    radial-gradient(circle at 30% 25%, rgba(255,255,255,.28), transparent 14%),
+    linear-gradient(145deg, #765b88 0%, #513e64 48%, #271f31 100%);
+  box-shadow:
+    inset -12px -10px 20px rgba(0,0,0,.22),
+    inset 7px 7px 14px rgba(255,255,255,.04);
+}
+
+html:not(.light) body::after,
+html[data-theme="dark"] body::after {
+  content: "";
+  position: fixed;
+  width: 7.4rem;
+  height: 7.4rem;
+  left: 8%;
+  bottom: 7%;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 0;
+  opacity: .11;
+  background:
+    radial-gradient(circle at 30% 25%, rgba(255,255,255,.26), transparent 14%),
+    linear-gradient(145deg, #7e8797 0%, #565c69 55%, #2b2e36 100%);
+  box-shadow:
+    inset -12px -10px 22px rgba(0,0,0,.20),
+    inset 7px 7px 13px rgba(255,255,255,.04);
+}
+
 /* brighter, more numerous-feeling light-mode planets */
 html.light #lightPlanetLayer,
 html[data-theme="light"] #lightPlanetLayer {

@@ -125,11 +125,17 @@ function enhancePlanetMaterial(mat, opts = {}) {
   float craterMask = smoothstep(0.2, 0.9, abs(nn));
   vec3 craterTint = mix(vec3(1.0), vec3(0.75,0.82,0.95), craterMask * pCrater);
 
-  // gentle albedo AO to add body
-  float ao = 0.82 + 0.18 * (snoise(vWPos * (pScale*0.35)) * 0.5 + 0.5);
+  // gentler AO so the planet does not collapse into a dark disc
+  float ao = 0.98 + 0.12 * (snoise(vWPos * (pScale*0.35)) * 0.5 + 0.5);
 
   diffuse *= bandCol * craterTint * ao;
-  roughnessFactor = clamp(roughnessFactor + craterMask * 0.22 * pCrater, 0.0, 1.0);
+
+  // warm limb brightening so the sphere reads like the reference image
+  vec3 V = normalize(cameraPosition - vWPos);
+  float limb = pow(max(dot(normalize(vWPos), V), 0.0), 0.55);
+  diffuse *= (0.82 + 0.18 * limb);
+
+  roughnessFactor = clamp(roughnessFactor + craterMask * 0.16 * pCrater, 0.0, 1.0);
 
   vec4 diffuseColor = vec4(diffuse, opacity);
 `)
@@ -238,6 +244,72 @@ function addNoisySurface(mat, params) {
   return mat;
 }
 
+
+function makeVenusCloudMaterial(opts = {}) {
+  const p = {
+    opacity: 0.34,
+    scale: 2.7,
+    density: 0.54,
+    colorA: new THREE.Color(0x3c1f17),
+    colorB: new THREE.Color(0x6d3d2d),
+    colorC: new THREE.Color(0x8a5840),
+    emissive: 0x140907,
+    emissiveIntensity: 0.02,
+    ...opts
+  };
+
+  const mat = new THREE.MeshStandardMaterial({
+    color: 0xffffff,
+    roughness: 1,
+    metalness: 0,
+    transparent: true,
+    opacity: p.opacity,
+    emissive: new THREE.Color(p.emissive),
+    emissiveIntensity: p.emissiveIntensity,
+    depthWrite: false
+  });
+
+  mat.onBeforeCompile = (shader) => {
+    shader.uniforms.cTime = { value: 0 };
+    shader.uniforms.cScale = { value: p.scale };
+    shader.uniforms.cDensity = { value: p.density };
+    shader.uniforms.cA = { value: p.colorA };
+    shader.uniforms.cB = { value: p.colorB };
+    shader.uniforms.cC = { value: p.colorC };
+    timeUniforms.push(shader.uniforms);
+
+    shader.vertexShader = shader.vertexShader
+      .replace('#include <common>', `#include <common>
+${NOISE_GLSL}
+varying vec3 vCloudWorldPosition; varying vec3 vCloudObjectPosition;`)
+      .replace('#include <worldpos_vertex>', `#include <worldpos_vertex>
+vCloudWorldPosition = worldPosition.xyz; vCloudObjectPosition = position;`);
+
+    shader.fragmentShader = shader.fragmentShader
+      .replace('#include <common>', `#include <common>
+${NOISE_GLSL}
+varying vec3 vCloudWorldPosition; varying vec3 vCloudObjectPosition;
+uniform float cTime, cScale, cDensity; uniform vec3 cA, cB, cC;`)
+      .replace('vec4 diffuseColor = vec4( diffuse, opacity );', `
+        vec3 nrm = normalize(vCloudObjectPosition);
+        float flow1 = snoise(nrm * cScale + vec3(cTime * 0.04, 0.0, 0.0));
+        float flow2 = snoise(nrm * (cScale * 2.2) + vec3(0.0, cTime * 0.03, 1.7));
+        float flow3 = snoise(nrm * (cScale * 4.0) + vec3(-cTime * 0.02, 2.4, 0.0));
+        float field = flow1 * 0.62 + flow2 * 0.28 + flow3 * 0.10;
+        float mask = smoothstep(cDensity - 0.18, cDensity + 0.12, field * 0.5 + 0.5);
+        float wisps = smoothstep(0.18, 0.84, flow2 * 0.5 + 0.5);
+        vec3 cloudCol = mix(cA, cB, flow1 * 0.5 + 0.5);
+        cloudCol = mix(cloudCol, cC, wisps * 0.55);
+        vec3 viewDir = normalize(cameraPosition - vCloudWorldPosition);
+        float limb = pow(1.0 - max(dot(nrm, viewDir), 0.0), 1.35);
+        cloudCol += cB * limb * 0.07;
+        vec4 diffuseColor = vec4(cloudCol, opacity * mask);
+      `);
+  };
+
+  return mat;
+}
+
 /* ---------- lights (key/fill + rim) ---------- */
 scene.add(new THREE.AmbientLight(0x687088, 0.55));
 
@@ -264,7 +336,9 @@ function makeRadialGlow(size = 30, inner = "rgba(124,247,255,0.35)", outer = "rg
   sprite.scale.set(size, size, 1);
   return sprite;
 }
-const sunGlow = makeRadialGlow(22);
+const sunGlow = makeRadialGlow(22, "rgba(124,247,255,0)", "rgba(124,247,255,0)");
+sunGlow.visible = false;
+sunGlow.material.opacity = 0;
 sunGlow.position.set(-2.2, 1.2, -6);
 scene.add(sunGlow);
 
@@ -277,22 +351,22 @@ const planet = new THREE.Mesh(
   enhancePlanetMaterial(
     new THREE.MeshPhysicalMaterial({
       color: 0xffffff,
-      roughness: 0.86,
-      metalness: 0.02,
-      clearcoat: 0.12,
-      clearcoatRoughness: 0.82,
-      sheen: 0.12,
-      sheenColor: new THREE.Color(0x4b281a),
-      emissive: 0x080302,
-      emissiveIntensity: 0.12
+      roughness: 0.74,
+      metalness: 0.015,
+      clearcoat: 0.16,
+      clearcoatRoughness: 0.72,
+      sheen: 0.18,
+      sheenColor: new THREE.Color(0x7a3418),
+      emissive: 0x180804,
+      emissiveIntensity: 0.13
     }),
     {
-      scale: 1.2,
-      disp: 0.014,
-      bandFreq: 1.45,
-      crater: 0.18,
-      colorA: 0x68432f,
-      colorB: 0xa0704c
+      scale: 1.55,
+      disp: 0.016,
+      bandFreq: 1.55,
+      crater: 0.14,
+      colorA: 0x8c421d,
+      colorB: 0xc9783c
     }
   )
 );
@@ -303,13 +377,22 @@ planetGroup.add(planet);
 /* atmosphere + faint cloud shell */
 const atm = new THREE.Mesh(
   new THREE.SphereGeometry(2.12, 128, 128),
-  new THREE.MeshBasicMaterial({ color: 0x8e5f45, transparent: true, opacity: 0.08 })
+  new THREE.MeshBasicMaterial({ color: 0xa45c34, transparent: true, opacity: 0.065 })
 );
 planetGroup.add(atm);
 
 const clouds = new THREE.Mesh(
   new THREE.SphereGeometry(2.06, 128, 128),
-  new THREE.MeshStandardMaterial({ transparent: true, opacity: 0.22, emissive: 0xffffff, emissiveIntensity: 0.05 })
+  makeVenusCloudMaterial({
+    opacity: 0.42,
+    scale: 3.0,
+    density: 0.48,
+    colorA: new THREE.Color(0x4a1d12),
+    colorB: new THREE.Color(0x7f371b),
+    colorC: new THREE.Color(0xb86731),
+    emissive: 0x1a0803,
+    emissiveIntensity: 0.03
+  })
 );
 planetGroup.add(clouds);
 
@@ -896,15 +979,15 @@ function animate() {
   planet.rotation.y += 0.0012;
   clouds.rotation.y += 0.0018;
   planetGroup.rotation.y += 0.0009;
-  atm.material.opacity = 0.09 + Math.sin(t * 2) * 0.012;
-  sunGlow.material.opacity = 0.18 + Math.sin(t * 1.3) * 0.04;
+  atm.material.opacity = 0.055 + Math.sin(t * 2) * 0.008;
   aurora.position.y = 1.55 + Math.sin(t * 1.5) * 0.05;
 
   // ring slow precession
   ring.rotation.z += 0.0006;
 
   // asteroid belt subtle shimmer
-  sunGlow.material.opacity = 0.3 + Math.sin(t * 1.3) * 0.05;
+  sunGlow.visible = false;
+  sunGlow.material.opacity = 0;
 
   // far planet slow parallax spin
   farGroup.rotation.y -= 0.0006;
@@ -943,6 +1026,7 @@ function animate() {
   // advance procedural time for all noisy materials
   for (const u of timeUniforms) {
     if (u.uTime) u.uTime.value += 0.5 * 0.016; // ~0.5x speed, stable across frames
+    if (u.cTime) u.cTime.value += 0.42 * 0.016;
   }
   // animate moon shaders’ time for subtle crater shimmer
   satellites.children.forEach(m => {
