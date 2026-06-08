@@ -362,7 +362,7 @@ function makeStarSprite(colorHex) {
   // Diffraction spikes
   ctx.globalCompositeOperation = 'lighter';
   const spikeLen = cx * 0.92;
-  const spikeW  = cx * 0.038;
+  const spikeW = cx * 0.038;
 
   function drawSpike(angle) {
     ctx.save();
@@ -689,7 +689,7 @@ function addConstellation(def) {
     sprite.position.copy(pt);
     sprite.material.opacity = THREE.MathUtils.randFloat(0.65, 0.96);
     sprite.userData.baseOpacity = sprite.material.opacity;
-    sprite.userData.baseScale  = size;
+    sprite.userData.baseScale = size;
     sprite.userData.phase = Math.random() * Math.PI * 2;
     sprite.userData.twinkleSpeed = 2.2 + Math.random() * 2.8;
     sprite.userData.label = def.name;
