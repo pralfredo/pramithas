@@ -3156,6 +3156,10 @@ html[data-theme="light"] .hero-rock {
   <span class="light-planet lp-f"></span>
 </div>
 
+<button id="themeToggle" class="theme-toggle" type="button" aria-label="Toggle theme">
+  <span id="themeToggleLabel">Dark Mode</span>
+</button>
+
   <div class="constellation-sky" id="constellationSky" aria-hidden="true"></div>
   <canvas id="scene"></canvas>
 
@@ -3605,7 +3609,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const NAMES = [
     "Summer 026 I","Crux 026","Summer 026 III","Word 026","Summer 026 II","Little 025",
     "Myth 026","Air 024","Rust 024","Light 024","Scape 023","Gavagai 026",
-    "Spring 026","Midwntr 026","NYC 026 II","NYC 026 III","NYC 026 I","Early 026",
+    "Spring 026","Midwntr 026","NYC 026 II","NYC 026 III","Early 026","NYC 026 I",
     "W 024","Michaelmas","Summer 025","Summer 024 I","Soph II","H-Town 024",
     "JP 024","NYC 023 II","Soph I","T’giving 023","Summer 023","NYC 023 I"
   ];
@@ -3867,6 +3871,33 @@ document.addEventListener("DOMContentLoaded", () => {
   </main>
 
   <div id="labels"></div>
+
+  <script>
+(() => {
+  const root = document.documentElement;
+  const btn = document.getElementById('themeToggle');
+  const label = document.getElementById('themeToggleLabel');
+  if (!btn) return;
+
+  const saved = localStorage.getItem('theme');
+  if (saved === 'light') root.classList.add('light');
+  else root.classList.remove('light');
+
+  function syncLabel() {
+    const isLight = root.classList.contains('light');
+    label.textContent = isLight ? 'Light Mode' : 'Dark Mode';
+  }
+
+  syncLabel();
+
+  btn.addEventListener('click', () => {
+    root.classList.toggle('light');
+    const isLight = root.classList.contains('light');
+    localStorage.setItem('theme', isLight ? 'light' : 'dark');
+    syncLabel();
+  });
+})();
+</script>
 
 
   <script>

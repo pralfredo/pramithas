@@ -558,6 +558,84 @@ html[data-theme="light"] #constellation{
   isolation: isolate;
 }
 
+.hero-center-planet{
+  position: absolute;
+  left: 50%;
+  top: 49%;
+  width: 560px;
+  height: 560px;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  z-index: 0;
+  pointer-events: none;
+  overflow: visible;
+
+  background:
+    radial-gradient(circle at 33% 30%,
+      rgba(255,255,255,.42) 0 7%,
+      rgba(255,244,220,.18) 8%,
+      rgba(0,0,0,0) 18%),
+    radial-gradient(circle at 52% 54%,
+      #d8b78d 0%,
+      #c89c73 22%,
+      #b78358 44%,
+      #9d6d49 68%,
+      #7d563e 100%);
+  box-shadow:
+    inset -42px -52px 90px rgba(45,24,12,.28),
+    inset 18px 16px 36px rgba(255,238,214,.12),
+    0 0 85px rgba(108,198,255,.14);
+}
+
+.hero-center-planet::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  border-radius:50%;
+  background:
+    repeating-linear-gradient(
+      170deg,
+      rgba(245,225,190,.16) 0px,
+      rgba(245,225,190,.16) 12px,
+      rgba(205,170,130,.08) 12px,
+      rgba(205,170,130,.08) 28px,
+      rgba(156,118,86,.10) 28px,
+      rgba(156,118,86,.10) 44px
+    );
+  mix-blend-mode: screen;
+  opacity:.38;
+  filter: blur(2px);
+}
+
+.hero-center-planet{
+  position: absolute;
+  left: 50%;
+  top: 49%;
+  width: 560px;
+  height: 560px;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  z-index: 0;
+  pointer-events: none;
+  overflow: visible;
+
+  background:
+    radial-gradient(circle at 33% 30%,
+      rgba(255,255,255,.42) 0 7%,
+      rgba(255,244,220,.18) 8%,
+      rgba(0,0,0,0) 18%),
+    radial-gradient(circle at 52% 54%,
+      #d8b78d 0%,
+      #c89c73 22%,
+      #b78358 44%,
+      #9d6d49 68%,
+      #7d563e 100%);
+  box-shadow:
+    inset -42px -52px 90px rgba(45,24,12,.28),
+    inset 18px 16px 36px rgba(255,238,214,.12),
+    0 0 85px rgba(108,198,255,.14);
+}
+
 /* main icy ring */
 .hero-center-planet::before {
   content: "";
@@ -609,6 +687,40 @@ html[data-theme="light"] #constellation{
 
   box-shadow:
     0 0 24px rgba(120, 210, 255, 0.16);
+}
+
+html.light .hero-center-planet,
+html[data-theme="light"] .hero-center-planet{
+  background:
+    radial-gradient(circle at 33% 30%,
+      rgba(255,255,255,.50) 0 7%,
+      rgba(255,248,232,.20) 8%,
+      rgba(0,0,0,0) 18%),
+    radial-gradient(circle at 52% 54%,
+      #e3c9a7 0%,
+      #d6b188 24%,
+      #c5986e 48%,
+      #ab7e5d 72%,
+      #8b654d 100%);
+  box-shadow:
+    inset -38px -46px 78px rgba(70,42,22,.18),
+    inset 16px 14px 32px rgba(255,245,226,.18),
+    0 0 58px rgba(90,120,145,.10);
+}
+
+html.light .hero-center-planet::before,
+html[data-theme="light"] .hero-center-planet::before{
+  opacity:.28;
+  filter: blur(2.4px);
+}
+
+html.light .hero-center-planet::after,
+html[data-theme="light"] .hero-center-planet::after{
+  background:
+    radial-gradient(circle,
+      rgba(255,240,214,.10) 0 60%,
+      rgba(120,140,160,.07) 74%,
+      rgba(0,0,0,0) 84%);
 }
 
 /* dark mode: brighter icy ring */
