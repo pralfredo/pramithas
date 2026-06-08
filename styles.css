@@ -716,6 +716,116 @@ html[data-theme="light"] .hero-center-planet::after {
   box-shadow: 0 0 20px rgba(70, 90, 115, 0.08);
 }
 
+/* === STONE / ASTEROID RING AROUND CENTER PLANET === */
+.hero-stone-ring {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 150%;
+  height: 150%;
+  transform: translate(-50%, -50%) rotate(-8deg);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 9;
+  opacity: 0.88;
+
+  background:
+    radial-gradient(circle at 50% 3%, rgba(180,235,255,.95) 0 1.8px, transparent 2.4px),
+    radial-gradient(circle at 56% 4%, rgba(120,210,235,.78) 0 1.5px, transparent 2.2px),
+    radial-gradient(circle at 62% 7%, rgba(190,240,255,.82) 0 1.7px, transparent 2.4px),
+    radial-gradient(circle at 69% 12%, rgba(105,190,220,.70) 0 1.4px, transparent 2.1px),
+    radial-gradient(circle at 75% 19%, rgba(180,235,255,.78) 0 1.8px, transparent 2.4px),
+    radial-gradient(circle at 80% 29%, rgba(120,210,235,.78) 0 1.5px, transparent 2.2px),
+    radial-gradient(circle at 83% 40%, rgba(190,240,255,.85) 0 1.8px, transparent 2.5px),
+    radial-gradient(circle at 84% 51%, rgba(105,190,220,.72) 0 1.4px, transparent 2.2px),
+    radial-gradient(circle at 82% 62%, rgba(180,235,255,.82) 0 1.8px, transparent 2.5px),
+    radial-gradient(circle at 78% 73%, rgba(120,210,235,.75) 0 1.5px, transparent 2.2px),
+    radial-gradient(circle at 71% 82%, rgba(190,240,255,.80) 0 1.7px, transparent 2.4px),
+    radial-gradient(circle at 62% 88%, rgba(105,190,220,.70) 0 1.4px, transparent 2.1px),
+    radial-gradient(circle at 52% 91%, rgba(180,235,255,.82) 0 1.8px, transparent 2.5px),
+    radial-gradient(circle at 42% 89%, rgba(120,210,235,.72) 0 1.5px, transparent 2.2px),
+    radial-gradient(circle at 33% 84%, rgba(190,240,255,.80) 0 1.7px, transparent 2.4px),
+    radial-gradient(circle at 25% 76%, rgba(105,190,220,.70) 0 1.4px, transparent 2.1px),
+    radial-gradient(circle at 19% 66%, rgba(180,235,255,.80) 0 1.8px, transparent 2.5px),
+    radial-gradient(circle at 16% 55%, rgba(120,210,235,.72) 0 1.5px, transparent 2.2px),
+    radial-gradient(circle at 17% 44%, rgba(190,240,255,.78) 0 1.7px, transparent 2.4px),
+    radial-gradient(circle at 21% 33%, rgba(105,190,220,.70) 0 1.4px, transparent 2.1px),
+    radial-gradient(circle at 27% 23%, rgba(180,235,255,.82) 0 1.8px, transparent 2.5px),
+    radial-gradient(circle at 36% 14%, rgba(120,210,235,.72) 0 1.5px, transparent 2.2px),
+    radial-gradient(circle at 45% 7%, rgba(190,240,255,.82) 0 1.7px, transparent 2.4px);
+
+  filter:
+    drop-shadow(0 0 4px rgba(124,247,255,.55))
+    drop-shadow(0 0 12px rgba(124,247,255,.22));
+
+  animation: stoneRingSpin 32s linear infinite;
+}
+
+.hero-stone-ring::before,
+.hero-stone-ring::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+.hero-stone-ring::before {
+  transform: rotate(34deg) scale(1.05, .96);
+  background:
+    radial-gradient(circle at 50% 2%, rgba(255,255,255,.90) 0 1.2px, transparent 1.9px),
+    radial-gradient(circle at 59% 5%, rgba(120,210,235,.70) 0 1.3px, transparent 2px),
+    radial-gradient(circle at 72% 16%, rgba(180,235,255,.75) 0 1.4px, transparent 2.1px),
+    radial-gradient(circle at 83% 45%, rgba(255,255,255,.78) 0 1.2px, transparent 1.9px),
+    radial-gradient(circle at 73% 80%, rgba(120,210,235,.72) 0 1.4px, transparent 2.1px),
+    radial-gradient(circle at 49% 92%, rgba(180,235,255,.76) 0 1.3px, transparent 2px),
+    radial-gradient(circle at 21% 69%, rgba(255,255,255,.72) 0 1.2px, transparent 1.9px),
+    radial-gradient(circle at 18% 35%, rgba(120,210,235,.70) 0 1.3px, transparent 2px);
+  opacity: .75;
+}
+
+.hero-stone-ring::after {
+  transform: rotate(-24deg) scale(.94, 1.08);
+  background:
+    radial-gradient(circle at 53% 4%, rgba(80,180,210,.70) 0 1px, transparent 1.7px),
+    radial-gradient(circle at 67% 10%, rgba(210,250,255,.72) 0 1.1px, transparent 1.8px),
+    radial-gradient(circle at 82% 35%, rgba(80,180,210,.68) 0 1px, transparent 1.7px),
+    radial-gradient(circle at 80% 63%, rgba(210,250,255,.72) 0 1.1px, transparent 1.8px),
+    radial-gradient(circle at 61% 87%, rgba(80,180,210,.68) 0 1px, transparent 1.7px),
+    radial-gradient(circle at 35% 86%, rgba(210,250,255,.72) 0 1.1px, transparent 1.8px),
+    radial-gradient(circle at 18% 58%, rgba(80,180,210,.68) 0 1px, transparent 1.7px),
+    radial-gradient(circle at 25% 22%, rgba(210,250,255,.72) 0 1.1px, transparent 1.8px);
+  opacity: .65;
+}
+
+@keyframes stoneRingSpin {
+  from {
+    transform: translate(-50%, -50%) rotate(-8deg);
+  }
+  to {
+    transform: translate(-50%, -50%) rotate(352deg);
+  }
+}
+
+/* dark mode: icy blue stones */
+html:not(.light) .hero-stone-ring,
+html[data-theme="dark"] .hero-stone-ring {
+  opacity: .92;
+  filter:
+    drop-shadow(0 0 4px rgba(124,247,255,.62))
+    drop-shadow(0 0 14px rgba(124,247,255,.28));
+}
+
+/* light mode: darker ink-blue stones */
+html.light .hero-stone-ring,
+html[data-theme="light"] .hero-stone-ring {
+  opacity: .58;
+  filter:
+    drop-shadow(0 0 3px rgba(50,80,95,.25))
+    drop-shadow(0 0 10px rgba(50,80,95,.10));
+  mix-blend-mode: multiply;
+}
+
 /* planet color map by menu position */
 .cta .button:nth-child(1) { --menu-planet-a:#7cf7ff; --menu-planet-b:#264f7c; }
 .cta .button:nth-child(2) { --menu-planet-a:#9cffb5; --menu-planet-b:#236449; }
