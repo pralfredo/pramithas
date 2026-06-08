@@ -3367,10 +3367,10 @@ html[data-theme="light"] .hero-center-planet::after {
   </button>
 <section class="hero" id="home">
   <div class="hero-center-planet" aria-hidden="true">
-    <span class="hero-stone-ring" id="heroStoneRing"></span>
-  <span class="hero-stone-ring"></span>
-  <span class="hero-ice-ring hero-ice-ring-main"></span>
-  <span class="hero-ice-ring hero-ice-ring-thin"></span>
+  <span class="hero-ring-band hero-ring-band-back"></span>
+  <span class="hero-ring-rock-field hero-ring-rock-field-back"></span>
+  <span class="hero-ring-band hero-ring-band-front"></span>
+  <span class="hero-ring-rock-field hero-ring-rock-field-front"></span>
 </div>
 
 <!-- existing hero content continues here -->
@@ -6421,6 +6421,47 @@ html:not(.light) #realThemeToggle {
   } else {
     initThemeToggle();
   }
+})();
+</script>
+
+<script>
+(() => {
+  const backField = document.querySelector('.hero-ring-rock-field-back');
+  const frontField = document.querySelector('.hero-ring-rock-field-front');
+
+  if (!backField || !frontField) return;
+
+  // avoid duplicates if script reruns
+  if (backField.dataset.done === "1") return;
+  backField.dataset.done = "1";
+  frontField.dataset.done = "1";
+
+  function populate(field, count, rx, ry) {
+    for (let i = 0; i < count; i++) {
+      const rock = document.createElement('span');
+      rock.className = 'hero-ring-rock';
+
+      const t = (i / count) * Math.PI * 2;
+      const jitterX = (Math.random() - 0.5) * 4;
+      const jitterY = (Math.random() - 0.5) * 3;
+
+      const x = 50 + Math.cos(t) * rx + jitterX;
+      const y = 50 + Math.sin(t) * ry + jitterY;
+
+      const size = 3 + Math.random() * 5;
+
+      rock.style.left = `${x}%`;
+      rock.style.top = `${y}%`;
+      rock.style.width = `${size}px`;
+      rock.style.height = `${size}px`;
+      rock.style.opacity = `${0.55 + Math.random() * 0.45}`;
+
+      field.appendChild(rock);
+    }
+  }
+
+  populate(backField, 150, 42, 16);
+  populate(frontField, 150, 42, 16);
 })();
 </script>
 
