@@ -3067,9 +3067,85 @@ html[data-theme="light"] .hero-stone {
   opacity: .35;
 }
 
+
+/* === FINAL VISIBLE STONE BELT ON HERO PLANET === */
+.hero-center-planet {
+  overflow: visible !important;
+}
+
+.hero-rock-belt {
+  position: absolute !important;
+  left: 50%;
+  top: 50%;
+  width: 190%;
+  height: 64%;
+  transform: translate(-50%, -50%) rotate(-13deg);
+  transform-origin: center;
+  border-radius: 50%;
+  z-index: 50 !important;
+  pointer-events: none !important;
+  overflow: visible !important;
+  animation: heroRockBeltSpin 42s linear infinite;
+}
+
+.hero-rock {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: var(--size);
+  height: var(--size);
+  border-radius: 50%;
+  transform:
+    translate(-50%, -50%)
+    rotate(var(--angle))
+    translateX(var(--radius))
+    rotate(calc(-1 * var(--angle)));
+  background:
+    radial-gradient(circle at 32% 28%,
+      rgba(255,255,255,.95),
+      rgba(170,235,255,.92) 38%,
+      rgba(55,145,170,.85) 100%);
+  box-shadow:
+    0 0 5px rgba(140,235,255,.75),
+    0 0 14px rgba(80,210,245,.34);
+  opacity: var(--alpha);
+}
+
+.hero-rock:nth-child(3n) {
+  background:
+    radial-gradient(circle at 30% 26%,
+      rgba(255,255,255,.98),
+      rgba(220,250,255,.92) 42%,
+      rgba(115,185,210,.82) 100%);
+}
+
+.hero-rock:nth-child(5n) {
+  filter: brightness(1.25);
+}
+
+@keyframes heroRockBeltSpin {
+  from {
+    transform: translate(-50%, -50%) rotate(-13deg);
+  }
+  to {
+    transform: translate(-50%, -50%) rotate(347deg);
+  }
+}
+
+html.light .hero-rock,
+html[data-theme="light"] .hero-rock {
+  background:
+    radial-gradient(circle at 32% 28%,
+      rgba(255,255,255,.96),
+      rgba(95,125,140,.80) 42%,
+      rgba(42,70,82,.72) 100%);
+  box-shadow:
+    0 0 3px rgba(40,70,82,.30),
+    0 0 10px rgba(40,70,82,.14);
+}
+
 </style></head>
 <body>
-<div id="DEPLOY_TEST_MARKER" style="position:fixed;left:20px;top:20px;z-index:999999999;background:red;color:white;padding:12px;font-size:20px">DEPLOY TEST</div>
 
 <div id="lightPlanetLayer" aria-hidden="true">
   <span class="light-planet lp-a"></span>
@@ -6038,39 +6114,51 @@ html:not(.light) #realThemeToggle {
 </script>
 
 
-<script id="BUILD_HERO_STONE_RING">
+
+<script id="FINAL_HERO_ROCK_BELT">
 (() => {
-  function buildHeroStoneRing() {
-    const ring = document.getElementById("heroStoneRing");
-    if (!ring || ring.dataset.built === "1") return;
-
-    ring.innerHTML = "";
-
-    const count = 120;
-    for (let i = 0; i < count; i++) {
-      const stone = document.createElement("i");
-      stone.className = "hero-stone";
-
-      const angle = (360 / count) * i + (Math.random() * 4 - 2);
-      const radius = 46 + Math.random() * 8;
-      const size = 2.2 + Math.random() * 3.8;
-      const opacity = 0.42 + Math.random() * 0.55;
-
-      stone.style.setProperty("--a", `${angle}deg`);
-      stone.style.setProperty("--r", `${radius}%`);
-      stone.style.setProperty("--s", `${size}px`);
-      stone.style.setProperty("--o", opacity.toFixed(2));
-
-      ring.appendChild(stone);
+  function buildRockBelt() {
+    const planet = document.querySelector(".hero-center-planet");
+    if (!planet) {
+      console.warn("No .hero-center-planet found for rock belt");
+      return;
     }
 
-    ring.dataset.built = "1";
+    let belt = planet.querySelector(".hero-rock-belt");
+    if (!belt) {
+      belt = document.createElement("span");
+      belt.className = "hero-rock-belt";
+      planet.appendChild(belt);
+    }
+
+    belt.innerHTML = "";
+
+    const count = 150;
+
+    for (let i = 0; i < count; i++) {
+      const rock = document.createElement("i");
+      rock.className = "hero-rock";
+
+      const angle = (360 / count) * i + (Math.random() * 4 - 2);
+      const radius = 40 + Math.random() * 18;
+      const size = 2.2 + Math.random() * 4.2;
+      const alpha = 0.42 + Math.random() * 0.48;
+
+      rock.style.setProperty("--angle", angle + "deg");
+      rock.style.setProperty("--radius", radius + "%");
+      rock.style.setProperty("--size", size + "px");
+      rock.style.setProperty("--alpha", alpha.toFixed(2));
+
+      belt.appendChild(rock);
+    }
+
+    console.log("Hero rock belt built:", belt.children.length);
   }
 
   if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", buildHeroStoneRing, { once: true });
+    document.addEventListener("DOMContentLoaded", buildRockBelt, { once: true });
   } else {
-    buildHeroStoneRing();
+    buildRockBelt();
   }
 })();
 </script>
