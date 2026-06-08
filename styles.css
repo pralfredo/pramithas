@@ -798,6 +798,33 @@ html[data-theme="light"] .hero-center-planet::after {
   opacity: .65;
 }
 
+/* DEBUG: force visible asteroid stones */
+.hero-stone-ring {
+  position: absolute !important;
+  left: 50% !important;
+  top: 50% !important;
+  width: 180% !important;
+  height: 180% !important;
+  transform: translate(-50%, -50%) rotate(-12deg) !important;
+  z-index: 999999 !important;
+  pointer-events: none !important;
+  overflow: visible !important;
+  background: rgba(255, 0, 0, 0.12) !important;
+}
+
+.hero-stone {
+  display: block !important;
+  position: absolute !important;
+  left: 50% !important;
+  top: 50% !important;
+  width: 8px !important;
+  height: 8px !important;
+  border-radius: 50% !important;
+  background: cyan !important;
+  box-shadow: 0 0 10px cyan, 0 0 24px cyan !important;
+  opacity: 1 !important;
+}
+
 @keyframes stoneRingSpin {
   from {
     transform: translate(-50%, -50%) rotate(-8deg);
