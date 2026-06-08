@@ -2864,6 +2864,115 @@ html[data-theme="light"] .hero-center-planet {
 
 
 
+
+/* === FINAL HERO CENTER PLANET + TOGGLE REPAIR === */
+.hero {
+  display: grid !important;
+  min-height: 100svh !important;
+  position: relative !important;
+  overflow: hidden !important;
+}
+
+.hero-center-planet {
+  position: absolute !important;
+  left: 50%;
+  top: 47%;
+  width: clamp(20rem, 38vw, 36rem);
+  height: clamp(20rem, 38vw, 36rem);
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  z-index: 0;
+  pointer-events: none;
+  overflow: visible !important;
+  opacity: .82;
+  background:
+    radial-gradient(circle at 32% 25%, rgba(255,255,255,.72), transparent 9%),
+    radial-gradient(circle at 54% 45%, rgba(255,235,165,.22), transparent 23%),
+    repeating-linear-gradient(170deg,
+      rgba(238,203,145,.24) 0 10px,
+      rgba(130,84,50,.22) 10px 22px,
+      rgba(70,42,30,.18) 22px 35px),
+    linear-gradient(145deg, #bb875a 0%, #80533b 48%, #31201b 100%);
+  box-shadow:
+    inset -54px -44px 92px rgba(0,0,0,.55),
+    inset 30px 24px 55px rgba(255,255,255,.14),
+    0 0 90px rgba(124,247,255,.22),
+    0 0 160px rgba(255,159,243,.10);
+  mix-blend-mode: screen;
+}
+
+.hero-ice-ring {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  pointer-events: none;
+  border-radius: 50%;
+  transform: translate(-50%, -50%) rotate(-13deg);
+}
+
+.hero-ice-ring-main {
+  width: 170%;
+  height: 36%;
+  z-index: 8;
+  border-top: 2px solid rgba(225,250,255,.82);
+  border-bottom: 1px solid rgba(140,220,255,.42);
+  background: linear-gradient(90deg,
+    transparent 0%,
+    rgba(170,235,255,.06) 15%,
+    rgba(255,255,255,.30) 48%,
+    rgba(140,210,255,.08) 75%,
+    transparent 100%);
+  box-shadow:
+    0 0 22px rgba(130,230,255,.38),
+    0 0 55px rgba(130,230,255,.13);
+}
+
+.hero-ice-ring-thin {
+  width: 192%;
+  height: 48%;
+  z-index: 7;
+  border-top: 1px solid rgba(230,250,255,.36);
+  border-bottom: 1px solid rgba(130,200,235,.20);
+  box-shadow: 0 0 24px rgba(120,210,255,.14);
+}
+
+.hero > *:not(.hero-center-planet) {
+  position: relative;
+  z-index: 2;
+}
+
+html.light .hero-center-planet,
+html[data-theme="light"] .hero-center-planet {
+  opacity: .36;
+  mix-blend-mode: multiply;
+  filter: saturate(.88) brightness(1.06);
+}
+
+html.light .hero-ice-ring-main,
+html[data-theme="light"] .hero-ice-ring-main {
+  border-top-color: rgba(55,80,105,.42);
+  border-bottom-color: rgba(55,80,105,.22);
+  box-shadow:
+    0 0 18px rgba(55,80,105,.12),
+    0 0 44px rgba(55,80,105,.06);
+}
+
+html.light .hero-ice-ring-thin,
+html[data-theme="light"] .hero-ice-ring-thin {
+  border-top-color: rgba(55,80,105,.22);
+  border-bottom-color: rgba(55,80,105,.12);
+}
+
+#themeToggle,
+#realThemeToggle {
+  position: fixed !important;
+  top: 1rem !important;
+  right: 1rem !important;
+  z-index: 2147483647 !important;
+  pointer-events: auto !important;
+  cursor: pointer !important;
+}
+
 </style></head>
 <body>
 
@@ -2890,17 +2999,14 @@ html[data-theme="light"] .hero-center-planet {
     <span id="themeIcon">☽</span>
     <span id="themeLabel">Theme</span>
   </button>
-
-  <section class="hero">
-    <section class="hero" id="home">
+<section class="hero" id="home">
   <div class="hero-center-planet" aria-hidden="true">
     <span class="hero-ice-ring hero-ice-ring-main"></span>
     <span class="hero-ice-ring hero-ice-ring-thin"></span>
   </div>
 
-  <!-- existing hero content continues here -->
-  <div class="hero-center-planet" aria-hidden="true"></div>
-    <header class="hud">
+<!-- existing hero content continues here -->
+<header class="hud">
       <p class="hud-eyebrow">Portfolio</p>
       <h1>Pramithas</h1>
       <p class="hud-sub">CS × Math through a philosophizing lens</p>
@@ -5672,8 +5778,6 @@ html:not(.light) #realThemeToggle {
 }
 </style>
 
-<button id="realThemeToggle" type="button">∗ Light Mode</button>
-
 <script>
 (() => {
   const root = document.documentElement;
@@ -5794,6 +5898,45 @@ html:not(.light) #realThemeToggle {
   }
 
   window.addEventListener("portfolio-theme-change", rebuildConstellations);
+})();
+</script>
+
+
+<script id="REAL_THEME_TOGGLE">
+(() => {
+  function initThemeToggle() {
+    const root = document.documentElement;
+    const btn = document.getElementById("themeToggle") || document.getElementById("realThemeToggle");
+    if (!btn) return;
+
+    function apply(mode) {
+      const light = mode === "light";
+      root.classList.toggle("light", light);
+      root.classList.toggle("dark", !light);
+      root.dataset.theme = light ? "light" : "dark";
+      root.style.colorScheme = light ? "light" : "dark";
+      btn.innerHTML = light ? "∗ Light Mode" : "☽ Dark Mode";
+      localStorage.setItem("portfolio-theme", light ? "light" : "dark");
+      localStorage.setItem("theme", light ? "light" : "dark");
+      window.dispatchEvent(new CustomEvent("portfolio-theme-change", { detail: { isLight: light } }));
+    }
+
+    const saved = localStorage.getItem("portfolio-theme") || localStorage.getItem("theme") || "dark";
+    apply(saved === "light" ? "light" : "dark");
+
+    btn.onclick = null;
+    btn.addEventListener("click", (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      apply(root.classList.contains("light") ? "dark" : "light");
+    }, true);
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", initThemeToggle, { once: true });
+  } else {
+    initThemeToggle();
+  }
 })();
 </script>
 
