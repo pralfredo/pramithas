@@ -2973,6 +2973,100 @@ html[data-theme="light"] .hero-ice-ring-thin {
   cursor: pointer !important;
 }
 
+
+/* === ACTUAL VISIBLE ICE ROCK / ASTEROID RING === */
+.hero-center-planet {
+  overflow: visible !important;
+}
+
+.hero-stone-ring {
+  position: absolute !important;
+  left: 50%;
+  top: 50%;
+  width: 178%;
+  height: 178%;
+  transform: translate(-50%, -50%) rotate(-12deg);
+  transform-origin: center;
+  border-radius: 50%;
+  z-index: 20 !important;
+  pointer-events: none;
+  opacity: 1 !important;
+  animation: heroStoneOrbit 38s linear infinite;
+}
+
+.hero-stone {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: var(--s);
+  height: var(--s);
+  border-radius: 50%;
+  transform:
+    rotate(var(--a))
+    translateX(var(--r))
+    scaleY(.34)
+    rotate(calc(-1 * var(--a)));
+  background:
+    radial-gradient(circle at 32% 28%, rgba(255,255,255,.95), rgba(172,235,255,.92) 35%, rgba(44,125,150,.82) 100%);
+  box-shadow:
+    0 0 5px rgba(145,235,255,.75),
+    0 0 13px rgba(80,200,235,.35);
+  opacity: var(--o);
+}
+
+.hero-stone:nth-child(3n) {
+  background:
+    radial-gradient(circle at 32% 28%, rgba(255,255,255,.96), rgba(220,250,255,.92) 40%, rgba(100,180,210,.82) 100%);
+}
+
+.hero-stone:nth-child(4n) {
+  width: calc(var(--s) * .72);
+  height: calc(var(--s) * .72);
+  opacity: calc(var(--o) * .75);
+}
+
+.hero-stone:nth-child(5n) {
+  width: calc(var(--s) * 1.25);
+  height: calc(var(--s) * 1.25);
+}
+
+@keyframes heroStoneOrbit {
+  from {
+    transform: translate(-50%, -50%) rotate(-12deg);
+  }
+  to {
+    transform: translate(-50%, -50%) rotate(348deg);
+  }
+}
+
+/* dark mode: bright icy stones */
+html:not(.light) .hero-stone,
+html[data-theme="dark"] .hero-stone {
+  box-shadow:
+    0 0 5px rgba(145,235,255,.85),
+    0 0 15px rgba(80,200,235,.45);
+}
+
+/* light mode: darker visible stones */
+html.light .hero-stone,
+html[data-theme="light"] .hero-stone {
+  background:
+    radial-gradient(circle at 32% 28%, rgba(255,255,255,.92), rgba(95,130,145,.78) 42%, rgba(40,70,82,.72) 100%);
+  box-shadow:
+    0 0 3px rgba(40,70,82,.28),
+    0 0 9px rgba(40,70,82,.14);
+  opacity: calc(var(--o) * .82);
+}
+
+/* Optional: make smooth rings secondary so stones dominate */
+.hero-ice-ring-main {
+  opacity: .45;
+}
+
+.hero-ice-ring-thin {
+  opacity: .35;
+}
+
 </style></head>
 <body>
 
@@ -3001,6 +3095,7 @@ html[data-theme="light"] .hero-ice-ring-thin {
   </button>
 <section class="hero" id="home">
   <div class="hero-center-planet" aria-hidden="true">
+    <span class="hero-stone-ring" id="heroStoneRing"></span>
   <span class="hero-stone-ring"></span>
   <span class="hero-ice-ring hero-ice-ring-main"></span>
   <span class="hero-ice-ring hero-ice-ring-thin"></span>
@@ -5937,6 +6032,44 @@ html:not(.light) #realThemeToggle {
     document.addEventListener("DOMContentLoaded", initThemeToggle, { once: true });
   } else {
     initThemeToggle();
+  }
+})();
+</script>
+
+
+<script id="BUILD_HERO_STONE_RING">
+(() => {
+  function buildHeroStoneRing() {
+    const ring = document.getElementById("heroStoneRing");
+    if (!ring || ring.dataset.built === "1") return;
+
+    ring.innerHTML = "";
+
+    const count = 120;
+    for (let i = 0; i < count; i++) {
+      const stone = document.createElement("i");
+      stone.className = "hero-stone";
+
+      const angle = (360 / count) * i + (Math.random() * 4 - 2);
+      const radius = 46 + Math.random() * 8;
+      const size = 2.2 + Math.random() * 3.8;
+      const opacity = 0.42 + Math.random() * 0.55;
+
+      stone.style.setProperty("--a", `${angle}deg`);
+      stone.style.setProperty("--r", `${radius}%`);
+      stone.style.setProperty("--s", `${size}px`);
+      stone.style.setProperty("--o", opacity.toFixed(2));
+
+      ring.appendChild(stone);
+    }
+
+    ring.dataset.built = "1";
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", buildHeroStoneRing, { once: true });
+  } else {
+    buildHeroStoneRing();
   }
 })();
 </script>
