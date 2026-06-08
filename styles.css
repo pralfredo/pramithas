@@ -2380,3 +2380,76 @@ html[data-theme="light"] body::after {
   filter: brightness(1.10) !important;
 }
 
+/* =========================================================
+   ULTIMATE PASTEL VENUS OVERRIDE (DARK & LIGHT MODE)
+   ========================================================= */
+
+/* 1. Make planet solid (normal blend mode) to block the WebGL blue dot */
+.hero-center-planet,
+html.light .hero-center-planet,
+html[data-theme="light"] .hero-center-planet,
+html[data-theme="dark"] .hero-center-planet {
+  opacity: 1 !important;
+  mix-blend-mode: normal !important; 
+  filter: saturate(1.1) brightness(1.05) contrast(1.02) !important;
+
+  /* Pastel teal & peach swirls for BOTH modes */
+  background:
+    radial-gradient(circle at 34% 27%, rgba(255, 255, 255, .6) 0 8%, transparent 15%),
+    radial-gradient(ellipse at 48% 42%, rgba(75, 112, 170, .25), transparent 28%),
+    repeating-linear-gradient(7deg,
+      rgba(166, 126, 82, .2) 0 8px,
+      rgba(212, 185, 139, .18) 8px 17px,
+      rgba(117, 145, 168, .25) 17px 27px,
+      rgba(232, 215, 176, .2) 27px 39px),
+    linear-gradient(145deg, #caa173 0%, #d79b62 31%, #8499ad 65%, #1f3155 100%) !important;
+
+  box-shadow:
+    inset -4rem -3.2rem 7rem rgba(26, 23, 30, .4),
+    inset 2rem 1.8rem 4.5rem rgba(255, 255, 255, .4),
+    0 0 4rem rgba(87, 105, 140, .15) !important;
+}
+
+/* 2. Unify and brighten the cloud layers */
+.venus-cloud-layer-a,
+html.light .venus-cloud-layer-a,
+html[data-theme="light"] .venus-cloud-layer-a,
+html[data-theme="dark"] .venus-cloud-layer-a {
+  opacity: 0.85 !important;
+  mix-blend-mode: screen !important;
+  filter: blur(5px) brightness(1.1) contrast(1.1) !important;
+  background:
+    radial-gradient(ellipse at 38% 33%, rgba(255, 250, 236, .4) 0 14%, transparent 28%),
+    radial-gradient(ellipse at 66% 44%, rgba(117, 145, 168, .3) 0 12%, transparent 24%),
+    repeating-conic-gradient(from 198deg at 52% 51%,
+      rgba(255, 243, 214, .15) 0 8deg,
+      rgba(255, 232, 193, .3) 8deg 19deg,
+      rgba(117, 145, 168, .2) 19deg 31deg,
+      rgba(238, 210, 154, .25) 31deg 44deg,
+      rgba(255, 243, 214, .15) 44deg 100deg) !important;
+}
+
+.venus-cloud-layer-b,
+html.light .venus-cloud-layer-b,
+html[data-theme="light"] .venus-cloud-layer-b,
+html[data-theme="dark"] .venus-cloud-layer-b {
+  opacity: 0.65 !important;
+  mix-blend-mode: screen !important;
+  filter: blur(3px) brightness(1.1) !important;
+  background:
+    repeating-radial-gradient(circle at 50% 50%,
+      rgba(255, 255, 255, .15) 0 14px,
+      rgba(238, 198, 145, .2) 14px 28px,
+      rgba(117, 145, 168, .15) 28px 42px,
+      rgba(244, 208, 166, .15) 42px 69px) !important;
+}
+
+/* 3. Hide the muddy dark third cloud layer entirely */
+.venus-cloud-layer-c,
+html.light .venus-cloud-layer-c,
+html[data-theme="light"] .venus-cloud-layer-c,
+html[data-theme="dark"] .venus-cloud-layer-c {
+  opacity: 0 !important;
+  display: none !important;
+}
+

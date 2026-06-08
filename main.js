@@ -336,6 +336,62 @@ function makeRadialGlow(size = 30, inner = "rgba(124,247,255,0.35)", outer = "rg
   sprite.scale.set(size, size, 1);
   return sprite;
 }
+
+/* Star sprite: bright core + soft halo + 4-point diffraction spikes */
+function makeStarSprite(colorHex) {
+  const sz = 256;
+  const c = document.createElement('canvas'); c.width = c.height = sz;
+  const ctx = c.getContext('2d');
+  const cx = sz / 2;
+
+  // parse color to rgba string
+  const col = new THREE.Color(colorHex || 0xd8eeff);
+  const cr = Math.round(col.r * 255), cg = Math.round(col.g * 255), cb = Math.round(col.b * 255);
+
+  // Outer halo
+  const halo = ctx.createRadialGradient(cx, cx, 0, cx, cx, cx);
+  halo.addColorStop(0.00, `rgba(${cr},${cg},${cb},1.0)`);
+  halo.addColorStop(0.04, `rgba(${cr},${cg},${cb},0.95)`);
+  halo.addColorStop(0.10, `rgba(${cr},${cg},${cb},0.55)`);
+  halo.addColorStop(0.22, `rgba(${cr},${cg},${cb},0.20)`);
+  halo.addColorStop(0.42, `rgba(${cr},${cg},${cb},0.06)`);
+  halo.addColorStop(1.00, 'rgba(0,0,0,0)');
+  ctx.fillStyle = halo;
+  ctx.fillRect(0, 0, sz, sz);
+
+  // Diffraction spikes
+  ctx.globalCompositeOperation = 'lighter';
+  const spikeLen = cx * 0.92;
+  const spikeW  = cx * 0.038;
+
+  function drawSpike(angle) {
+    ctx.save();
+    ctx.translate(cx, cx);
+    ctx.rotate(angle);
+    const grad = ctx.createLinearGradient(-spikeLen, 0, spikeLen, 0);
+    grad.addColorStop(0.00, 'rgba(0,0,0,0)');
+    grad.addColorStop(0.38, `rgba(${cr},${cg},${cb},0.28)`);
+    grad.addColorStop(0.50, `rgba(255,255,255,0.90)`);
+    grad.addColorStop(0.62, `rgba(${cr},${cg},${cb},0.28)`);
+    grad.addColorStop(1.00, 'rgba(0,0,0,0)');
+    ctx.fillStyle = grad;
+    ctx.fillRect(-spikeLen, -spikeW, spikeLen * 2, spikeW * 2);
+    ctx.restore();
+  }
+
+  drawSpike(0);              // horizontal
+  drawSpike(Math.PI / 2);   // vertical
+  drawSpike(Math.PI / 4);   // diagonal 1 (slightly fainter)
+  drawSpike(-Math.PI / 4);  // diagonal 2
+
+  const tex = new THREE.CanvasTexture(c);
+  return new THREE.Sprite(new THREE.SpriteMaterial({
+    map: tex,
+    transparent: true,
+    blending: THREE.AdditiveBlending,
+    depthWrite: false
+  }));
+}
 const sunGlow = makeRadialGlow(22, "rgba(124,247,255,0)", "rgba(124,247,255,0)");
 sunGlow.visible = false;
 sunGlow.material.opacity = 0;
@@ -617,9 +673,9 @@ function addConstellation(def) {
   const lineGeo = new THREE.BufferGeometry();
   lineGeo.setAttribute('position', new THREE.Float32BufferAttribute(linePositions, 3));
   const lineMat = new THREE.LineBasicMaterial({
-    color: starMatColor.clone().lerp(new THREE.Color(0xffffff), 0.25),
+    color: starMatColor.clone().lerp(new THREE.Color(0xffffff), 0.35),
     transparent: true,
-    opacity: def.lineOpacity || 0.16,
+    opacity: def.lineOpacity || 0.22,
     depthWrite: false,
     blending: THREE.AdditiveBlending
   });
@@ -627,13 +683,15 @@ function addConstellation(def) {
   group.add(lines);
 
   pts.forEach((pt, i) => {
-    const sprite = makeRadialGlow(2.0, 'rgba(230,245,255,0.98)', 'rgba(255,255,255,0)');
-    const size = (def.sizes && def.sizes[i]) || THREE.MathUtils.randFloat(0.42, 0.72);
+    const sprite = makeStarSprite(def.color || 0xd8eeff);
+    const size = (def.sizes && def.sizes[i]) || THREE.MathUtils.randFloat(0.55, 1.10);
     sprite.scale.setScalar(size);
     sprite.position.copy(pt);
-    sprite.material.opacity = THREE.MathUtils.randFloat(0.58, 0.92);
+    sprite.material.opacity = THREE.MathUtils.randFloat(0.65, 0.96);
     sprite.userData.baseOpacity = sprite.material.opacity;
+    sprite.userData.baseScale  = size;
     sprite.userData.phase = Math.random() * Math.PI * 2;
+    sprite.userData.twinkleSpeed = 2.2 + Math.random() * 2.8;
     sprite.userData.label = def.name;
     group.add(sprite);
     stars.push(sprite);
@@ -767,31 +825,37 @@ if (labelsRoot) {
   });
 }
 
-/* ---------- distant secondary planet (parallax depth) ---------- */
+/* ---------- distant planets (parallax depth) ---------- */
+
+/* --- Planet A: Deep Blue with ring (upper-left) --- */
 const farGroup = new THREE.Group();
 farGroup.position.set(-12, 6, -24); scene.add(farGroup);
 
 const farPlanet = new THREE.Mesh(
   new THREE.SphereGeometry(1.25, 96, 96),
-  new THREE.MeshPhysicalMaterial({
-    color: 0x142438,
-    roughness: 0.5,
-    metalness: 0.1,
+  addNoisySurface(new THREE.MeshPhysicalMaterial({
+    color: 0x1a4880,
+    roughness: 0.55,
+    metalness: 0.08,
     clearcoat: 0.5,
     clearcoatRoughness: 0.4,
-    emissive: 0x081426,
-    emissiveIntensity: 0.25
+    emissive: 0x060e1e,
+    emissiveIntensity: 0.22
+  }), {
+    colorA: new THREE.Color(0x0c2040),
+    colorB: new THREE.Color(0x2a5ca0),
+    bandFreq: 3.2,
+    crater: 0.15
   })
 );
 farGroup.add(farPlanet);
 
 const farAtm = new THREE.Mesh(
   new THREE.SphereGeometry(1.31, 64, 64),
-  new THREE.MeshBasicMaterial({ color: 0x9abfff, transparent: true, opacity: 0.15 })
+  new THREE.MeshBasicMaterial({ color: 0x4488dd, transparent: true, opacity: 0.18 })
 );
 farGroup.add(farAtm);
 
-/* small tilted ring for the far planet */
 const farRing = new THREE.Mesh(
   new THREE.RingGeometry(1.5, 1.85, 160, 1),
   new THREE.MeshBasicMaterial({ map: makeRingTexture(), transparent: true, depthWrite: false })
@@ -799,6 +863,119 @@ const farRing = new THREE.Mesh(
 farRing.rotation.x = Math.PI * 0.72;
 farRing.rotation.y = Math.PI * 0.18;
 farGroup.add(farRing);
+
+/* --- Planet B: Rust Red / Mars (lower-right) --- */
+const redGroup = new THREE.Group();
+redGroup.position.set(13, -4, -30); scene.add(redGroup);
+
+const redPlanet = new THREE.Mesh(
+  new THREE.SphereGeometry(0.95, 80, 80),
+  addNoisySurface(new THREE.MeshPhysicalMaterial({
+    color: 0x9c3010,
+    roughness: 0.82,
+    metalness: 0.02,
+    emissive: 0x200802,
+    emissiveIntensity: 0.18
+  }), {
+    colorA: new THREE.Color(0x6a1e08),
+    colorB: new THREE.Color(0xb84020),
+    bandFreq: 2.4,
+    crater: 0.55
+  })
+);
+redGroup.add(redPlanet);
+const redAtm = new THREE.Mesh(
+  new THREE.SphereGeometry(0.99, 48, 48),
+  new THREE.MeshBasicMaterial({ color: 0xff6020, transparent: true, opacity: 0.10 })
+);
+redGroup.add(redAtm);
+
+/* --- Planet C: Emerald Green (bottom-left) --- */
+const greenGroup = new THREE.Group();
+greenGroup.position.set(-9, -7, -32); scene.add(greenGroup);
+
+const greenPlanet = new THREE.Mesh(
+  new THREE.SphereGeometry(1.05, 80, 80),
+  addNoisySurface(new THREE.MeshPhysicalMaterial({
+    color: 0x156638,
+    roughness: 0.65,
+    metalness: 0.06,
+    clearcoat: 0.3,
+    emissive: 0x051208,
+    emissiveIntensity: 0.20
+  }), {
+    colorA: new THREE.Color(0x082816),
+    colorB: new THREE.Color(0x1e8040),
+    bandFreq: 2.8,
+    crater: 0.22
+  })
+);
+greenGroup.add(greenPlanet);
+const greenAtm = new THREE.Mesh(
+  new THREE.SphereGeometry(1.10, 48, 48),
+  new THREE.MeshBasicMaterial({ color: 0x22cc66, transparent: true, opacity: 0.14 })
+);
+greenGroup.add(greenAtm);
+const greenRing = new THREE.Mesh(
+  new THREE.RingGeometry(1.28, 1.62, 128, 1),
+  new THREE.MeshBasicMaterial({ map: makeRingTexture(), transparent: true, depthWrite: false, color: 0x44ff88 })
+);
+greenRing.rotation.x = Math.PI * 0.62;
+greenRing.rotation.y = Math.PI * 0.35;
+greenGroup.add(greenRing);
+
+/* --- Planet D: Warm Brown / Gas Giant (upper-right, large) --- */
+const brownGroup = new THREE.Group();
+brownGroup.position.set(18, 9, -38); scene.add(brownGroup);
+
+const brownPlanet = new THREE.Mesh(
+  new THREE.SphereGeometry(1.55, 96, 96),
+  addNoisySurface(new THREE.MeshPhysicalMaterial({
+    color: 0x8c5020,
+    roughness: 0.60,
+    metalness: 0.04,
+    emissive: 0x120a02,
+    emissiveIntensity: 0.15
+  }), {
+    colorA: new THREE.Color(0x4a2808),
+    colorB: new THREE.Color(0xb07040),
+    bandFreq: 4.5,
+    crater: 0.18
+  })
+);
+brownGroup.add(brownPlanet);
+const brownAtm = new THREE.Mesh(
+  new THREE.SphereGeometry(1.62, 64, 64),
+  new THREE.MeshBasicMaterial({ color: 0xc87840, transparent: true, opacity: 0.12 })
+);
+brownGroup.add(brownAtm);
+
+/* --- Planet E: Deep Purple (far right) --- */
+const purpleGroup = new THREE.Group();
+purpleGroup.position.set(20, -2, -44); scene.add(purpleGroup);
+
+const purplePlanet = new THREE.Mesh(
+  new THREE.SphereGeometry(0.80, 72, 72),
+  addNoisySurface(new THREE.MeshPhysicalMaterial({
+    color: 0x4a1870,
+    roughness: 0.50,
+    metalness: 0.10,
+    clearcoat: 0.6,
+    emissive: 0x0c0414,
+    emissiveIntensity: 0.24
+  }), {
+    colorA: new THREE.Color(0x200835),
+    colorB: new THREE.Color(0x6a2898),
+    bandFreq: 3.0,
+    crater: 0.30
+  })
+);
+purpleGroup.add(purplePlanet);
+const purpleAtm = new THREE.Mesh(
+  new THREE.SphereGeometry(0.84, 48, 48),
+  new THREE.MeshBasicMaterial({ color: 0xaa44ff, transparent: true, opacity: 0.16 })
+);
+purpleGroup.add(purpleAtm);
 
 /* ---------- raycaster for clicks ---------- */
 const raycaster = new THREE.Raycaster();
@@ -993,6 +1170,13 @@ function animate() {
   farGroup.rotation.y -= 0.0006;
   farRing.rotation.z -= 0.0003;
 
+  // additional outer planets
+  redGroup.rotation.y += 0.0008;
+  greenGroup.rotation.y -= 0.0005;
+  greenRing.rotation.z += 0.0004;
+  brownGroup.rotation.y += 0.0004;
+  purpleGroup.rotation.y -= 0.0007;
+
   // star drift + stronger twinkle
   starsFar.rotation.y -= 0.0001;
   starsMid.rotation.y -= 0.00025;
@@ -1037,14 +1221,19 @@ function animate() {
     if (u.pTime) u.pTime.value += 0.016 * 0.5; // gentle 0.5x speed
   }
 
-  // constellations: very subtle twinkle and label breathing
+  // constellations: dramatic glimmer — vary opacity + scale
   constellations.forEach((g, i) => {
     g.lookAt(camera.position);
     g.rotation.z += g.userData.spin;
     const pulse = 0.5 + 0.5 * Math.sin(t * 1.7 + g.userData.twinkle + i * 0.35);
-    if (g.userData.lines?.material) g.userData.lines.material.opacity = 0.12 + pulse * 0.08;
+    if (g.userData.lines?.material) g.userData.lines.material.opacity = 0.10 + pulse * 0.14;
     (g.userData.stars || []).forEach((s, j) => {
-      s.material.opacity = s.userData.baseOpacity * (0.82 + 0.3 * Math.sin(t * 2.8 + s.userData.phase + j * 0.11));
+      const sp = s.userData.twinkleSpeed || 2.5;
+      const tw = 0.55 + 0.52 * Math.sin(t * sp + s.userData.phase + j * 0.17);
+      s.material.opacity = s.userData.baseOpacity * tw;
+      // scale pulse: stars "breathe" size as they twinkle
+      const scPulse = s.userData.baseScale * (0.78 + 0.40 * Math.sin(t * (sp * 0.7) + s.userData.phase));
+      s.scale.setScalar(Math.max(0.15, scPulse));
     });
   });
   // constellation labels are disabled for a cleaner network-style sky.
