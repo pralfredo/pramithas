@@ -619,6 +619,7 @@
       position: relative;
       overflow: hidden;
       isolation: isolate;
+      border-radius: 22px;
     }
 
     .section-label {
@@ -2523,6 +2524,698 @@
         opacity: .30 !important;
       }
     }
+
+    /* =========================================================
+       LIGHT-MODE / MOBILE CARD FIXES
+       (dashboard panels were hard-coded dark; on phones & iPads
+       the ambient planets sit behind content, so light mode needs
+       proper paper surfaces)
+       ========================================================= */
+    html.light main>section:not(.dashboard-section):not(.research-atlas) {
+      background: rgba(255, 252, 246, .80);
+      border: 1px solid rgba(8, 12, 22, .09);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      box-shadow: 0 18px 50px rgba(35, 42, 60, .08);
+    }
+
+    html.light .dashboard-section {
+      border-color: rgba(8, 12, 22, .14) !important;
+      background: linear-gradient(135deg, rgba(255, 255, 255, .93), rgba(255, 251, 243, .87)) !important;
+      box-shadow: 0 24px 70px rgba(35, 42, 60, .12), inset 0 1px 0 rgba(255, 255, 255, .85) !important;
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+    }
+
+    html.light .research-atlas {
+      border-color: rgba(8, 12, 22, .13);
+      background: linear-gradient(145deg, rgba(255, 255, 255, .93), rgba(255, 252, 245, .85));
+      box-shadow: 0 20px 60px rgba(35, 42, 60, .10);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+    }
+
+    /* vivid, luminous planets in light mode */
+    html.light .cosmic-fallback {
+      opacity: .96;
+      filter: saturate(1.22) brightness(1.08) contrast(1.04);
+    }
+
+    html.light .orb-blue {
+      --orb-a: #5a7fd6;
+      --orb-b: #2a3f7e;
+      --orb-c: #141d3a;
+      --orb-glow: rgba(90, 140, 255, .40);
+    }
+
+    html.light .orb-red {
+      --orb-a: #d6643f;
+      --orb-b: #7e2a14;
+      --orb-c: #38120a;
+      --orb-glow: rgba(255, 110, 70, .36);
+    }
+
+    html.light .orb-purple {
+      --orb-a: #a05fd6;
+      --orb-b: #52257e;
+      --orb-c: #251038;
+      --orb-glow: rgba(186, 110, 255, .36);
+    }
+
+    html.light .orb-brown {
+      --orb-a: #c08a48;
+      --orb-b: #6e4a20;
+      --orb-c: #33210c;
+      --orb-glow: rgba(214, 160, 90, .34);
+    }
+
+    html.light .orb-green {
+      --orb-a: #43c272;
+      --orb-b: #1d6a3a;
+      --orb-c: #0a2c17;
+      --orb-glow: rgba(80, 220, 130, .34);
+    }
+
+    html.light .fallback-orb span {
+      box-shadow: inset -22px -18px 45px rgba(0, 0, 0, .42), inset 12px 10px 30px rgba(255, 255, 255, .18);
+    }
+
+    html.light .grad-badge-stack span {
+      border-color: rgba(46, 72, 150, .30);
+      background: rgba(46, 72, 150, .07);
+      color: #1c2a55;
+    }
+
+    html.light .tier-board-pro .tier-label {
+      background: rgba(8, 12, 22, .05);
+      border: 1px solid rgba(8, 12, 22, .10);
+    }
+
+    html.light .tier-board-pro .school-pill {
+      background: rgba(255, 255, 255, .88) !important;
+      border: 1px solid rgba(8, 12, 22, .14) !important;
+      box-shadow: 0 6px 18px rgba(35, 42, 60, .06);
+    }
+
+    html.light .tier-board-pro .school-pill b {
+      color: #131830;
+    }
+
+    html.light .tier-board-pro .school-pill span {
+      color: #8a5a00;
+    }
+
+    html.light .score-legend span {
+      background: rgba(8, 12, 22, .04);
+      border-color: rgba(8, 12, 22, .12);
+      color: rgba(13, 16, 38, .78);
+    }
+
+    html.light .score-legend b {
+      color: #131830;
+    }
+
+    html.light .rts-block {
+      background: rgba(8, 12, 22, .04);
+      border-color: rgba(8, 12, 22, .12);
+    }
+
+    html.light .rts-block p {
+      color: rgba(13, 16, 38, .78);
+    }
+
+    html.light .reach h4 {
+      color: #b3261e;
+    }
+
+    html.light .target h4 {
+      color: #8a6400;
+    }
+
+    html.light .safety h4 {
+      color: #1d7a44;
+    }
+
+    html.light .grad-note {
+      color: rgba(13, 16, 38, .60) !important;
+    }
+
+    html.light .odds-table {
+      color: rgba(13, 16, 38, .80);
+    }
+
+    html.light .odds-table th,
+    html.light .odds-table td {
+      border-color: rgba(8, 12, 22, .16);
+    }
+
+    html.light .odds-table th {
+      background: rgba(8, 12, 22, .05);
+    }
+
+    html.light .odds-table strong {
+      color: #8a5a00;
+    }
+
+    html.light .quote-band {
+      border-color: rgba(46, 72, 150, .25);
+      color: rgba(13, 16, 38, .72);
+      background: linear-gradient(90deg, transparent, rgba(46, 72, 150, .07), transparent);
+    }
+
+    html.light .cosmos-node .atlas-kicker {
+      color: #2a3a90;
+    }
+
+    html.light .cards li {
+      background: rgba(255, 255, 255, .82);
+      border-color: rgba(8, 12, 22, .12);
+    }
+
+    html.light .journey-dot {
+      box-shadow: 0 0 8px rgba(58, 82, 160, .45);
+      background: #3a52a0;
+    }
+
+    /* missing highlight placeholder (never show a broken circle) */
+    .missing-highlight .highlight-inner {
+      display: grid;
+      place-items: center;
+      background: linear-gradient(145deg, #1b2440, #0e1326);
+    }
+
+    .missing-highlight .highlight-inner img {
+      display: none;
+    }
+
+    .missing-highlight .highlight-inner::after {
+      content: '\2726';
+      color: rgba(124, 247, 255, .78);
+      font-size: 1.25rem;
+    }
+
+    html.light .missing-highlight .highlight-inner {
+      background: linear-gradient(145deg, #ece4d6, #d9cfbd);
+    }
+
+    html.light .missing-highlight .highlight-inner::after {
+      color: #3a52a0;
+    }
+
+
+    /* ===== EXPERIENCE & ACTIVITIES ===== */
+    .xp-grid {
+      display: grid;
+      gap: 1rem;
+    }
+
+    .xp-card {
+      position: relative;
+      overflow: hidden;
+      border: 1px solid rgba(255, 255, 255, .11);
+      border-radius: 16px;
+      padding: 1.15rem 1.3rem;
+      background: linear-gradient(180deg, rgba(255, 255, 255, .055), rgba(255, 255, 255, .025));
+      backdrop-filter: blur(14px);
+      display: grid;
+      gap: .5rem;
+    }
+
+    .xp-card::before {
+      content: '';
+      position: absolute;
+      inset: -40% auto auto -20%;
+      width: 8rem;
+      height: 8rem;
+      border-radius: 999px;
+      background: radial-gradient(circle, rgba(124, 247, 255, .14), transparent 65%);
+      pointer-events: none;
+    }
+
+    .xp-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .xp-role {
+      font-family: 'Syne', sans-serif;
+      font-weight: 600;
+      font-size: 1.02rem;
+      color: #fff;
+      letter-spacing: -0.005em;
+    }
+
+    .xp-org {
+      display: block;
+      margin-top: .2rem;
+      color: var(--neonA);
+      font-family: 'DM Mono', monospace;
+      font-size: .72rem;
+      letter-spacing: .07em;
+    }
+
+    .xp-date {
+      font-family: 'DM Mono', monospace;
+      font-size: .66rem;
+      letter-spacing: .08em;
+      white-space: nowrap;
+      color: rgba(221, 232, 255, .6);
+      border: 1px solid rgba(255, 255, 255, .13);
+      border-radius: 999px;
+      padding: .2rem .6rem;
+      background: rgba(0, 0, 0, .18);
+      flex-shrink: 0;
+    }
+
+    .xp-card p {
+      color: var(--muted);
+      font-size: .8rem;
+      line-height: 1.68;
+    }
+
+    .xp-subhead {
+      margin: 1.5rem 0 .7rem;
+      color: var(--neonC);
+      font-family: 'DM Mono', monospace;
+      font-size: .68rem;
+      letter-spacing: .28em;
+      text-transform: uppercase;
+      opacity: .85;
+    }
+
+    .xp-activities {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 1rem;
+    }
+
+    @media (max-width: 920px) {
+      .xp-activities {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    html.light .xp-card {
+      background: rgba(255, 255, 255, .74) !important;
+      border-color: rgba(8, 12, 22, .13) !important;
+      box-shadow: 0 18px 50px rgba(8, 12, 22, .07);
+    }
+
+    html.light .xp-role {
+      color: #11142a;
+    }
+
+    html.light .xp-date {
+      color: rgba(13, 16, 38, .62);
+      border-color: rgba(8, 12, 22, .15);
+      background: rgba(8, 12, 22, .04);
+    }
+
+    html.light .xp-subhead {
+      color: #1a6040;
+      opacity: 1;
+    }
+
+    /* =========================================================
+       STAR MAP NAVIGATION
+       ========================================================= */
+    .star-map-toggle {
+      position: fixed;
+      right: 18px;
+      bottom: 18px;
+      z-index: 2147483600;
+      display: inline-flex;
+      align-items: center;
+      gap: .45rem;
+      padding: 11px 17px;
+      border-radius: 999px;
+      border: 1px solid rgba(124, 247, 255, .42);
+      background: rgba(4, 8, 22, .72);
+      color: #9ff7ff;
+      font: 700 13px/1.1 "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      letter-spacing: .03em;
+      cursor: pointer;
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      box-shadow: 0 0 0 1px rgba(255, 255, 255, .04) inset, 0 10px 28px rgba(0, 0, 0, .25), 0 0 22px rgba(124, 247, 255, .14);
+      transition: transform .2s, box-shadow .2s, border-color .2s;
+    }
+
+    .star-map-toggle:hover {
+      transform: translateY(-1px);
+      border-color: rgba(124, 247, 255, .75);
+      box-shadow: 0 0 0 1px rgba(255, 255, 255, .05) inset, 0 12px 30px rgba(0, 0, 0, .28), 0 0 28px rgba(124, 247, 255, .22);
+    }
+
+    .star-map-toggle .smt-icon {
+      animation: smPulse 2.6s ease-in-out infinite;
+    }
+
+    html.light .star-map-toggle {
+      background: rgba(255, 255, 255, .85);
+      color: #162044;
+      border-color: rgba(30, 42, 86, .26);
+      box-shadow: 0 0 0 1px rgba(0, 0, 0, .04) inset, 0 10px 24px rgba(35, 40, 55, .12);
+    }
+
+    #starMapOverlay {
+      position: fixed;
+      inset: 0;
+      z-index: 2147483647;
+      opacity: 0;
+      transition: opacity .3s ease;
+    }
+
+    #starMapOverlay.active {
+      opacity: 1;
+    }
+
+    #starMapOverlay[hidden] {
+      display: none;
+    }
+
+    .sm-backdrop {
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(circle at 50% 16%, rgba(12, 18, 42, .94), rgba(3, 4, 12, .975) 72%);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+    }
+
+    html.light .sm-backdrop {
+      background:
+        radial-gradient(circle at 50% 16%, rgba(252, 249, 243, .96), rgba(238, 230, 217, .975) 72%);
+    }
+
+    #smLines {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+    }
+
+    .sm-line {
+      fill: none;
+      stroke: rgba(160, 200, 255, .30);
+      stroke-width: 1;
+      stroke-linecap: round;
+      stroke-dasharray: 3 8;
+      animation: smDash 30s linear infinite;
+    }
+
+    html.light .sm-line {
+      stroke: rgba(28, 40, 80, .32);
+    }
+
+    .sm-bgstar {
+      fill: rgba(235, 244, 255, .85);
+      transform-box: fill-box;
+      transform-origin: center;
+      animation: starGlimmer 3.4s ease-in-out infinite;
+    }
+
+    html.light .sm-bgstar {
+      fill: rgba(28, 40, 80, .42);
+    }
+
+    @keyframes smDash {
+      to {
+        stroke-dashoffset: -260;
+      }
+    }
+
+    .sm-head {
+      position: absolute;
+      top: max(22px, env(safe-area-inset-top));
+      left: 24px;
+      z-index: 2;
+      pointer-events: none;
+      max-width: 70vw;
+    }
+
+    .sm-eyebrow {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: .62rem;
+      letter-spacing: .3em;
+      text-transform: uppercase;
+      color: #7cf7ff;
+      opacity: .8;
+      margin-bottom: .35rem;
+    }
+
+    .sm-title {
+      font-family: 'Syne', 'Inter', sans-serif;
+      font-size: clamp(1.4rem, 4vw, 2.2rem);
+      color: #eef5ff;
+      text-shadow: 0 0 24px rgba(124, 247, 255, .35);
+      margin-bottom: .3rem;
+      letter-spacing: -.01em;
+    }
+
+    .sm-hint {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: .68rem;
+      color: rgba(222, 234, 255, .62);
+      letter-spacing: .04em;
+    }
+
+    html.light .sm-eyebrow {
+      color: #2a3a90;
+    }
+
+    html.light .sm-title {
+      color: #10142e;
+      text-shadow: none;
+    }
+
+    html.light .sm-hint {
+      color: rgba(13, 16, 38, .62);
+    }
+
+    .sm-close {
+      position: absolute;
+      top: max(20px, env(safe-area-inset-top));
+      right: 20px;
+      z-index: 3;
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      border: 1px solid rgba(124, 247, 255, .4);
+      background: rgba(4, 8, 22, .7);
+      color: #9ff7ff;
+      font-size: 1rem;
+      cursor: pointer;
+      display: grid;
+      place-items: center;
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      transition: transform .2s, border-color .2s;
+    }
+
+    .sm-close:hover {
+      transform: scale(1.08);
+      border-color: rgba(124, 247, 255, .8);
+    }
+
+    html.light .sm-close {
+      background: rgba(255, 255, 255, .85);
+      color: #162044;
+      border-color: rgba(30, 42, 86, .3);
+    }
+
+    .sm-sky {
+      position: absolute;
+      inset: 0;
+      z-index: 1;
+    }
+
+    .sm-star {
+      position: absolute;
+      transform: translate(-50%, -50%);
+      background: none;
+      border: none;
+      padding: .4rem;
+      cursor: pointer;
+      display: grid;
+      justify-items: center;
+      gap: .5rem;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .sm-dot {
+      width: 13px;
+      height: 13px;
+      border-radius: 50%;
+      background: radial-gradient(circle at 32% 28%, #ffffff, #bfe7ff 48%, rgba(124, 200, 255, .55) 78%);
+      box-shadow: 0 0 14px rgba(150, 220, 255, .85), 0 0 36px rgba(124, 180, 255, .4);
+      animation: smPulse 3s ease-in-out infinite;
+      transition: transform .22s cubic-bezier(.34, 1.56, .64, 1);
+    }
+
+    .sm-star:hover .sm-dot,
+    .sm-star:focus-visible .sm-dot {
+      transform: scale(1.45);
+    }
+
+    .sm-star:focus-visible {
+      outline: 1px dashed rgba(124, 247, 255, .7);
+      outline-offset: 4px;
+      border-radius: 12px;
+    }
+
+    .sm-name {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: clamp(.62rem, 1.5vw, .76rem);
+      color: #dfe9ff;
+      letter-spacing: .13em;
+      text-transform: uppercase;
+      white-space: nowrap;
+      text-shadow: 0 2px 12px rgba(0, 0, 0, .85);
+    }
+
+    .sm-you {
+      display: none;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: .52rem;
+      letter-spacing: .24em;
+      text-transform: uppercase;
+      color: #ffd35c;
+      margin-top: -.25rem;
+    }
+
+    .sm-star.sm-current .sm-dot {
+      width: 18px;
+      height: 18px;
+      background: radial-gradient(circle at 32% 28%, #fff7df, #ffd35c 52%, rgba(255, 180, 70, .6) 80%);
+      box-shadow: 0 0 18px rgba(255, 211, 92, .9), 0 0 44px rgba(255, 180, 70, .45);
+    }
+
+    .sm-star.sm-current .sm-you {
+      display: block;
+    }
+
+    .sm-star.sm-visited:not(.sm-current) .sm-dot {
+      box-shadow: 0 0 10px rgba(156, 255, 181, .65), 0 0 26px rgba(156, 255, 181, .3);
+      background: radial-gradient(circle at 32% 28%, #ffffff, #c9ffd9 48%, rgba(140, 230, 170, .55) 78%);
+    }
+
+    html.light .sm-dot {
+      background: radial-gradient(circle at 32% 28%, #44558c, #16203f 64%);
+      box-shadow: 0 0 0 3px rgba(28, 40, 80, .10), 0 0 16px rgba(28, 40, 80, .28);
+    }
+
+    html.light .sm-name {
+      color: #141b38;
+      text-shadow: none;
+      font-weight: 600;
+    }
+
+    html.light .sm-star.sm-current .sm-dot {
+      background: radial-gradient(circle at 32% 28%, #ffe9b3, #b8860b 60%);
+      box-shadow: 0 0 0 3px rgba(184, 134, 11, .18), 0 0 18px rgba(184, 134, 11, .4);
+    }
+
+    html.light .sm-you {
+      color: #8a5a00;
+    }
+
+    html.light .sm-star.sm-visited:not(.sm-current) .sm-dot {
+      background: radial-gradient(circle at 32% 28%, #d6f5e0, #1d7a44 64%);
+      box-shadow: 0 0 0 3px rgba(29, 122, 68, .14), 0 0 14px rgba(29, 122, 68, .3);
+    }
+
+    .sm-comet {
+      position: absolute;
+      width: 3px;
+      height: 3px;
+      border-radius: 50%;
+      background: #fff;
+      box-shadow: 0 0 8px 2px rgba(180, 225, 255, .9);
+      opacity: 0;
+      pointer-events: none;
+      animation: smComet 9s ease-in 2.5s infinite;
+    }
+
+    .sm-comet::after {
+      content: '';
+      position: absolute;
+      right: 1px;
+      top: 50%;
+      width: 90px;
+      height: 1px;
+      transform: translateY(-50%);
+      background: linear-gradient(270deg, rgba(200, 232, 255, .9), transparent);
+    }
+
+    html.light .sm-comet {
+      background: #2a3a66;
+      box-shadow: 0 0 8px 2px rgba(42, 58, 102, .5);
+    }
+
+    html.light .sm-comet::after {
+      background: linear-gradient(270deg, rgba(42, 58, 102, .55), transparent);
+    }
+
+    @keyframes smComet {
+      0% {
+        opacity: 0;
+        transform: translate(0, 0);
+      }
+
+      4% {
+        opacity: 1;
+      }
+
+      14% {
+        opacity: 0;
+        transform: translate(-46vw, 22vh);
+      }
+
+      100% {
+        opacity: 0;
+        transform: translate(-46vw, 22vh);
+      }
+    }
+
+    @keyframes smPulse {
+
+      0%,
+      100% {
+        transform: scale(1);
+      }
+
+      50% {
+        transform: scale(1.18);
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+
+      .sm-dot,
+      .sm-line,
+      .sm-comet,
+      .star-map-toggle .smt-icon {
+        animation: none;
+      }
+    }
+
+    @media (max-width: 540px) {
+      .star-map-toggle {
+        right: 14px;
+        bottom: max(14px, env(safe-area-inset-bottom));
+        padding: 10px 14px;
+        font-size: 12px;
+      }
+
+      .sm-head {
+        left: 16px;
+      }
+    }
   </style>
 </head>
 
@@ -2598,13 +3291,14 @@
         <a class="button" href="#atlas">Atlas</a>
         <a class="button" href="https://arxiv.org/abs/2409.15094" target="_blank" rel="noopener">Publication ↗</a>
         <a class="button" href="#research-agenda">Research</a>
-        <a class="button" href="#graduate-study">Graduate Study</a>
+        <a class="button" href="#experience">Experience</a>
         <a class="button" href="#notebook">Notebook</a>
         <a class="button" href="#about">About</a>
         <a class="button" href="#highlights">Highlights</a>
         <a class="button" href="#shows">Shows</a>
         <a class="button" href="https://github.com/pralfredo" target="_blank" rel="noopener">GitHub ↗</a>
         <a class="button" href="./public/Resume.pdf" target="_blank" rel="noopener">Résumé ↗</a>
+        <a class="button" id="navStarMap" href="#starmap">Star Map ✦</a>
       </nav>
     </header>
   </section>
@@ -2863,6 +3557,122 @@
       </div>
     </section>
 
+    <!-- EXPERIENCE & ACTIVITIES -->
+    <section id="experience" class="dashboard-section">
+      <p class="section-label">// experience / activities</p>
+      <h2>Experience &amp; Activities</h2>
+      <p class="section-intro">Research, analytics, and teaching — the working record behind the research agenda:
+        algorithms that became a publication, machine learning in climate science, and four years of making logic
+        click for other people.</p>
+
+      <div class="xp-grid">
+        <article class="xp-card">
+          <div class="xp-head">
+            <div>
+              <h3 class="xp-role">Data Analytics &amp; Research Intern</h3>
+              <span class="xp-org">International Sibling Society · Las Vegas, NV</span>
+            </div>
+            <span class="xp-date">Jun – Aug 2026</span>
+          </div>
+          <p>Designed scalable Python data-collection frameworks tracking user acquisition, engagement, retention, and
+            platform performance for a nonprofit serving stakeholders in 190+ countries — then built the interactive
+            dashboards and KPI systems that turn that telemetry into decisions, powering impact measurement, A/B
+            experimentation, and strategy across product, research, and operations.</p>
+          <div class="card-tags">
+            <span class="tag">Python</span>
+            <span class="tag">Dashboards</span>
+            <span class="tag">Impact Analytics</span>
+            <span class="tag">A/B Testing</span>
+          </div>
+        </article>
+
+        <article class="xp-card">
+          <div class="xp-head">
+            <div>
+              <h3 class="xp-role">Research Assistant — Online Algorithms</h3>
+              <span class="xp-org">Colby College · Waterville, ME</span>
+            </div>
+            <span class="xp-date">May – Aug 2024</span>
+          </div>
+          <p>Investigated dynamic pricing for the online set cover problem in the client–server model, where a server
+            can only post prices rather than assign resources. Helped characterize which online algorithms can be
+            mimicked by pricing schemes and analyze competitive efficiency — work that became the co-authored paper
+            <em>Dynamic Pricing Algorithms for Online Set Cover</em> (arXiv:2409.15094).</p>
+          <div class="card-tags">
+            <span class="tag">Online Algorithms</span>
+            <span class="tag">Dynamic Pricing</span>
+            <span class="tag">Theory</span>
+            <span class="tag">Publication</span>
+          </div>
+        </article>
+
+        <article class="xp-card">
+          <div class="xp-head">
+            <div>
+              <h3 class="xp-role">Research Assistant — Climate Informatics</h3>
+              <span class="xp-org">Colby College · Waterville, ME</span>
+            </div>
+            <span class="xp-date">Jun – Aug 2023</span>
+          </div>
+          <p>Mapped five decades of ice-core science through comprehensive bibliometric analysis, building guided
+            machine-learning models in PyTorch and TensorFlow for dynamic topic classification — tracing how the
+            field's questions, methods, and institutions evolved across time and geography.</p>
+          <div class="card-tags">
+            <span class="tag">PyTorch</span>
+            <span class="tag">TensorFlow</span>
+            <span class="tag">NLP</span>
+            <span class="tag">Bibliometrics</span>
+          </div>
+        </article>
+
+        <article class="xp-card">
+          <div class="xp-head">
+            <div>
+              <h3 class="xp-role">Teaching Assistant</h3>
+              <span class="xp-org">Colby Center for Teaching &amp; Learning · Waterville, ME</span>
+            </div>
+            <span class="xp-date">Dec 2022 – Present</span>
+          </div>
+          <p>Teach across seven courses spanning computer science, mathematics, and philosophy — CS333, CS252, CS231,
+            CS152, MA130, MA120, and PL151. Grading, help sessions, and the patient craft of making formal reasoning
+            click for someone else, one explanation at a time.</p>
+          <div class="card-tags">
+            <span class="tag">CS · Math · Phil</span>
+            <span class="tag">7 Courses</span>
+            <span class="tag">Pedagogy</span>
+          </div>
+        </article>
+      </div>
+
+      <p class="xp-subhead">activities</p>
+      <div class="xp-activities">
+        <article class="xp-card">
+          <div class="xp-head">
+            <div>
+              <h3 class="xp-role">Summer School in Logic &amp; Formal Epistemology</h3>
+              <span class="xp-org">Carnegie Mellon University · Pittsburgh, PA</span>
+            </div>
+            <span class="xp-date">Jun 2026</span>
+          </div>
+          <p>Intensive program spanning epistemic logic and topology, decision theory and the foundations of AI
+            agents, and the path from &ldquo;gavagai&rdquo; to a full grammar.</p>
+        </article>
+
+        <article class="xp-card">
+          <div class="xp-head">
+            <div>
+              <h3 class="xp-role">AI Camp</h3>
+              <span class="xp-org">Roux Institute, Northeastern University · Portland, ME</span>
+            </div>
+            <span class="xp-date">Jul 2023</span>
+          </div>
+          <p>Collaborative machine-learning practicum — applying ML models to real datasets and building hands-on
+            fluency with data-driven AI workflows.</p>
+        </article>
+      </div>
+    </section>
+
+
     <!-- NOTEBOOK -->
     <section id="notebook" class="dashboard-section">
       <p class="section-label">// archive / notebook</p>
@@ -2887,259 +3697,6 @@
           <p>Open questions about agency, formalization, controlled language, and mathematical structure.</p>
         </article>
       </div>
-    </section>
-
-    <!-- GRADUATE STUDY -->
-    <section id="graduate-study" class="dashboard-section grad-atlas-pro">
-      <p class="section-label">// graduate study page / admissions dashboard</p>
-      <div class="grad-hero-row">
-        <div>
-          <h2>Logic PhD Program Atlas</h2>
-          <p class="section-intro">
-            A graduate-study dashboard for logic, philosophy of logic, formal methods, and AI-adjacent foundations.
-            This section records the working application map: tiered program scores, reach / target / safety grouping,
-            program context, and conservative odds.
-          </p>
-        </div>
-        <div class="grad-badge-stack">
-          <span>Logic · Philosophy · Formal Methods</span>
-          <span>26 programs tracked</span>
-        </div>
-      </div>
-
-      <div class="grad-pro-grid">
-        <article class="grad-card grad-tier-card">
-          <span class="grad-kicker">tier list snapshot · final weighted score</span>
-          <div class="tier-board tier-board-pro" aria-label="Logic PhD program tier list">
-            <div class="tier-row tier-s-row">
-              <div class="tier-label tier-s"><strong>S</strong><span>Elite</span></div>
-              <div class="tier-schools">
-                <span class="school-pill"><b>MIT</b><span>95.56</span></span>
-                <span class="school-pill"><b>CMU</b><span>94.39</span></span>
-                <span class="school-pill"><b>Oxford</b><span>91.11</span></span>
-                <span class="school-pill"><b>UC Berkeley</b><span>90.77</span></span>
-                <span class="school-pill"><b>Harvard</b><span>89.09</span></span>
-                <span class="school-pill"><b>Princeton</b><span>87.59</span></span>
-              </div>
-            </div>
-            <div class="tier-row tier-a-row">
-              <div class="tier-label tier-a"><strong>A</strong><span>Exceptional</span></div>
-              <div class="tier-schools">
-                <span class="school-pill"><b>UCL</b><span>85.97</span></span>
-                <span class="school-pill"><b>Columbia</b><span>84.75</span></span>
-                <span class="school-pill"><b>TU Wien</b><span>82.05</span></span>
-                <span class="school-pill"><b>Notre Dame</b><span>81.94</span></span>
-                <span class="school-pill"><b>UC Irvine</b><span>81.31</span></span>
-                <span class="school-pill"><b>Pitt</b><span>79.90</span></span>
-              </div>
-            </div>
-            <div class="tier-row tier-b-row">
-              <div class="tier-label tier-b"><strong>B</strong><span>Strong</span></div>
-              <div class="tier-schools">
-                <span class="school-pill"><b>Edinburgh</b><span>77.45</span></span>
-                <span class="school-pill"><b>Manchester</b><span>75.80</span></span>
-                <span class="school-pill"><b>CUNY</b><span>74.31</span></span>
-                <span class="school-pill"><b>UIUC</b><span>73.74</span></span>
-                <span class="school-pill"><b>Maryland</b><span>72.48</span></span>
-                <span class="school-pill"><b>Wisconsin</b><span>70.58</span></span>
-                <span class="school-pill"><b>Rutgers</b><span>69.76</span></span>
-              </div>
-            </div>
-            <div class="tier-row tier-c-row">
-              <div class="tier-label tier-c"><strong>C</strong><span>Solid</span></div>
-              <div class="tier-schools">
-                <span class="school-pill"><b>Bristol</b><span>66.82</span></span>
-                <span class="school-pill"><b>Amsterdam</b><span>65.20</span></span>
-                <span class="school-pill"><b>Vienna</b><span>64.63</span></span>
-                <span class="school-pill"><b>Leeds</b><span>64.37</span></span>
-                <span class="school-pill"><b>Durham</b><span>62.94</span></span>
-                <span class="school-pill"><b>Aalto</b><span>60.51</span></span>
-                <span class="school-pill"><b>Gothenburg</b><span>58.30</span></span>
-              </div>
-            </div>
-          </div>
-          <div class="score-legend">
-            <span><b>Heart Score 45%</b>A comprehensive score form 5 AI agents scoring on 30% academic outcomes, 50%
-              industry outcomes and 20% prestige. The composite was calculated as a mix of 15% each for Gemini, DeepSeek
-              & Meta AI, 25% for ChatGPT & 30% for Claude.</span>
-            <span><b>Circle Score 55%</b>A score based on the same 3 metrics, but my own preferences. The scores for
-              this subscore were calculated by scoring the top school a 100, and a subsequent reduction of 2 points for
-              every other school.</span>
-            <span><b>Final Weighted Score</b>Weighted combination of Heart and Circle scores. Higher is better.</span>
-          </div>
-        </article>
-
-        <article class="grad-card rts-card" style="text-align:center;">
-          <span class="grad-kicker">reach / target / safety</span>
-          <div class="rts-grid">
-            <div class="rts-block reach">
-              <h4>Reach</h4>
-              <p>MIT · Carnegie Mellon · Oxford · Berkeley · Harvard · Princeton · UCL · Columbia</p>
-            </div>
-            <div class="rts-block target">
-              <h4>Target</h4>
-              <p>Notre Dame · TU Wien · University of Vienna · UC Irvine · Pitt · Edinburgh · Manchester · CUNY · UIUC ·
-                Maryland · Wisconsin · Rutgers · Bristol · Leeds · Durham</p>
-            </div>
-            <div class="rts-block safety">
-              <h4>Safety</h4>
-              <p>Amsterdam · Aalto · Gothenburg</p>
-            </div>
-          </div>
-          <p class="grad-note">Placement reflects reach, fit, selectivity, and program ecology — not a simple preference
-            ranking.</p>
-        </article>
-
-        <article class="grad-card odds-card">
-          <span class="grad-kicker">admissions odds · final table</span>
-          <table class="odds-table">
-            <thead>
-              <tr>
-                <th>Rank</th>
-                <th>School</th>
-                <th>Final Odds</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>1</td>
-                <td>CMU</td>
-                <td><strong>2.10%</strong></td>
-              </tr>
-              <tr>
-                <td>2</td>
-                <td>MIT</td>
-                <td><strong>0.50%</strong></td>
-              </tr>
-              <tr>
-                <td>3</td>
-                <td>Oxford</td>
-                <td><strong>1.20%</strong></td>
-              </tr>
-              <tr>
-                <td>4</td>
-                <td>Berkeley</td>
-                <td><strong>0.90%</strong></td>
-              </tr>
-              <tr>
-                <td>5</td>
-                <td>Harvard</td>
-                <td><strong>0.70%</strong></td>
-              </tr>
-              <tr>
-                <td>6</td>
-                <td>Princeton</td>
-                <td><strong>0.60%</strong></td>
-              </tr>
-              <tr>
-                <td>7</td>
-                <td>UCL</td>
-                <td><strong>1.40%</strong></td>
-              </tr>
-              <tr>
-                <td>8</td>
-                <td>Columbia</td>
-                <td><strong>1.70%</strong></td>
-              </tr>
-              <tr>
-                <td>9</td>
-                <td>TU Wien</td>
-                <td><strong>4.70%</strong></td>
-              </tr>
-              <tr>
-                <td>10</td>
-                <td>Notre Dame</td>
-                <td><strong>2.10%</strong></td>
-              </tr>
-              <tr>
-                <td>11</td>
-                <td>UC Irvine</td>
-                <td><strong>3.60%</strong></td>
-              </tr>
-              <tr>
-                <td>12</td>
-                <td>Pitt</td>
-                <td><strong>3.10%</strong></td>
-              </tr>
-              <tr>
-                <td>13</td>
-                <td>Edinburgh</td>
-                <td><strong>4.70%</strong></td>
-              </tr>
-              <tr>
-                <td>14</td>
-                <td>Manchester</td>
-                <td><strong>4.60%</strong></td>
-              </tr>
-              <tr>
-                <td>15</td>
-                <td>U Vienna</td>
-                <td><strong>3.10%</strong></td>
-              </tr>
-              <tr>
-                <td>16</td>
-                <td>CUNY</td>
-                <td><strong>2.60%</strong></td>
-              </tr>
-              <tr>
-                <td>17</td>
-                <td>Illinois</td>
-                <td><strong>3.10%</strong></td>
-              </tr>
-              <tr>
-                <td>18</td>
-                <td>Maryland</td>
-                <td><strong>3.10%</strong></td>
-              </tr>
-              <tr>
-                <td>19</td>
-                <td>Amsterdam</td>
-                <td><strong>8.70%</strong></td>
-              </tr>
-              <tr>
-                <td>20</td>
-                <td>Wisconsin</td>
-                <td><strong>2.10%</strong></td>
-              </tr>
-              <tr>
-                <td>21</td>
-                <td>Rutgers</td>
-                <td><strong>1.90%</strong></td>
-              </tr>
-              <tr>
-                <td>22</td>
-                <td>Bristol</td>
-                <td><strong>10.00%</strong></td>
-              </tr>
-              <tr>
-                <td>23</td>
-                <td>Leeds</td>
-                <td><strong>16.00%</strong></td>
-              </tr>
-              <tr>
-                <td>24</td>
-                <td>Durham</td>
-                <td><strong>16.00%</strong></td>
-              </tr>
-              <tr>
-                <td>25</td>
-                <td>Aalto</td>
-                <td><strong>27.00%</strong></td>
-              </tr>
-              <tr>
-                <td>26</td>
-                <td>Gothenburg</td>
-                <td><strong>26.00%</strong></td>
-              </tr>
-            </tbody>
-          </table>
-          <p class="grad-note">Lower percentage = more selective. Odds are conservative working estimates, not
-            predictions.</p>
-        </article>
-      </div>
-
-      <div class="quote-band">Logic is not merely a tool; it is a lens through which we understand knowledge, agents,
-        and the world.</div>
     </section>
 
     <!-- PUBLICATION -->
@@ -3408,6 +3965,24 @@
   <div id="labels"></div>
 
   <!-- ===== SCRIPTS ===== -->
+
+  <!-- ===== STAR MAP NAVIGATION ===== -->
+  <button id="starMapToggle" class="star-map-toggle" type="button" aria-haspopup="dialog"
+    aria-controls="starMapOverlay"><span class="smt-icon" aria-hidden="true">✦</span> Star Map</button>
+
+  <div id="starMapOverlay" role="dialog" aria-modal="true" aria-label="Star map site navigation" hidden>
+    <div class="sm-backdrop" data-sm-close></div>
+    <svg id="smLines" aria-hidden="true"></svg>
+    <span class="sm-comet" style="left:82%;top:12%" aria-hidden="true"></span>
+    <header class="sm-head">
+      <p class="sm-eyebrow">// celestial navigation</p>
+      <h2 class="sm-title">Star Map</h2>
+      <p class="sm-hint">Every section of this site is a star. Tap one to travel.</p>
+    </header>
+    <button id="smClose" class="sm-close" type="button" aria-label="Close star map">✕</button>
+    <div class="sm-sky" id="smSky"></div>
+  </div>
+
   <script>
     // ===== YEAR =====
     document.getElementById('year').textContent = new Date().getFullYear();
@@ -3530,12 +4105,32 @@
       if (!gallery || !overlay) return;
 
       gallery.innerHTML = '';
-      const HIGHLIGHT_BASE = new URL('./highlights/', window.location.href).href;
+      // Try several deploy locations and filename casings so the gallery
+      // survives folder moves and case-sensitive hosting (e.g. GitHub Pages).
+      const HIGHLIGHT_BASES = ['./highlights/', './public/highlights/', './assets/highlights/', './images/highlights/'];
+
+      function candidatesFor(file) {
+        const variants = [file, file.replace(/\.PNG$/, '.png'), file.toLowerCase(), file.toUpperCase()];
+        const seen = new Set();
+        const out = [];
+        HIGHLIGHT_BASES.forEach(base => variants.forEach(v => {
+          const u = new URL(base + v, window.location.href).href;
+          if (!seen.has(u)) {
+            seen.add(u);
+            out.push(u);
+          }
+        }));
+        return out;
+      }
 
       const stories = highlightFiles.map((file, index) => ({
         file,
         name: NAMES[index] || `Highlight ${index + 1}`,
-        src: new URL(file, HIGHLIGHT_BASE).href
+        candidates: candidatesFor(file),
+        srcIndex: 0,
+        get src() {
+          return this.candidates[Math.min(this.srcIndex, this.candidates.length - 1)];
+        }
       }));
 
       stories.forEach((story, index) => {
@@ -3545,12 +4140,23 @@
         item.setAttribute('aria-label', story.name);
         item.innerHTML = `
           <span class="highlight-ring">
-            <span class="highlight-inner">
-              <img src="${story.src}" alt="${story.name}" loading="lazy" onerror="this.closest('.highlight-item')?.classList.add('missing-highlight')">
-            </span>
+            <span class="highlight-inner"></span>
           </span>
           <span class="highlight-label">${story.name}</span>
         `;
+        const img = document.createElement('img');
+        img.alt = story.name;
+        img.loading = 'lazy';
+        img.onerror = () => {
+          if (story.srcIndex < story.candidates.length - 1) {
+            story.srcIndex++;
+            img.src = story.src;
+          } else {
+            item.classList.add('missing-highlight');
+          }
+        };
+        img.src = story.src;
+        item.querySelector('.highlight-inner').appendChild(img);
         item.addEventListener('click', () => openStory(index));
         gallery.appendChild(item);
       });
@@ -3579,8 +4185,14 @@
         if (!story) return;
 
         hlImg.style.opacity = 0;
-        hlImg.src = story.src;
         hlImg.onload = () => { hlImg.style.opacity = 1; };
+        hlImg.onerror = () => {
+          if (story.srcIndex < story.candidates.length - 1) {
+            story.srcIndex++;
+            hlImg.src = story.src;
+          }
+        };
+        hlImg.src = story.src;
         hlName.textContent = story.name;
         hlIndex.textContent = `${i + 1} / ${stories.length}`;
         hlAvatar.style.backgroundImage = `url(${story.src})`;
@@ -4004,6 +4616,192 @@
       } else {
         buildIcyStoneBelt();
       }
+    })();
+  </script>
+
+
+  <!-- ===== STAR MAP NAVIGATION LOGIC ===== -->
+  <script>
+    (function () {
+      const overlay = document.getElementById('starMapOverlay');
+      const sky = document.getElementById('smSky');
+      const linesSvg = document.getElementById('smLines');
+      const toggle = document.getElementById('starMapToggle');
+      const closeBtn = document.getElementById('smClose');
+      if (!overlay || !sky || !linesSvg || !toggle) return;
+
+      // d: [x%, y%] landscape / desktop · m: [x%, y%] portrait (phones, iPads)
+      const STARS = [
+        { id: 'home', label: 'Home', d: [50, 12], m: [50, 9] },
+        { id: 'projects', label: 'Projects', d: [24, 23], m: [25, 16] },
+        { id: 'research-agenda', label: 'Research Agenda', d: [25, 60], m: [30, 29] },
+        { id: 'journey', label: 'Journey', d: [42, 46], m: [67, 36] },
+        { id: 'experience', label: 'Experience', d: [30, 74], m: [28, 43] },
+        { id: 'notebook', label: 'Notebook', d: [46, 82], m: [64, 50] },
+        { id: 'graduate-study', label: 'Graduate Study', d: [58, 62], m: [30, 57] },
+        { id: 'publication', label: 'Publication', d: [73, 79], m: [66, 64] },
+        { id: 'about', label: 'About', d: [83, 52], m: [30, 71] },
+        { id: 'highlights', label: 'Highlights', d: [88, 28], m: [64, 78] },
+        { id: 'shows', label: 'Shows', d: [69, 21], m: [36, 85] }
+      ];
+      const EDGES = STARS.map((s, i) => [i, (i + 1) % STARS.length]);
+      const NS = 'http://www.w3.org/2000/svg';
+
+      // ----- visited-star tracking (constellation fills in as you read) -----
+      const visited = new Set(['home']);
+      if ('IntersectionObserver' in window) {
+        const vo = new IntersectionObserver((entries) => {
+          entries.forEach(e => { if (e.isIntersecting) visited.add(e.target.id); });
+        }, { threshold: 0.2 });
+        STARS.forEach(s => {
+          const el = document.getElementById(s.id);
+          if (el) vo.observe(el);
+        });
+      }
+
+      // ----- build star buttons -----
+      const buttons = {};
+      STARS.forEach((s) => {
+        const b = document.createElement('button');
+        b.type = 'button';
+        b.className = 'sm-star';
+        b.dataset.target = s.id;
+        b.setAttribute('aria-label', 'Go to ' + s.label);
+        b.innerHTML = '<span class="sm-dot" aria-hidden="true"></span>' +
+          '<span class="sm-name">' + s.label + '</span>' +
+          '<span class="sm-you" aria-hidden="true">you are here</span>';
+        b.addEventListener('click', () => travelTo(s.id));
+        sky.appendChild(b);
+        buttons[s.id] = b;
+      });
+
+      function isPortrait() {
+        return window.innerHeight > window.innerWidth * 1.02;
+      }
+
+      function positionStars() {
+        const portrait = isPortrait();
+        STARS.forEach(s => {
+          const [x, y] = portrait ? s.m : s.d;
+          const b = buttons[s.id];
+          b.style.left = x + '%';
+          b.style.top = y + '%';
+        });
+      }
+
+      // ----- constellation lines + ambient starfield -----
+      let seed = 90377; // Sedna
+      function rand() {
+        seed = (seed * 1664525 + 1013904223) >>> 0;
+        return seed / 4294967296;
+      }
+
+      function drawLines() {
+        const w = overlay.clientWidth, h = overlay.clientHeight;
+        linesSvg.setAttribute('viewBox', '0 0 ' + w + ' ' + h);
+        linesSvg.innerHTML = '';
+
+        seed = 90377;
+        for (let i = 0; i < 90; i++) {
+          const dot = document.createElementNS(NS, 'circle');
+          dot.setAttribute('cx', (rand() * w).toFixed(1));
+          dot.setAttribute('cy', (rand() * h).toFixed(1));
+          dot.setAttribute('r', (0.5 + rand() * 1.1).toFixed(2));
+          dot.setAttribute('class', 'sm-bgstar');
+          dot.style.animationDelay = (-rand() * 3.4).toFixed(2) + 's';
+          linesSvg.appendChild(dot);
+        }
+
+        const oRect = overlay.getBoundingClientRect();
+        const center = (id) => {
+          const r = buttons[id].querySelector('.sm-dot').getBoundingClientRect();
+          return [r.left - oRect.left + r.width / 2, r.top - oRect.top + r.height / 2];
+        };
+        EDGES.forEach(([a, b]) => {
+          const [x1, y1] = center(STARS[a].id);
+          const [x2, y2] = center(STARS[b].id);
+          const line = document.createElementNS(NS, 'line');
+          line.setAttribute('x1', x1.toFixed(1));
+          line.setAttribute('y1', y1.toFixed(1));
+          line.setAttribute('x2', x2.toFixed(1));
+          line.setAttribute('y2', y2.toFixed(1));
+          line.setAttribute('class', 'sm-line');
+          linesSvg.appendChild(line);
+        });
+      }
+
+      // ----- scroll-spy: which star is "you are here" -----
+      function currentSectionId() {
+        const mark = window.innerHeight * 0.35;
+        let cur = 'home';
+        STARS.forEach(s => {
+          const el = document.getElementById(s.id);
+          if (el && el.getBoundingClientRect().top <= mark) cur = s.id;
+        });
+        return cur;
+      }
+
+      function refreshStates() {
+        const cur = currentSectionId();
+        STARS.forEach(s => {
+          buttons[s.id].classList.toggle('sm-current', s.id === cur);
+          buttons[s.id].classList.toggle('sm-visited', visited.has(s.id));
+        });
+      }
+
+      // ----- open / close / travel -----
+      let lastFocus = null;
+
+      function openMap() {
+        lastFocus = document.activeElement;
+        overlay.hidden = false;
+        positionStars();
+        refreshStates();
+        requestAnimationFrame(() => {
+          overlay.classList.add('active');
+          drawLines();
+        });
+        document.body.style.overflow = 'hidden';
+        closeBtn.focus({ preventScroll: true });
+      }
+
+      function closeMap() {
+        overlay.classList.remove('active');
+        document.body.style.overflow = '';
+        setTimeout(() => { overlay.hidden = true; }, 300);
+        if (lastFocus && lastFocus.focus) lastFocus.focus({ preventScroll: true });
+      }
+
+      function travelTo(id) {
+        visited.add(id);
+        closeMap();
+        const el = document.getElementById(id);
+        if (el) setTimeout(() => el.scrollIntoView({ behavior: 'smooth', block: 'start' }), 80);
+      }
+
+      toggle.addEventListener('click', openMap);
+      closeBtn.addEventListener('click', closeMap);
+      overlay.querySelector('[data-sm-close]').addEventListener('click', closeMap);
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && !overlay.hidden) closeMap();
+      });
+
+      let resizeRaf = null;
+      window.addEventListener('resize', () => {
+        if (overlay.hidden) return;
+        cancelAnimationFrame(resizeRaf);
+        resizeRaf = requestAnimationFrame(() => {
+          positionStars();
+          drawLines();
+        });
+      });
+
+      // optional nav entry hookup
+      const navLink = document.getElementById('navStarMap');
+      if (navLink) navLink.addEventListener('click', (e) => {
+        e.preventDefault();
+        openMap();
+      });
     })();
   </script>
 
