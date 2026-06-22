@@ -904,13 +904,6 @@
       flex: 0 0 auto;
     }
 
-    /* ===== NOTEBOOK ===== */
-    .notebook-grid {
-      display: grid;
-      grid-template-columns: repeat(4, minmax(0, 1fr));
-      gap: 1rem;
-    }
-
     .note-card {
       position: relative;
       overflow: hidden;
@@ -3288,11 +3281,8 @@
       </button>
       <nav class="cta hidden" id="mainNav">
         <a class="button" href="#projects">Projects</a>
-        <a class="button" href="#atlas">Atlas</a>
         <a class="button" href="https://arxiv.org/abs/2409.15094" target="_blank" rel="noopener">Publication ↗</a>
-        <a class="button" href="#research-agenda">Research</a>
         <a class="button" href="#experience">Experience</a>
-        <a class="button" href="#notebook">Notebook</a>
         <a class="button" href="#about">About</a>
         <a class="button" href="#highlights">Highlights</a>
         <a class="button" href="#shows">Shows</a>
@@ -3455,108 +3445,6 @@
       </ul>
     </section>
 
-    <!-- RESEARCH ATLAS -->
-    <section id="atlas" class="research-atlas">
-      <p class="section-label">// research atlas</p>
-      <h2>Research Operating System</h2>
-      <p class="atlas-intro">A portfolio should not only list artifacts; it should reveal the architecture of a mind.
-        This atlas organizes my work as a network of questions across logic, mathematics, artificial intelligence, and
-        philosophy.</p>
-      <div class="atlas-grid">
-        <article class="atlas-card logic-node">
-          <span class="atlas-kicker">Logic</span>
-          <h3>How is knowledge represented?</h3>
-          <p>Modal logic, epistemic logic, topological semantics, Kripke frames, and formal languages.</p>
-        </article>
-        <article class="atlas-card math-node">
-          <span class="atlas-kicker">Mathematics</span>
-          <h3>How does structure become visible?</h3>
-          <p>Figurate numbers, topology, dynamical systems, probability, graph-theoretic visualization, and geometric
-            patterning across number and space.</p>
-        </article>
-        <article class="atlas-card cosmos-node">
-          <span class="atlas-kicker">Cosmos</span>
-          <h3>How can a portfolio become a sky map?</h3>
-          <p>Constellations, celestial navigation, and a visual language that turns research interests into a navigable
-            night-sky atlas.</p>
-        </article>
-        <article class="atlas-card ai-node">
-          <span class="atlas-kicker">AI</span>
-          <h3>How can machines reason with meaning?</h3>
-          <p>Knowledge representation, semantic authoring, proof-assistant workflows, and formalization tools.</p>
-        </article>
-        <article class="atlas-card philosophy-node">
-          <span class="atlas-kicker">Philosophy</span>
-          <h3>What is the form of understanding?</h3>
-          <p>Epistemology, language, rationality, reference, decision theory, and the limits of inference.</p>
-        </article>
-      </div>
-    </section>
-
-    <!-- RESEARCH AGENDA -->
-    <section id="research-agenda" class="dashboard-section">
-      <p class="section-label">// research agenda</p>
-      <h2>Questions I Keep Returning To</h2>
-      <p class="section-intro">The site is organized around a research trajectory rather than a list of unrelated
-        projects: how formal structures represent knowledge, meaning, rationality, and computation.</p>
-      <div class="research-grid">
-        <article class="research-card"><span class="grad-kicker">01 · logic</span>
-          <h3>Epistemic logic & topology</h3>
-          <ul>
-            <li>S4 and topological semantics</li>
-            <li>Interior, closure, and modal operators</li>
-            <li>Multi-agent knowledge and common knowledge</li>
-          </ul>
-        </article>
-        <article class="research-card"><span class="grad-kicker">02 · language</span>
-          <h3>Formal semantics & grammar</h3>
-          <ul>
-            <li>Reference and indeterminacy</li>
-            <li>From “gavagai” to grammar</li>
-            <li>Controlled natural language for mathematics</li>
-          </ul>
-        </article>
-        <article class="research-card"><span class="grad-kicker">03 · agency</span>
-          <h3>Decision theory & AI agents</h3>
-          <ul>
-            <li>Rational choice and foundations</li>
-            <li>Agent models under uncertainty</li>
-            <li>Formal epistemology for AI systems</li>
-          </ul>
-        </article>
-        <article class="research-card"><span class="grad-kicker">04 · tools</span>
-          <h3>Human-machine formalization</h3>
-          <ul>
-            <li>Semantic editors</li>
-            <li>Dependency graphs</li>
-            <li>Proof-assistant-oriented workflows</li>
-          </ul>
-        </article>
-      </div>
-    </section>
-
-    <!-- INTELLECTUAL JOURNEY -->
-    <section id="journey" class="dashboard-section">
-      <p class="section-label">// intellectual journey</p>
-      <h2>Trajectory Toward Graduate Study</h2>
-      <p class="section-intro">A compact academic timeline connecting coursework, research, writing, and graduate
-        preparation.</p>
-      <div class="journey-line">
-        <div class="journey-item"><span class="journey-dot"></span><span><strong>Logic coursework and
-              self-study</strong> — modal logic, epistemic logic, topology, formal semantics, and proof-oriented
-            writing.</span></div>
-        <div class="journey-item"><span class="journey-dot"></span><span><strong>Oxford term</strong> — probability,
-            philosophy, and mathematical maturity in a rigorous academic setting.</span></div>
-        <div class="journey-item"><span class="journey-dot"></span><span><strong>Research and publication work</strong>
-            — formal algorithms, mathematical modeling, and structured technical exposition.</span></div>
-        <div class="journey-item"><span class="journey-dot"></span><span><strong>CMU Summer School in Logic</strong> —
-            focused preparation in logic, AI foundations, topology, and formal grammar.</span></div>
-        <div class="journey-item"><span class="journey-dot"></span><span><strong>Independent study and writing
-              sample</strong> — building a graduate-level portfolio around logic, semantics, and formalization.</span>
-        </div>
-      </div>
-    </section>
-
     <!-- EXPERIENCE & ACTIVITIES -->
     <section id="experience" class="dashboard-section">
       <p class="section-label">// experience / activities</p>
@@ -3668,33 +3556,6 @@
           </div>
           <p>Collaborative machine-learning practicum — applying ML models to real datasets and building hands-on
             fluency with data-driven AI workflows.</p>
-        </article>
-      </div>
-    </section>
-
-
-    <!-- NOTEBOOK -->
-    <section id="notebook" class="dashboard-section">
-      <p class="section-label">// archive / notebook</p>
-      <h2>Archive / Notebook</h2>
-      <p class="section-intro">A public-facing research notebook can make the site feel alive: not just finished
-        projects, but proofs, sketches, questions, and developing intuitions.</p>
-      <div class="notebook-grid">
-        <article class="note-card">
-          <h3>Expository Notes</h3>
-          <p>Short essays on Kripke semantics, S4/topology, common knowledge, and formal semantics.</p>
-        </article>
-        <article class="note-card">
-          <h3>Proof Sketches</h3>
-          <p>Work-in-progress arguments, diagrammatic proofs, and failed attempts worth preserving.</p>
-        </article>
-        <article class="note-card">
-          <h3>Logic Visualizations</h3>
-          <p>Frames, models, diagrams, semantic trees, and interactive explanations.</p>
-        </article>
-        <article class="note-card">
-          <h3>Unfinished Ideas</h3>
-          <p>Open questions about agency, formalization, controlled language, and mathematical structure.</p>
         </article>
       </div>
     </section>
@@ -3959,7 +3820,7 @@
       </div>
     </section>
 
-    <footer>© <span id="year"></span> Pramithas Upreti 2026</footer>
+    <footer>© <span id="year"></span> Pramithas Upreti</footer>
   </main>
 
   <div id="labels"></div>
@@ -4634,10 +4495,7 @@
       const STARS = [
         { id: 'home', label: 'Home', d: [50, 12], m: [50, 9] },
         { id: 'projects', label: 'Projects', d: [24, 23], m: [25, 16] },
-        { id: 'research-agenda', label: 'Research Agenda', d: [25, 60], m: [30, 29] },
-        { id: 'journey', label: 'Journey', d: [42, 46], m: [67, 36] },
         { id: 'experience', label: 'Experience', d: [30, 74], m: [28, 43] },
-        { id: 'notebook', label: 'Notebook', d: [46, 82], m: [64, 50] },
         { id: 'publication', label: 'Publication', d: [73, 79], m: [66, 64] },
         { id: 'about', label: 'About', d: [83, 52], m: [30, 71] },
         { id: 'highlights', label: 'Highlights', d: [88, 28], m: [64, 78] },
